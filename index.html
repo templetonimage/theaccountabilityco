@@ -1,0 +1,960 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AAC — Ad Accountability Challenge</title>
+  <meta name="description" content="60 days. Real ads. Proof-based accountability. AAC keeps you running, reviewing, and refining your paid ads so your spend actually compounds." />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --paper:      #F5F1E8;
+      --paper-dark: #EDE8DC;
+      --ink:        #111010;
+      --ink-mid:    #2a2826;
+      --muted:      #7a7570;
+      --rule:       #D4CEBC;
+      --rule-dark:  #B8B0A0;
+      --gold:       #C9A84D;
+      --gold-lt:    #E8BE50;
+      --gold-bg:    rgba(201,168,77,.08);
+      --gold-rule:  rgba(201,168,77,.35);
+      --white:      #FDFAF4;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--paper);
+      color: var(--ink);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 16px;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      pointer-events: none;
+      z-index: 9999;
+    }
+
+    /* dot grid only on cream/light backgrounds */
+    .dot-grid {
+      background-color: var(--paper);
+      background-image: radial-gradient(circle, rgba(100,90,70,.18) 1px, transparent 1px);
+      background-size: 20px 20px;
+    }
+    .dot-grid-dark {
+      background-color: var(--paper-dark);
+      background-image: radial-gradient(circle, rgba(100,90,70,.14) 1px, transparent 1px);
+      background-size: 20px 20px;
+    }
+
+    .container { max-width: 1080px; margin: 0 auto; padding: 0 32px; }
+
+    @keyframes fadeUp { from { opacity:0; transform:translateY(24px); } to { opacity:1; transform:translateY(0); } }
+    @keyframes pulse-dot { 0%,100% { opacity:1; transform:scale(1); } 50% { opacity:.3; transform:scale(.5); } }
+    @keyframes ticker { from { transform:translateX(0); } to { transform:translateX(-50%); } }
+    @keyframes scanline { 0% { top:-2px; } 100% { top:100%; } }
+
+    .fade-up { animation: fadeUp .65s ease both; }
+    .d1 { animation-delay:.08s; } .d2 { animation-delay:.18s; } .d3 { animation-delay:.3s; } .d4 { animation-delay:.42s; }
+
+    /* NAV */
+    nav {
+      position: sticky; top: 0; z-index: 100;
+      background: var(--ink);
+      border-bottom: 2px solid var(--gold);
+      padding: 0 32px;
+      display: flex; align-items: stretch; justify-content: space-between;
+      height: 52px;
+    }
+    .nav-left { display: flex; align-items: center; }
+    .nav-logo {
+      font-family: 'Bebas Neue', sans-serif; font-size: 1.55rem; letter-spacing: .07em;
+      color: var(--gold); text-decoration: none;
+      padding-right: 24px; border-right: 1px solid #2a2826;
+      display: flex; align-items: center; height: 100%;
+    }
+    .nav-logo span { color: #7a7470; font-size: 1.55rem; font-family: 'Bebas Neue', sans-serif; margin-left: 8px; }
+    .nav-links { display: flex; align-items: stretch; margin-left: 8px; }
+    .nav-link {
+      font-family: 'DM Mono', monospace; font-size: .69rem; letter-spacing: .1em; text-transform: uppercase;
+      color: #7a7470; text-decoration: none; padding: 0 18px;
+      display: flex; align-items: center; border-right: 1px solid #1e1c1a;
+      transition: color .2s, background .2s;
+    }
+    .nav-link:hover { color: var(--paper); background: #1a1816; }
+    .nav-right { display: flex; align-items: center; gap: 12px; }
+    .nav-cta {
+      background: var(--gold); color: var(--ink);
+      font-family: 'DM Mono', monospace; font-weight: 500; font-size: .72rem; letter-spacing: .09em; text-transform: uppercase;
+      padding: 8px 20px; border: none; border-radius: 2px; cursor: pointer; text-decoration: none;
+      transition: background .2s;
+    }
+    .nav-cta:hover { background: var(--gold-lt); }
+
+    .hamburger {
+      display: none; flex-direction: column; justify-content: center; gap: 5px;
+      width: 36px; height: 36px; background: transparent;
+      border: 1px solid #2a2826; border-radius: 2px; cursor: pointer; padding: 7px;
+    }
+    .hamburger span { display: block; width: 100%; height: 1.5px; background: #888; transition: all .22s ease; }
+    .hamburger.open span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+    .hamburger.open span:nth-child(2) { opacity: 0; }
+    .hamburger.open span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+
+    .mobile-menu {
+      display: none; position: fixed; top: 52px; left: 0; right: 0;
+      background: var(--ink); border-bottom: 1px solid #222;
+      padding: 16px 24px 24px; z-index: 99; flex-direction: column;
+    }
+    .mobile-menu.open { display: flex; }
+    .mobile-menu a {
+      font-family: 'DM Mono', monospace; font-size: .8rem; letter-spacing: .08em; text-transform: uppercase;
+      color: #7a7470; text-decoration: none; padding: 13px 0; border-bottom: 1px solid #1e1c1a; transition: color .2s;
+    }
+    .mobile-menu a:hover { color: var(--paper); }
+
+    @media (max-width: 700px) { .nav-links { display: none; } .nav-cta { display: none; } .hamburger { display: flex; } }
+
+    /* HERO */
+    .hero {
+      background-color: #F6F1E8;
+      background-image: radial-gradient(circle, rgba(100,90,70,.18) 1px, transparent 1px);
+      background-size: 20px 20px;
+      color: var(--ink); padding: 0;
+      position: relative; overflow: hidden;
+      display: flex; flex-direction: column;
+    }    .hero-main {
+      padding: 72px 56px 72px 56px; 
+      display: flex; flex-direction: column; justify-content: space-between; position: relative;
+      max-width: 900px;
+    }
+    .hero-eyebrow {
+      font-family: 'DM Mono', monospace; font-size: .72rem; letter-spacing: .18em; text-transform: uppercase;
+      color: var(--gold); margin-bottom: 32px; display: flex; align-items: center; gap: 10px;
+    }
+    .live-dot {
+      display: inline-block; width: 6px; height: 6px; background: var(--gold);
+      border-radius: 50%; animation: pulse-dot 1.8s ease-in-out infinite;
+    }
+    .hero h1 {
+      font-family: 'Bebas Neue', sans-serif; font-size: clamp(64px, 8.5vw, 112px);
+      line-height: .92; letter-spacing: .01em; color: var(--ink); margin-bottom: 36px;
+    }
+    .hero h1 em { font-style: normal; color: var(--gold); }
+    .hero-sub { font-size: 1.05rem; font-weight: 300; color: var(--muted); max-width: 480px; line-height: 1.72; margin-bottom: 48px; }
+    .hero-actions { display: flex; gap: 12px; flex-wrap: wrap; }
+    .btn-primary {
+      background: var(--gold); color: var(--ink);
+      font-family: 'DM Mono', monospace; font-weight: 500; font-size: .8rem; letter-spacing: .09em; text-transform: uppercase;
+      padding: 14px 28px; border: none; border-radius: 2px; cursor: pointer; text-decoration: none; display: inline-block;
+      transition: background .2s, transform .15s;
+    }
+    .btn-primary:hover { background: var(--gold-lt); transform: translateY(-1px); }
+    .btn-outline {
+      background: transparent; color: var(--muted);
+      font-family: 'DM Mono', monospace; font-size: .78rem; letter-spacing: .08em; text-transform: uppercase;
+      padding: 14px 24px; border: 1px solid var(--rule-dark); border-radius: 2px; cursor: pointer; text-decoration: none; display: inline-block;
+      transition: border-color .2s, color .2s;
+    }
+    .btn-outline:hover { border-color: var(--ink); color: var(--ink); }
+
+    .hero-panel {
+      background: #0a0908;
+      border-top: 1px solid #1a1816;
+      padding: 0 56px;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0;
+    }    .panel-label {
+      font-family: 'DM Mono', monospace; font-size: .65rem; letter-spacing: .14em; text-transform: uppercase;
+      color: #6a6460; padding: 16px 56px; border-bottom: 1px solid #1a1816;
+      grid-column: 1 / -1;
+    }
+    .panel-row {
+      padding: 28px 32px;
+      border-right: 1px solid #1a1816;
+      display: flex; flex-direction: column; gap: 5px;
+    }
+    .panel-row:last-of-type { border-right: none; }
+    .panel-stat { font-family: 'Bebas Neue', sans-serif; font-size: 2.8rem; color: var(--gold); line-height: 1; letter-spacing: .02em; }
+    .panel-desc { font-size: .82rem; color: #9a9490; line-height: 1.4; }
+    .panel-badge {
+      display: inline-flex; align-items: center; gap: 6px; margin-top: 4px;
+      font-family: 'DM Mono', monospace; font-size: .62rem; letter-spacing: .1em; text-transform: uppercase;
+      color: var(--gold); background: rgba(201,168,77,.1); border: 1px solid rgba(201,168,77,.2);
+      padding: 3px 8px; border-radius: 2px; width: fit-content;
+    }
+
+    @media (max-width: 860px) {
+      .hero-main { padding: 56px 32px; }
+      .hero-main::before { display: none; }
+      .hero-panel { padding: 0 32px; grid-template-columns: repeat(2, 1fr); }
+      .panel-label { padding: 14px 32px; }
+      .panel-row { border-right: 1px solid #1a1816; }
+      .panel-row:nth-child(even) { border-right: none; }
+      .panel-row:nth-child(3), .panel-row:nth-child(4) { border-top: 1px solid #1a1816; }
+    }
+    @media (max-width: 520px) {
+      .hero-panel { grid-template-columns: 1fr 1fr; padding: 0 24px; }
+      .hero-main { padding: 48px 24px; }
+    }
+
+    /* MARQUEE */
+    .marquee-bar { background: var(--gold); padding: 10px 0; overflow: hidden; }
+    .marquee-track {
+      display: flex; align-items: center; white-space: nowrap;
+      animation: ticker 28s linear infinite; width: max-content;
+    }
+    .marquee-track span { font-family: 'Bebas Neue', sans-serif; font-size: 1rem; letter-spacing: .12em; color: var(--ink); padding: 0 28px; opacity: .75; }
+    .marquee-track span.bold { opacity: 1; }
+    .marquee-sep { color: rgba(0,0,0,.25); font-size: 1.2rem; padding: 0 4px; margin-right: 28px; }
+
+    /* SECTION */
+    .section { padding: 96px 0; }
+    .section-alt {
+      background-color: var(--paper-dark);
+      background-image: radial-gradient(circle, rgba(100,90,70,.14) 1px, transparent 1px);
+      background-size: 20px 20px;
+    }
+    .section-dark { background: var(--ink); }
+    .section-label {
+      font-family: 'DM Mono', monospace; font-size: .68rem; letter-spacing: .16em; text-transform: uppercase;
+      color: var(--gold); margin-bottom: 12px; display: block;
+    }
+    .section-title {
+      font-family: 'Bebas Neue', sans-serif; font-size: clamp(38px,5vw,60px); letter-spacing: .02em;
+      line-height: 1.02; color: var(--ink); margin-bottom: 16px;
+    }
+    .section-sub { font-size: 1rem; font-weight: 300; color: var(--muted); max-width: 500px; line-height: 1.68; }
+
+    /* PROBLEM GRID */
+    .problem-strip {
+      display: grid; grid-template-columns: 1fr 1fr 1fr;
+      border-top: 1px solid var(--rule); border-left: 1px solid var(--rule);
+    }
+    .problem-cell {
+      padding: 32px 28px; border-right: 1px solid var(--rule); border-bottom: 1px solid var(--rule);
+      position: relative; transition: background .2s;
+    }
+    .problem-cell:hover { background: var(--paper-dark); }
+    .problem-num { font-family: 'DM Mono', monospace; font-size: .65rem; letter-spacing: .12em; color: var(--rule-dark); margin-bottom: 16px; display: block; }
+    .problem-cell h3 { font-weight: 600; font-size: .97rem; color: var(--ink); margin-bottom: 8px; line-height: 1.3; }
+    .problem-cell p { font-size: .87rem; color: var(--muted); line-height: 1.62; }
+    .problem-cell::before {
+      content: ''; position: absolute; top: 0; left: 0; width: 0; height: 2px;
+      background: var(--gold); transition: width .3s ease;
+    }
+    .problem-cell:hover::before { width: 100%; }
+    @media (max-width: 700px) { .problem-strip { grid-template-columns: 1fr 1fr; } }
+    @media (max-width: 440px) { .problem-strip { grid-template-columns: 1fr; } }
+
+    /* HOW IT WORKS — tabbed panel */
+    .hiw-grid {
+      display: grid; grid-template-columns: 200px 1fr; gap: 0;
+      border: 1px solid var(--rule); border-radius: 3px; overflow: hidden;
+    }
+    .hiw-nav { background: var(--ink); display: flex; flex-direction: column; }
+    .hiw-tab {
+      padding: 20px 24px; border-bottom: 1px solid #1a1816; cursor: pointer;
+      transition: background .2s, border-left-color .2s; display: flex; align-items: center; gap: 12px;
+      border-left: 3px solid transparent;
+    }
+    .hiw-tab:last-child { border-bottom: none; }
+    .hiw-tab:hover { background: #151311; border-left-color: rgba(201,168,77,.35); }
+    .hiw-tab:hover .hiw-tab-num { color: rgba(201,168,77,.6); }
+    .hiw-tab:hover .hiw-tab-label { color: #9a9490; }
+    .hiw-tab.active { background: #1a1714; border-left-color: var(--gold); }
+    .hiw-tab-num { font-family: 'DM Mono', monospace; font-size: .65rem; color: #6a6460; letter-spacing: .08em; }
+    .hiw-tab.active .hiw-tab-num { color: var(--gold); }
+    .hiw-tab-label { font-size: .82rem; font-weight: 500; color: #6a6460; line-height: 1.3; }
+    .hiw-tab.active .hiw-tab-label { color: var(--paper); }
+    .hiw-content { padding: 44px 48px; background: var(--white); display: none; }
+    .hiw-content.active { display: block; }
+    .hiw-content h3 { font-family: 'Bebas Neue', sans-serif; font-size: 2rem; letter-spacing: .03em; color: var(--ink); margin-bottom: 14px; }
+    .hiw-content p { font-size: .97rem; font-weight: 300; color: var(--muted); line-height: 1.72; margin-bottom: 16px; }
+    .hiw-proof {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: var(--gold-bg); border: 1px solid var(--gold-rule); padding: 10px 16px; border-radius: 2px;
+      font-family: 'DM Mono', monospace; font-size: .72rem; letter-spacing: .06em; color: var(--gold);
+    }
+    @media (max-width: 680px) {
+      .hiw-grid { grid-template-columns: 1fr; }
+      .hiw-nav { flex-direction: row; overflow-x: auto; border-bottom: 1px solid var(--rule); }
+      .hiw-tab { border-bottom: none; border-right: 1px solid #1a1816; padding: 14px 18px; white-space: nowrap; flex-direction: column; gap: 4px; }
+      .hiw-tab.active { border-left: none; border-top: 3px solid var(--gold); }
+      .hiw-content { padding: 32px 24px; }
+    }
+
+    /* WHAT COUNTS TABLE */
+    .counts-table { width: 100%; border-collapse: collapse; font-size: .92rem; }
+    .counts-table thead tr { background: var(--ink); }
+    .counts-table th {
+      font-family: 'DM Mono', monospace; font-size: .65rem; letter-spacing: .14em; text-transform: uppercase;
+      color: #7a7470; padding: 14px 20px; text-align: left; font-weight: 400;
+    }
+    .counts-table tbody tr { border-bottom: 1px solid var(--rule); transition: background .15s; }
+    .counts-table tbody tr:hover { background: var(--paper-dark); }
+    .counts-table td { padding: 16px 20px; color: var(--ink-mid); vertical-align: top; }
+    .counts-table td:first-child {
+      font-family: 'DM Mono', monospace; font-size: .7rem; color: var(--gold);
+      letter-spacing: .06em; white-space: nowrap; padding-right: 12px;
+    }
+    .counts-table td.platform { font-family: 'DM Mono', monospace; font-size: .75rem; color: var(--muted); }
+
+    /* ALL-STAR */
+    .allstar-inner {
+      max-width: 1080px; margin: 0 auto; padding: 0 32px;
+      display: grid; grid-template-columns: 1fr 400px; gap: 80px; align-items: center;
+    }
+    .allstar-text .section-label { color: var(--gold); }
+    .allstar-text h2 {
+      font-family: 'Bebas Neue', sans-serif; font-size: clamp(52px,6vw,80px);
+      letter-spacing: .02em; line-height: .96; color: var(--white); margin-bottom: 24px;
+    }
+    .allstar-text h2 em { font-style: normal; color: var(--gold); }
+    .allstar-text p { font-size: 1rem; font-weight: 300; color: #9a9490; line-height: 1.72; }
+    .allstar-prizes { background: #0a0908; border: 1px solid #1e1c1a; border-radius: 3px; overflow: hidden; }
+    .prize-header { background: var(--gold); padding: 12px 24px; font-family: 'Bebas Neue', sans-serif; font-size: 1rem; letter-spacing: .1em; color: var(--ink); }
+    .prize-row { padding: 22px 24px; border-bottom: 1px solid #1a1816; display: flex; flex-direction: column; gap: 4px; }
+    .prize-row:last-child { border-bottom: none; }
+    .prize-row-label { font-family: 'DM Mono', monospace; font-size: .65rem; letter-spacing: .12em; text-transform: uppercase; color: #7a7470; }
+    .prize-row-val { font-weight: 500; color: #d8d4cc; font-size: .95rem; }
+    .allstar-note { font-family: 'DM Mono', monospace; font-size: .68rem; letter-spacing: .06em; color: #6a6460; padding: 14px 24px; background: #080706; text-align: center; border-top: 1px solid #1a1816; }
+    @media (max-width: 780px) { .allstar-inner { grid-template-columns: 1fr; gap: 48px; } }
+
+    /* PRICING */
+    .pricing-row {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 0;
+      border: 1px solid var(--rule); border-radius: 3px; overflow: visible;
+      max-width: 820px; margin: 20px auto 0;
+    }
+    .pricing-col { padding: 44px 40px; background: var(--white); position: relative; border-radius: 3px 0 0 3px; }
+    .pricing-col.featured { background: var(--ink); border-left: 1px solid var(--rule); border-radius: 0 3px 3px 0; padding-top: 56px; }
+    .pricing-col::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: var(--rule); }
+    .pricing-col.featured::before { background: var(--gold); }
+    .pricing-tier { font-family: 'DM Mono', monospace; font-size: .68rem; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); margin-bottom: 20px; }
+    .pricing-col.featured .pricing-tier { color: #6a6460; }
+    .price-line { display: flex; align-items: baseline; gap: 4px; margin-bottom: 6px; }
+    .price-currency { font-family: 'DM Sans', sans-serif; font-size: 1.4rem; font-weight: 300; color: var(--muted); }
+    .price-num { font-family: 'Bebas Neue', sans-serif; font-size: 4.5rem; color: var(--ink); line-height: 1; letter-spacing: .01em; }
+    .pricing-col.featured .price-num { color: var(--white); }
+    .pricing-col.featured .price-currency { color: #5a5450; }
+    .price-period { font-size: .8rem; color: var(--rule-dark); margin-bottom: 32px; }
+    .pricing-col.featured .price-period { color: #6a6460; }
+    .feature-list { list-style: none; display: flex; flex-direction: column; gap: 10px; margin-bottom: 36px; }
+    .feature-list li {
+      font-size: .9rem; color: var(--muted);
+      display: flex; align-items: flex-start; gap: 10px;
+      padding-bottom: 10px; border-bottom: 1px solid var(--rule);
+    }
+    .feature-list li:last-child { border-bottom: none; padding-bottom: 0; }
+    .pricing-col.featured .feature-list li { color: #7a7470; border-color: #1a1816; }
+    .feature-list li.on { color: var(--ink); }
+    .pricing-col.featured .feature-list li.on { color: var(--paper); }
+    .feature-list li::before { content: '—'; color: var(--rule-dark); font-family: 'DM Mono', monospace; font-size: .8rem; flex-shrink: 0; margin-top: 1px; }
+    .feature-list li.on::before { content: '✓'; color: var(--gold); }
+    .btn-full { display: block; width: 100%; text-align: center; font-family: 'DM Mono', monospace; font-weight: 500; font-size: .75rem; letter-spacing: .09em; text-transform: uppercase; padding: 14px; border-radius: 2px; cursor: pointer; text-decoration: none; transition: background .2s, border-color .2s; }
+    .btn-full-outline { background: transparent; color: var(--ink); border: 1px solid var(--rule-dark); }
+    .btn-full-outline:hover { border-color: var(--ink); }
+    .btn-full-gold { background: var(--gold); color: var(--ink); border: 1px solid var(--gold); }
+    .btn-full-gold:hover { background: var(--gold-lt); border-color: var(--gold-lt); }
+    @media (max-width: 620px) { .pricing-row { grid-template-columns: 1fr; } .pricing-col { border-radius: 3px 3px 0 0; } .pricing-col.featured { border-left: none; border-top: 1px solid var(--rule); border-radius: 0 0 3px 3px; padding-top: 56px; } }
+
+    /* FAQ */
+    .faq-cols { display: grid; grid-template-columns: 280px 1fr; gap: 80px; align-items: start; }
+    .faq-sidebar { position: sticky; top: 72px; }
+    .faq-sidebar h2 { font-family: 'Bebas Neue', sans-serif; font-size: clamp(36px,4vw,52px); letter-spacing: .02em; line-height: 1.02; color: var(--ink); margin-bottom: 16px; }
+    .faq-sidebar p { font-size: .9rem; font-weight: 300; color: var(--muted); line-height: 1.65; }
+    .faq-list { display: flex; flex-direction: column; }
+    .faq-item { border-top: 1px solid var(--rule); overflow: hidden; }
+    .faq-item:last-child { border-bottom: 1px solid var(--rule); }
+    .faq-q {
+      padding: 20px 0; cursor: pointer; font-weight: 500; font-size: .95rem; color: var(--ink);
+      display: flex; justify-content: space-between; align-items: center; gap: 16px;
+      user-select: none; transition: color .2s;
+    }
+    .faq-q:hover { color: var(--gold); }
+    .faq-icon {
+      width: 20px; height: 20px; flex-shrink: 0;
+      border: 1px solid var(--rule-dark); border-radius: 1px;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--gold); font-size: 1rem; font-weight: 300;
+      transition: transform .2s, background .2s;
+    }
+    .faq-item.open .faq-icon { transform: rotate(45deg); background: var(--gold-bg); border-color: var(--gold-rule); }
+    .faq-a { max-height: 0; overflow: hidden; transition: max-height .35s ease, padding .2s; font-size: .9rem; color: var(--muted); line-height: 1.72; }
+    .faq-item.open .faq-a { max-height: 280px; padding-bottom: 20px; }
+    @media (max-width: 680px) { .faq-cols { grid-template-columns: 1fr; gap: 40px; } .faq-sidebar { position: static; } }
+
+    /* WAITLIST */
+    .waitlist-inner { display: grid; grid-template-columns: 1fr 460px; gap: 80px; align-items: center; }
+    .waitlist-left h2 { font-family: 'Bebas Neue', sans-serif; font-size: clamp(44px,5.5vw,72px); letter-spacing: .02em; line-height: .96; color: var(--ink); margin-bottom: 18px; }
+    .waitlist-left h2 em { font-style: normal; color: var(--gold); }
+    .waitlist-left p { font-size: 1rem; font-weight: 300; color: var(--muted); line-height: 1.68; }
+    .waitlist-form-wrap { background: var(--ink); border-radius: 3px; padding: 40px; border-top: 3px solid var(--gold); }
+    .form-label { font-family: 'DM Mono', monospace; font-size: .68rem; letter-spacing: .12em; text-transform: uppercase; color: #7a7470; display: block; margin-bottom: 10px; }
+    .form-input {
+      display: block; width: 100%; background: #0a0908; border: 1px solid #2e2c2a;
+      border-radius: 2px; color: var(--paper); font-family: 'DM Sans', sans-serif; font-size: .97rem;
+      padding: 13px 16px; outline: none; margin-bottom: 12px; transition: border-color .2s;
+    }
+    .form-input::placeholder { color: #7a7470; }
+    .form-input:focus { border-color: var(--gold-rule); }
+    .form-submit {
+      display: block; width: 100%; background: var(--gold); color: var(--ink);
+      font-family: 'DM Mono', monospace; font-weight: 500; font-size: .78rem; letter-spacing: .1em; text-transform: uppercase;
+      padding: 15px; border: none; border-radius: 2px; cursor: pointer; transition: background .2s;
+    }
+    .form-submit:hover { background: var(--gold-lt); }
+    .form-note { margin-top: 14px; font-family: 'DM Mono', monospace; font-size: .65rem; letter-spacing: .08em; color: #7a7470; text-align: center; }
+    .form-success { display: none; background: rgba(201,168,77,.08); border: 1px solid var(--gold-rule); border-radius: 2px; padding: 18px 20px; font-size: .92rem; color: var(--paper); line-height: 1.6; }
+    .form-success strong { color: var(--gold); }
+    @media (max-width: 780px) { .waitlist-inner { grid-template-columns: 1fr; gap: 48px; } }
+
+    /* SISTER BAR */
+    .sister-bar { background: var(--paper-dark); border-top: 1px solid var(--rule); padding: 20px 32px; }
+    .sister-bar-inner { max-width: 1080px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 24px; flex-wrap: wrap; }
+    .sister-label { font-family: 'DM Mono', monospace; font-size: .68rem; letter-spacing: .12em; text-transform: uppercase; color: var(--rule-dark); }
+    .sister-links { display: flex; gap: 12px; flex-wrap: wrap; }
+    .sister-link {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-family: 'DM Mono', monospace; font-size: .72rem; letter-spacing: .08em; text-transform: uppercase;
+      color: var(--muted); border: 1px solid var(--rule); padding: 8px 16px; border-radius: 2px;
+      text-decoration: none; transition: border-color .2s, color .2s;
+    }
+    .sister-link:hover { border-color: var(--rule-dark); color: var(--ink); }
+
+    /* FOOTER */
+    footer { background: var(--ink); padding: 44px 32px; }
+    .footer-inner { max-width: 1080px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 24px; flex-wrap: wrap; }
+    .footer-logo { font-family: 'Bebas Neue', sans-serif; font-size: 1.5rem; color: var(--gold); letter-spacing: .06em; }
+    .footer-logo span { font-family: 'DM Mono', monospace; font-size: .65rem; font-weight: 400; letter-spacing: .1em; color: #7a7470; text-transform: uppercase; margin-left: 10px; vertical-align: middle; }
+    .footer-links { display: flex; gap: 24px; flex-wrap: wrap; }
+    .footer-links a { font-family: 'DM Mono', monospace; font-size: .68rem; letter-spacing: .08em; color: #8a8480; text-decoration: none; text-transform: uppercase; transition: color .2s; }
+    .footer-links a:hover { color: #b0aca8; }
+    .footer-copy { font-family: 'DM Mono', monospace; font-size: .64rem; letter-spacing: .06em; color: #6a6460; text-align: center; padding-top: 24px; border-top: 1px solid #1a1816; max-width: 1080px; margin: 24px auto 0; }
+  </style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-left">
+    <a href="#" class="nav-logo">AAC <span>2026</span></a>
+    <div class="nav-links">
+      <a href="#how-it-works" class="nav-link">How It Works</a>
+      <a href="#pricing" class="nav-link">Pricing</a>
+      <a href="#faq" class="nav-link">FAQ</a>
+      <a href="#waitlist" class="nav-link">Waitlist</a>
+    </div>
+  </div>
+  <div class="nav-right">
+    <a class="nav-cta ml-onclick-form" href="javascript:void(0)" onclick="showWaitlistForm()">Join the Waitlist</a>
+    <button class="hamburger" id="hamburger" aria-label="Open menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#how-it-works">How It Works</a>
+  <a href="#pricing">Pricing</a>
+  <a href="#faq">FAQ</a>
+  <a class="ml-onclick-form" href="javascript:void(0)" onclick="showWaitlistForm()">Join Waitlist</a>
+</div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-main container">
+    <div>
+      <p class="hero-eyebrow fade-up"><span class="live-dot"></span> Free Trial starts June 1, 2026 · Round 1 launches July 1</p>
+      <h1 class="fade-up d1">Your Budget<br>Isn't the Problem.<br><em>Inconsistency Is.</em></h1>
+    </div>
+    <div>
+      <p class="hero-sub fade-up d2">AAC is a 90-day proof-based challenge that keeps you running, reviewing, and iterating on your paid ads — so every dollar compounds instead of disappearing. Try it free for 30 days in June before Round 1 kicks off July 1.</p>
+      <div class="hero-actions fade-up d3">
+        <a class="btn-primary ml-onclick-form" href="javascript:void(0)" onclick="showWaitlistForm()">Join the Waitlist</a>
+        <a href="#how-it-works" class="btn-outline">See How It Works</a>
+      </div>
+    </div>
+  </div>
+  <div class="hero-panel">
+    <div class="panel-label">Challenge Overview</div>
+    <div class="panel-row">
+      <span class="panel-stat">90</span>
+      <div class="panel-desc">Days per round — Round 1 starts July 1</div>
+      <div class="panel-badge">Round 1</div>
+    </div>
+    <div class="panel-row">
+      <span class="panel-stat">30</span>
+      <div class="panel-desc">Day free trial in June — try it before you commit</div>
+      <div class="panel-badge">Trial</div>
+    </div>
+    <div class="panel-row">
+      <span class="panel-stat">1×</span>
+      <div class="panel-desc">Weekly proof submission required</div>
+    </div>
+    <div class="panel-row">
+      <span class="panel-stat">$↑</span>
+      <div class="panel-desc">Prize pool scales with membership</div>
+    </div>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee-bar" aria-hidden="true">
+  <div class="marquee-track">
+    <span class="bold">AD ACCOUNTABILITY CHALLENGE</span><span class="marquee-sep">·</span>
+    <span>Meta + Google Ads</span><span class="marquee-sep">·</span>
+    <span>90 Days. Real Data. No Excuses.</span><span class="marquee-sep">·</span>
+    <span class="bold">Round 1 Starts July 1, 2026</span><span class="marquee-sep">·</span>
+    <span>Free Trial Starts June 1</span><span class="marquee-sep">·</span>
+    <span>Proof-Based Weekly Submissions</span><span class="marquee-sep">·</span>
+    <span>AAC All-Star Cash Prize</span><span class="marquee-sep">·</span>
+    <span>Your Spend Should Compound</span><span class="marquee-sep">·</span>
+    <span class="bold">AD ACCOUNTABILITY CHALLENGE</span><span class="marquee-sep">·</span>
+    <span>Meta + Google Ads</span><span class="marquee-sep">·</span>
+    <span>90 Days. Real Data. No Excuses.</span><span class="marquee-sep">·</span>
+    <span class="bold">Round 1 Starts July 1, 2026</span><span class="marquee-sep">·</span>
+    <span>Free Trial Starts June 1</span><span class="marquee-sep">·</span>
+    <span>Proof-Based Weekly Submissions</span><span class="marquee-sep">·</span>
+    <span>AAC All-Star Cash Prize</span><span class="marquee-sep">·</span>
+    <span>Your Spend Should Compound</span><span class="marquee-sep">·</span>
+  </div>
+</div>
+
+<!-- PROBLEM -->
+<section class="section">
+  <div class="container">
+    <div style="margin-bottom:48px;">
+      <span class="section-label">The Problem</span>
+      <h2 class="section-title">You're Running Ads.<br>But Are You Actually Managing Them?</h2>
+    </div>
+    <div class="problem-strip">
+      <div class="problem-cell"><span class="problem-num">01</span><h3>Set it, forget it</h3><p>Campaigns running for months with no creative refresh. The audience is exhausted. You're paying for it anyway.</p></div>
+      <div class="problem-cell"><span class="problem-num">02</span><h3>Never reviewing the data</h3><p>Your dashboard has answers. You just never open it. No review cadence means flying blind on your own money.</p></div>
+      <div class="problem-cell"><span class="problem-num">03</span><h3>Zero testing discipline</h3><p>One headline, one creative, one audience. You know you should test more. You just never do. Results plateau.</p></div>
+      <div class="problem-cell"><span class="problem-num">04</span><h3>Spend without compounding</h3><p>Ad spend gets smarter over time — but only if you iterate. Without a loop, you're paying the same cost forever.</p></div>
+      <div class="problem-cell"><span class="problem-num">05</span><h3>No one holding you to it</h3><p>Ad management gets pushed to next week. No urgency, no cadence, no results. Your campaigns pay the price.</p></div>
+      <div class="problem-cell"><span class="problem-num">06</span><h3>Budget without strategy</h3><p>Spending money isn't the same as running a good ad. A budget without a review loop is a slower way to lose it.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- COMPARISON -->
+<section class="section section-dark">
+  <div class="container">
+    <div style="margin-bottom:52px;">
+      <span class="section-label">Competitive Landscape</span>
+      <h2 class="section-title" style="color:var(--white);">Nothing Else Does This.</h2>
+      <p class="section-sub" style="color:#9a9490; max-width:580px;">Ad courses teach. Habit apps track. Fitness challenges hold you accountable. AAC is the only program that combines all three — built specifically for people spending money on paid ads.</p>
+    </div>
+
+    <div style="overflow-x:auto;">
+      <table style="width:100%; border-collapse:collapse; font-size:.9rem; min-width:560px;">
+        <thead>
+          <tr style="border-bottom:1px solid #2a2826;">
+            <th style="font-family:'DM Mono',monospace; font-size:.63rem; letter-spacing:.14em; text-transform:uppercase; color:#5a5450; padding:12px 20px; text-align:left; font-weight:400; width:22%;"></th>
+            <th style="padding:16px 16px 20px; text-align:center; min-width:130px;">
+              <div style="font-family:'Bebas Neue',sans-serif; font-size:1.1rem; letter-spacing:.06em; color:var(--white); margin-bottom:4px;">AAC</div>
+              <div style="font-family:'DM Mono',monospace; font-size:.6rem; letter-spacing:.08em; color:var(--gold); text-transform:uppercase;">Ad Accountability Challenge</div>
+            </th>
+            <th style="padding:16px 16px 20px; text-align:center; min-width:130px;">
+              <div style="font-family:'Bebas Neue',sans-serif; font-size:1.1rem; letter-spacing:.06em; color:#7a7470; margin-bottom:4px;">Ad Bootcamps</div>
+              <div style="font-family:'DM Mono',monospace; font-size:.6rem; letter-spacing:.08em; color:#4a4846; text-transform:uppercase;">e.g. FB Ads Bootcamp</div>
+            </th>
+            <th style="padding:16px 16px 20px; text-align:center; min-width:130px;">
+              <div style="font-family:'Bebas Neue',sans-serif; font-size:1.1rem; letter-spacing:.06em; color:#7a7470; margin-bottom:4px;">Habit Apps</div>
+              <div style="font-family:'DM Mono',monospace; font-size:.6rem; letter-spacing:.08em; color:#4a4846; text-transform:uppercase;">e.g. Streaks, Habitica</div>
+            </th>
+            <th style="padding:16px 16px 20px; text-align:center; min-width:130px;">
+              <div style="font-family:'Bebas Neue',sans-serif; font-size:1.1rem; letter-spacing:.06em; color:#7a7470; margin-bottom:4px;">Communities</div>
+              <div style="font-family:'DM Mono',monospace; font-size:.6rem; letter-spacing:.08em; color:#4a4846; text-transform:uppercase;">e.g. Skool groups</div>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr style="border-bottom:1px solid #1a1816;">
+            <td style="padding:16px 20px; font-family:'DM Mono',monospace; font-size:.72rem; letter-spacing:.06em; color:#7a7470; text-transform:uppercase;">Ads-Specific</td>
+            <td style="padding:16px 16px; text-align:center; color:var(--gold); font-size:1.1rem; background:rgba(201,168,77,.04);">✓</td>
+            <td style="padding:16px 16px; text-align:center; color:#4a6640; font-size:1rem;">✓</td>
+            <td style="padding:16px 16px; text-align:center; color:#2a2826; font-size:1rem;">✗</td>
+            <td style="padding:16px 16px; text-align:center; color:#2a2826; font-size:1rem;">✗</td>
+          </tr>
+          <tr style="border-bottom:1px solid #1a1816;">
+            <td style="padding:16px 20px; font-family:'DM Mono',monospace; font-size:.72rem; letter-spacing:.06em; color:#7a7470; text-transform:uppercase;">Proof-Based</td>
+            <td style="padding:16px 16px; text-align:center; color:var(--gold); font-size:1.1rem; background:rgba(201,168,77,.04);">✓</td>
+            <td style="padding:16px 16px; text-align:center; color:#2a2826; font-size:1rem;">✗</td>
+            <td style="padding:16px 16px; text-align:center; color:#4a6640; font-size:1rem;">✓</td>
+            <td style="padding:16px 16px; text-align:center; color:#2a2826; font-size:1rem;">✗</td>
+          </tr>
+          <tr style="border-bottom:1px solid #1a1816;">
+            <td style="padding:16px 20px; font-family:'DM Mono',monospace; font-size:.72rem; letter-spacing:.06em; color:#7a7470; text-transform:uppercase;">Structured Rounds</td>
+            <td style="padding:16px 16px; text-align:center; color:var(--gold); font-size:1.1rem; background:rgba(201,168,77,.04);">✓</td>
+            <td style="padding:16px 16px; text-align:center; color:#2a2826; font-size:1rem;">✗</td>
+            <td style="padding:16px 16px; text-align:center; color:#2a2826; font-size:1rem;">✗</td>
+            <td style="padding:16px 16px; text-align:center; color:#2a2826; font-size:1rem;">✗</td>
+          </tr>
+          <tr style="border-bottom:1px solid #1a1816;">
+            <td style="padding:16px 20px; font-family:'DM Mono',monospace; font-size:.72rem; letter-spacing:.06em; color:#7a7470; text-transform:uppercase;">Prize Pool</td>
+            <td style="padding:16px 16px; text-align:center; color:var(--gold); font-size:1.1rem; background:rgba(201,168,77,.04);">✓</td>
+            <td style="padding:16px 16px; text-align:center; color:#2a2826; font-size:1rem;">✗</td>
+            <td style="padding:16px 16px; text-align:center; color:#2a2826; font-size:1rem;">✗</td>
+            <td style="padding:16px 16px; text-align:center; color:#2a2826; font-size:1rem;">✗</td>
+          </tr>
+          <tr style="border-bottom:1px solid #2a2826;">
+            <td style="padding:16px 20px; font-family:'DM Mono',monospace; font-size:.72rem; letter-spacing:.06em; color:#7a7470; text-transform:uppercase;">Peer Accountability</td>
+            <td style="padding:16px 16px; text-align:center; color:var(--gold); font-size:1.1rem; background:rgba(201,168,77,.04);">✓</td>
+            <td style="padding:16px 16px; text-align:center; color:#2a2826; font-size:1rem;">✗</td>
+            <td style="padding:16px 16px; text-align:center; color:#2a2826; font-size:1rem;">✗</td>
+            <td style="padding:16px 16px; text-align:center; color:#4a6640; font-size:1rem;">✓</td>
+          </tr>
+          <tr style="border-bottom:1px solid #1a1816;">
+            <td style="padding:16px 20px; font-family:'DM Mono',monospace; font-size:.72rem; letter-spacing:.06em; color:#7a7470; text-transform:uppercase;">Exclusive Community</td>
+            <td style="padding:16px 16px; text-align:center; color:var(--gold); font-size:1.1rem; background:rgba(201,168,77,.04);">✓</td>
+            <td style="padding:16px 16px; text-align:center; color:#2a2826; font-size:1rem;">✗</td>
+            <td style="padding:16px 16px; text-align:center; color:#2a2826; font-size:1rem;">✗</td>
+            <td style="padding:16px 16px; text-align:center; color:#4a6640; font-size:1rem;">✓</td>
+          </tr>
+          <tr style="border-bottom:1px solid #2a2826;">
+            <td style="padding:16px 20px; font-family:'DM Mono',monospace; font-size:.72rem; letter-spacing:.06em; color:#7a7470; text-transform:uppercase;">Custom Platform</td>
+            <td style="padding:16px 16px; text-align:center; color:var(--gold); font-size:1.1rem; background:rgba(201,168,77,.04);">✓</td>
+            <td style="padding:16px 16px; text-align:center; color:#2a2826; font-size:1rem;">✗</td>
+            <td style="padding:16px 16px; text-align:center; color:#4a6640; font-size:1rem;">✓</td>
+            <td style="padding:16px 16px; text-align:center; color:#4a6640; font-size:1rem;">✓</td>
+          </tr>
+          <tr style="border-bottom:1px solid #2a2826; background:#0a0908;">
+            <td style="padding:16px 20px; font-family:'DM Mono',monospace; font-size:.72rem; letter-spacing:.06em; color:#7a7470; text-transform:uppercase;">Length of Program</td>
+            <td style="padding:16px 16px; text-align:center; color:var(--gold); font-size:.82rem; font-family:'DM Mono',monospace; background:rgba(201,168,77,.04);">30-day trial<br>90-day Round 1</td>
+            <td style="padding:16px 16px; text-align:center; color:#6a6460; font-size:.82rem; font-family:'DM Mono',monospace;">5–7 days</td>
+            <td style="padding:16px 16px; text-align:center; color:#6a6460; font-size:.82rem; font-family:'DM Mono',monospace;">Ongoing</td>
+            <td style="padding:16px 16px; text-align:center; color:#6a6460; font-size:.82rem; font-family:'DM Mono',monospace;">Ongoing</td>
+          </tr>
+          <tr style="background:#0a0908;">
+            <td style="padding:16px 20px; font-family:'DM Mono',monospace; font-size:.72rem; letter-spacing:.06em; color:#7a7470; text-transform:uppercase;">Pricing</td>
+            <td style="padding:16px 16px; text-align:center; background:rgba(201,168,77,.06);">
+              <span style="font-family:'DM Mono',monospace; font-size:.7rem; color:var(--gold); background:rgba(201,168,77,.12); border:1px solid rgba(201,168,77,.3); padding:5px 12px; border-radius:2px; display:inline-block; white-space:nowrap;">Free Trial · $95 Round 1</span>
+            </td>
+            <td style="padding:16px 16px; text-align:center;">
+              <span style="font-family:'DM Mono',monospace; font-size:.7rem; color:#6a6460; background:#111; border:1px solid #2a2826; padding:5px 12px; border-radius:2px; display:inline-block; white-space:nowrap;">$25–97 one-time</span>
+            </td>
+            <td style="padding:16px 16px; text-align:center;">
+              <span style="font-family:'DM Mono',monospace; font-size:.7rem; color:#6a6460; background:#111; border:1px solid #2a2826; padding:5px 12px; border-radius:2px; display:inline-block; white-space:nowrap;">Free – $12/mo</span>
+            </td>
+            <td style="padding:16px 16px; text-align:center;">
+              <span style="font-family:'DM Mono',monospace; font-size:.7rem; color:#6a6460; background:#111; border:1px solid #2a2826; padding:5px 12px; border-radius:2px; display:inline-block; white-space:nowrap;">$29–97/mo</span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="section section-alt" id="how-it-works">
+  <div class="container">
+    <div style="margin-bottom:48px;">
+      <span class="section-label">How It Works</span>
+      <h2 class="section-title">Accountability You Can Actually Prove</h2>
+      <p class="section-sub">No honor system. No vibes check-in. You submit screenshot proof every week or it doesn't count.</p>
+    </div>
+    <div class="hiw-grid">
+      <div class="hiw-nav">
+        <div class="hiw-tab active" data-tab="0"><div><div class="hiw-tab-num">01</div><div class="hiw-tab-label">Join with your existing ads</div></div></div>
+        <div class="hiw-tab" data-tab="1"><div><div class="hiw-tab-num">02</div><div class="hiw-tab-label">Keep one campaign active</div></div></div>
+        <div class="hiw-tab" data-tab="2"><div><div class="hiw-tab-num">03</div><div class="hiw-tab-label">Submit your weekly snapshot</div></div></div>
+        <div class="hiw-tab" data-tab="3"><div><div class="hiw-tab-num">04</div><div class="hiw-tab-label">Document one data-driven change</div></div></div>
+        <div class="hiw-tab" data-tab="4"><div><div class="hiw-tab-num">05</div><div class="hiw-tab-label">Earn AAC All-Star</div></div></div>
+      </div>
+      <div>
+        <div class="hiw-content active" data-content="0">
+          <h3>Start Where You Are</h3>
+          <p>You bring your existing ad setup — Meta, Google, or both. AAC isn't a course on how to run ads. It's the structure and accountability to run them consistently and actually review what's happening week over week.</p>
+          <p>No minimum ad spend required. Members at $10/day and $1,000/day both belong here. The discipline is the same either way.</p>
+        </div>
+        <div class="hiw-content" data-content="1">
+          <h3>One Active Campaign, Every Window</h3>
+          <p>Each submission window, you upload a screenshot of your Ads Manager showing at least one live campaign. No active ad = no credit for that window. No exceptions, no grace period, no "I meant to."</p>
+          <div class="hiw-proof">📸 Screenshot proof required each window</div>
+        </div>
+        <div class="hiw-content" data-content="2">
+          <h3>Your Numbers on the Form</h3>
+          <p>Along with your screenshot, you fill out the submission form each window: spend, impressions, CTR, results. It takes two minutes and builds the habit of actually reading your dashboard instead of ignoring it.</p>
+          <div class="hiw-proof">📊 Spend · Impressions · CTR · Results</div>
+        </div>
+        <div class="hiw-content" data-content="3">
+          <h3>One Change Tied to Data</h3>
+          <p>New ad creative. Updated copy. A budget shift. A new audience segment. Whatever the numbers are telling you — you act on it and log what you changed and why, directly on the submission form. This is how ad spend compounds.</p>
+          <div class="hiw-proof">✏️ Documented on the submission form</div>
+        </div>
+        <div class="hiw-content" data-content="4">
+          <h3>Hit Every Week, Earn the Title</h3>
+          <p>Members who complete every weekly minimum for the full 90-day window earn AAC All-Star status and qualify for the prize pool. Miss a single week and you're out. That's the point.</p>
+          <p>12 weeks of active ads. Every submission. No partial credit.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WHAT COUNTS -->
+<section class="section">
+  <div class="container">
+    <div style="margin-bottom:48px;">
+      <span class="section-label">Proof Standards</span>
+      <h2 class="section-title">What Counts as a Valid Submission</h2>
+      <p class="section-sub">One submission per window. Screenshot proof of an active campaign is required. Performance report and documented change are submitted via the form.</p>
+    </div>
+    <table class="counts-table">
+      <thead>
+        <tr>
+          <th>What</th>
+          <th>How</th>
+          <th>Platform</th>
+          <th>Details</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Active campaign proof</td>
+          <td>Screenshot upload</td>
+          <td class="platform">Meta / Google / TikTok / LinkedIn</td>
+          <td>At least one live, spending campaign visible in Ads Manager — required every window</td>
+        </tr>
+        <tr>
+          <td>Performance report</td>
+          <td>Submission form</td>
+          <td class="platform">Any platform</td>
+          <td>Spend, impressions, CTR, and results for the window — entered on the form</td>
+        </tr>
+        <tr>
+          <td>Documented change</td>
+          <td>Submission form</td>
+          <td class="platform">Any platform</td>
+          <td>What you changed and what data prompted it (creative, copy, budget, audience, bid)</td>
+        </tr>
+      </tbody>
+    </table>
+
+
+  </div>
+</section>
+
+<!-- ALL-STAR -->
+<section class="section section-dark" id="allstar">
+  <div class="allstar-inner">
+    <div class="allstar-text">
+      <span class="section-label">AAC All-Star</span>
+      <h2>Hit Every<br>Week. <em>Earn<br>the Title.</em></h2>
+      <p style="margin-bottom:16px;">AAC All-Star goes to members who complete every single weekly minimum for the full 90 days. That's 12 weeks of active ads, weekly data snapshots, and documented changes. All of them.</p>
+      <p>No exceptions. No partial credit. All-Stars qualify for the prize pool. The accountability is the whole product.</p>
+    </div>
+    <div class="allstar-prizes">
+      <div class="prize-header">Prize Pool — AAC All-Stars Only</div>
+      <div class="prize-row">
+        <div class="prize-row-label">Cash Prize</div>
+        <div class="prize-row-val">Funded by entry fees — grows as membership grows</div>
+      </div>
+      <div class="prize-row">
+        <div class="prize-row-label">Ad Credit Giveaway</div>
+        <div class="prize-row-val">Meta or Google Ads gift cards</div>
+      </div>
+      <div class="prize-row">
+        <div class="prize-row-label">Ad Audit Session</div>
+        <div class="prize-row-val">1-on-1 campaign review with Nate</div>
+      </div>
+      <div class="prize-row">
+        <div class="prize-row-label">Eligibility</div>
+        <div class="prize-row-val">Complete all 12 weeks of submissions</div>
+      </div>
+      <div class="allstar-note">Prize structure confirmed before Round 1 opens · Scales with membership</div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section class="section section-alt" id="pricing">
+  <div class="container">
+    <div style="margin-bottom:52px; text-align:center;">
+      <span class="section-label">Pricing</span>
+      <h2 class="section-title" style="text-align:center;">Free Trial in June.<br>Round 1 Starts July 1.</h2>
+      <p class="section-sub" style="margin:0 auto;">Try the 30-day free trial in June to see if it's right for you. Commit to Round 1 — 90 days starting July 1, 2026.</p>
+    </div>
+    <div class="pricing-row">
+      <div class="pricing-col">
+        <div class="pricing-tier">Free Trial — June 2026</div>
+        <div class="price-line"><span class="price-num" style="font-size:4.5rem; font-family:'Bebas Neue',sans-serif; color:var(--ink); line-height:1; letter-spacing:.01em;">Free</span></div>
+        <div class="price-period">No cost · Try it in June before committing to Round 1</div>
+        <ul class="feature-list">
+          <li class="on">30-day challenge access</li>
+          <li class="on">Private community</li>
+          <li class="on">Weekly check-ins + proof submissions</li>
+          <li class="on">Get a feel for the cadence</li>
+          <li>AAC All-Star eligibility</li>
+          <li>Prize pool entry</li>
+          <li>Monthly live strategy Zooms</li>
+        </ul>
+        <a class="btn-full btn-full-outline ml-onclick-form" href="javascript:void(0)" onclick="showWaitlistForm()">Join Waitlist</a>
+      </div>
+      <div class="pricing-col featured">
+        <div class="pricing-badge-top" style="position:absolute;top:-13px;left:50%;transform:translateX(-50%);background:var(--gold);color:var(--ink);font-family:'DM Mono',monospace;font-size:.68rem;letter-spacing:.1em;font-weight:500;padding:4px 14px;border-radius:2px;white-space:nowrap;">Round 1 — Recommended</div>
+        <div class="pricing-tier">Round 1 — July 1, 2026</div>
+        <div class="price-line"><span class="price-currency">$</span><span class="price-num">95</span></div>
+        <div class="price-period">One-time · 90 days starting July 1, 2026</div>
+        <ul class="feature-list">
+          <li class="on">Full 90-day challenge access</li>
+          <li class="on">Private community</li>
+          <li class="on">Weekly check-ins + proof submissions</li>
+          <li class="on">AAC All-Star eligibility</li>
+          <li class="on">Prize pool entry</li>
+          <li class="on">Monthly live strategy Zooms + guest speakers</li>
+          <li class="on">Early access to Round 2 at locked rate</li>
+        </ul>
+        <a class="btn-full btn-full-gold" href="https://buy.stripe.com/8x28wP3Pt5MX99Q3WNbo406" target="_blank" rel="noopener">Buy Round 1 — $95</a>
+      </div>
+    </div>
+    <p style="text-align:center; margin-top:24px; font-family:'DM Mono',monospace; font-size:.68rem; letter-spacing:.06em; color:var(--rule-dark);">Free trial waitlist opens soon · Trial members get first access to Round 1</p>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="section" id="faq">
+  <div class="container">
+    <div class="faq-cols">
+      <div class="faq-sidebar">
+        <span class="section-label">FAQ</span>
+        <h2 style="font-family:'Bebas Neue',sans-serif; font-size:clamp(36px,4vw,52px); letter-spacing:.02em; line-height:1.02; color:var(--ink); margin-bottom:16px;">Common Questions</h2>
+        <p style="font-size:.9rem; font-weight:300; color:var(--muted); line-height:1.65;">Everything you need before you join. More questions? Reach out directly.</p>
+      </div>
+      <div class="faq-list">
+        <div class="faq-item"><div class="faq-q">Do I need to already be running ads?<div class="faq-icon">+</div></div><div class="faq-a">Not necessarily. AAC is about accountability and consistency, with a side of education. You can set one up on your own when we start, but we can't tell you specifically what to do. But we can encourage you to be consistent and to not give up if you don't see results immediately.</div></div>
+        <div class="faq-item"><div class="faq-q">Which platforms are supported?<div class="faq-icon">+</div></div><div class="faq-a">Meta and Google Ads are the primary focus. TikTok, LinkedIn, and others are accepted as long as you can submit equivalent screenshot proof of an active campaign and weekly performance data.</div></div>
+        <div class="faq-item"><div class="faq-q">What counts as a "documented change"?<div class="faq-icon">+</div></div><div class="faq-a">Anything you changed based on what the data told you — new creative, updated copy, budget adjustment, new audience, bid strategy change. Describe what changed and why, and it counts.</div></div>
+        <div class="faq-item"><div class="faq-q">Is there a minimum ad spend?<div class="faq-icon">+</div></div><div class="faq-a">No minimum set by AAC. You need at least one active, spending campaign per week — but the budget is yours. Members at $10/day and members at $1,000/day are both welcome.</div></div>
+        <div class="faq-item"><div class="faq-q">Will Nate coach us on ad strategy?<div class="faq-icon">+</div></div><div class="faq-a">Not in a 1-on-1 coaching sense — AAC isn't primarily about education. It's about maintaining consistency. However, Round 1 will include monthly live strategy Zooms, guest speaker sessions with real practitioners, and peer ad reviews inside the community. The knowledge is there. The accountability structure surfaces it consistently.</div></div>
+        <div class="faq-item"><div class="faq-q">How does the prize pool work?<div class="faq-icon">+</div></div><div class="faq-a">The prize pool is funded by entry fees — the more members who join, the larger it gets. All AAC All-Stars (every weekly minimum, all 12 weeks of Round 1) are eligible. Final prize structure is confirmed before Round 1 opens.</div></div>
+        <div class="faq-item"><div class="faq-q">Is this connected to SMAC and WAC?<div class="faq-icon">+</div></div><div class="faq-a">Yes. AAC is the third challenge under The Accountability Challenge Co., alongside SMAC (social media) and WAC (websites). Same proof-based model, different discipline: paid ads.</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WAITLIST -->
+<section class="section section-alt" id="waitlist">
+  <div class="container">
+    <div class="waitlist-inner">
+      <div class="waitlist-left">
+        <span class="section-label">Waitlist</span>
+        <h2>First In for the<br><em>June Trial.</em></h2>
+        <p>Free trial starts June 1, 2026. Round 1 launches July 1. Get on the list now — waitlist members get first access and pricing before it's announced anywhere else.</p>
+      </div>
+      <div class="waitlist-form-wrap" style="display:flex; flex-direction:column; gap:16px; justify-content:center;">
+        <a class="form-submit ml-onclick-form" href="javascript:void(0)" onclick="showWaitlistForm()" style="font-size:.85rem; padding:18px 28px; border-radius:2px; cursor:pointer; text-align:center; text-decoration:none; display:block;">Get Early Access →</a>
+        <p class="form-note" style="text-align:center;">No spam. One email when spots open.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SISTER BAR -->
+<div class="sister-bar">
+  <div class="sister-bar-inner">
+    <span class="sister-label">Also by Nate Templeton</span>
+    <div class="sister-links">
+      <a href="https://www.joinsmac.com" class="sister-link" target="_blank" rel="noopener">SMAC — Social Media Accountability →</a>
+      <a href="https://www.joinwac.com" class="sister-link" target="_blank" rel="noopener">WAC — Website Accountability →</a>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-logo">AAC <span>Ad Accountability Challenge</span></div>
+    <div class="footer-links">
+      <a href="https://www.natetempleton.com" target="_blank" rel="noopener">Created by Nate Templeton</a>
+      <a href="privacy.html">Privacy Policy</a>
+      <a href="contact.html">Contact</a>
+    </div>
+  </div>
+  <div class="footer-copy">© 2026 Nate Templeton. All rights reserved.</div>
+</footer>
+
+<script>
+  // Hamburger
+  const hamburger = document.getElementById('hamburger');
+  const mobileMenu = document.getElementById('mobileMenu');
+  hamburger.addEventListener('click', () => {
+    const open = mobileMenu.classList.toggle('open');
+    hamburger.classList.toggle('open', open);
+    hamburger.setAttribute('aria-expanded', open);
+  });
+  mobileMenu.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+    mobileMenu.classList.remove('open'); hamburger.classList.remove('open'); hamburger.setAttribute('aria-expanded', false);
+  }));
+
+  // How It Works tabs
+  document.querySelectorAll('.hiw-tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      const idx = tab.dataset.tab;
+      document.querySelectorAll('.hiw-tab').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.hiw-content').forEach(c => c.classList.remove('active'));
+      tab.classList.add('active');
+      document.querySelector(`.hiw-content[data-content="${idx}"]`).classList.add('active');
+    });
+  });
+
+  // FAQ
+  document.querySelectorAll('.faq-q').forEach(q => {
+    q.addEventListener('click', () => {
+      const item = q.closest('.faq-item');
+      const isOpen = item.classList.contains('open');
+      document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+      if (!isOpen) item.classList.add('open');
+    });
+  });
+
+  // Scroll fade-in
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.style.opacity='1'; e.target.style.transform='translateY(0)'; } });
+  }, { threshold: 0.07 });
+  document.querySelectorAll('.problem-cell, .pricing-col, .prize-row').forEach(el => {
+    el.style.opacity='0'; el.style.transform='translateY(16px)'; el.style.transition='opacity .45s ease, transform .45s ease';
+    obs.observe(el);
+  });
+</script>
+
+<!-- MailerLite Universal — deferred, loads only on button click -->
+<script>
+  let mlLoaded = false;
+
+  function loadMailerLite(callback) {
+    if (mlLoaded) { callback(); return; }
+    mlLoaded = true;
+    (function(w,d,e,u,f,l,n){w[f]=w[f]||function(){(w[f].q=w[f].q||[])
+    .push(arguments);},l=d.createElement(e),l.async=1,l.src=u,
+    n=d.getElementsByTagName(e)[0],n.parentNode.insertBefore(l,n);})
+    (window,document,'script','https://assets.mailerlite.com/js/universal.js','ml');
+    ml('account', '2186512');
+    // Small delay to let the script initialize before showing the form
+    setTimeout(callback, 800);
+  }
+
+  function showWaitlistForm() {
+    loadMailerLite(function() {
+      ml('show', 'oFZS4B', true);
+    });
+  }
+</script>
+<!-- End MailerLite Universal -->
+</body>
+</html>
