@@ -70,12 +70,13 @@
     .nav-left { display: flex; align-items: center; gap: 0; }
     .nav-logo {
       font-family: 'Bebas Neue', sans-serif;
-      font-size: 1.45rem; letter-spacing: .1em;
-      color: var(--gold); text-decoration: none;
+      font-size: 1.2rem; letter-spacing: .07em;
+      color: var(--paper); text-decoration: none;
       display: flex; align-items: center; height: 100%;
       padding-right: 28px;
       border-right: 1px solid #222;
     }
+    .nav-logo .gold-period { color: var(--gold); }
     .nav-logo .logo-sub {
       font-family: 'DM Mono', monospace;
       font-size: .6rem; letter-spacing: .18em; text-transform: uppercase;
@@ -182,6 +183,12 @@
     }
 
     /* ── CONTENT BODY ── */
+    .content-area {
+      background-color: #F6F1E8;
+      background-image: radial-gradient(circle, rgba(100,90,70,.15) 1px, transparent 1px);
+      background-size: 20px 20px;
+      border-top: 1px solid #D4CEBC;
+    }
     .content-wrap {
       max-width: 860px; margin: 0 auto; padding: 72px 32px 100px;
       display: grid; grid-template-columns: 200px 1fr; gap: 64px; align-items: start;
@@ -193,80 +200,80 @@
     }
     .toc-head {
       font-family: 'DM Mono', monospace; font-size: .6rem; letter-spacing: .18em; text-transform: uppercase;
-      color: #3a3632; margin-bottom: 16px; padding-bottom: 12px;
-      border-bottom: 1px solid #1a1816;
+      color: #9a9080; margin-bottom: 16px; padding-bottom: 12px;
+      border-bottom: 1px solid #D4CEBC;
     }
     .toc-list { list-style: none; display: flex; flex-direction: column; gap: 2px; }
     .toc-list a {
       font-family: 'DM Mono', monospace; font-size: .65rem; letter-spacing: .08em;
-      color: #4a4642; text-decoration: none; padding: 5px 0;
+      color: #7a7470; text-decoration: none; padding: 5px 0;
       display: block; transition: color .2s;
       border-left: 2px solid transparent; padding-left: 10px;
     }
-    .toc-list a:hover { color: var(--gold); border-left-color: var(--gold); }
-    .toc-list a.active { color: var(--gold); border-left-color: var(--gold); }
+    .toc-list a:hover { color: var(--gold-dk); border-left-color: var(--gold-dk); }
+    .toc-list a.active { color: var(--gold-dk); border-left-color: var(--gold-dk); }
 
     /* Prose */
     .prose { min-width: 0; }
 
     .prose-section {
       padding-bottom: 52px;
-      border-bottom: 1px solid #1a1816;
+      border-bottom: 1px solid #D4CEBC;
       margin-bottom: 52px;
     }
     .prose-section:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
 
     .prose-section-num {
       font-family: 'DM Mono', monospace; font-size: .62rem; letter-spacing: .16em; text-transform: uppercase;
-      color: var(--gold); margin-bottom: 12px; display: block;
+      color: var(--gold-dk); margin-bottom: 12px; display: block;
     }
     .prose-section h2 {
       font-family: 'Bebas Neue', sans-serif; font-size: 1.9rem; letter-spacing: .04em;
-      color: var(--paper); margin-bottom: 20px; line-height: 1;
+      color: #0d0d0d; margin-bottom: 20px; line-height: 1;
     }
     .prose-section p {
-      font-size: .95rem; color: #7a7570; line-height: 1.75; font-weight: 300;
+      font-size: .95rem; color: #5a5450; line-height: 1.75; font-weight: 300;
       margin-bottom: 16px;
     }
     .prose-section p:last-child { margin-bottom: 0; }
-    .prose-section p strong { color: var(--paper); font-weight: 500; }
+    .prose-section p strong { color: #0d0d0d; font-weight: 500; }
     .prose-section p a {
-      color: var(--gold); text-decoration: none; border-bottom: 1px solid rgba(201,168,76,.3);
+      color: var(--gold-dk); text-decoration: none; border-bottom: 1px solid rgba(158,124,46,.3);
       transition: border-color .2s;
     }
-    .prose-section p a:hover { border-color: var(--gold); }
+    .prose-section p a:hover { border-color: var(--gold-dk); }
 
     .prose-section ul {
       list-style: none; margin: 16px 0; display: flex; flex-direction: column; gap: 10px;
     }
     .prose-section ul li {
-      font-size: .95rem; color: #7a7570; line-height: 1.65; font-weight: 300;
+      font-size: .95rem; color: #5a5450; line-height: 1.65; font-weight: 300;
       padding-left: 18px; position: relative;
     }
     .prose-section ul li::before {
       content: '◆'; position: absolute; left: 0;
-      font-size: .45rem; color: var(--gold); top: 6px;
+      font-size: .45rem; color: var(--gold-dk); top: 6px;
     }
-    .prose-section ul li strong { color: var(--paper); font-weight: 500; }
+    .prose-section ul li strong { color: #0d0d0d; font-weight: 500; }
 
     /* Highlight box */
     .prose-callout {
-      background: rgba(201,168,76,.05);
-      border: 1px solid rgba(201,168,76,.18);
-      border-left: 3px solid var(--gold);
+      background: rgba(201,168,76,.08);
+      border: 1px solid rgba(158,124,46,.25);
+      border-left: 3px solid var(--gold-dk);
       border-radius: 2px;
       padding: 20px 24px;
       margin: 24px 0;
     }
     .prose-callout p {
-      font-size: .9rem; color: #9a9080; margin-bottom: 0;
+      font-size: .9rem; color: #6a6458; margin-bottom: 0;
     }
-    .prose-callout p strong { color: var(--paper); }
+    .prose-callout p strong { color: #0d0d0d; }
 
     /* Contact block */
     .contact-block {
-      background: #111;
-      border: 1px solid #1a1816;
+      background: #EDE8DC;
+      border: 1px solid #D4CEBC;
       border-radius: 3px;
       padding: 28px 32px;
       margin-top: 24px;
@@ -274,18 +281,18 @@
       flex-wrap: wrap;
     }
     .contact-block-text strong {
-      display: block; font-size: .95rem; font-weight: 600; color: var(--paper); margin-bottom: 4px;
+      display: block; font-size: .95rem; font-weight: 600; color: #0d0d0d; margin-bottom: 4px;
     }
     .contact-block-text span {
-      font-size: .85rem; color: #5a5550;
+      font-size: .85rem; color: #7a7470;
     }
     .contact-block-link {
       font-family: 'DM Mono', monospace; font-size: .68rem; letter-spacing: .1em; text-transform: uppercase;
-      color: var(--gold); border: 1px solid rgba(201,168,76,.3); border-radius: 2px;
+      color: #0d0d0d; border: 1px solid rgba(0,0,0,.25); border-radius: 2px;
       padding: 9px 18px; text-decoration: none; white-space: nowrap;
       transition: background .2s, color .2s;
     }
-    .contact-block-link:hover { background: var(--gold); color: var(--ink); }
+    .contact-block-link:hover { background: #0d0d0d; color: #F6F1E8; }
 
     @media (max-width: 720px) {
       .content-wrap { grid-template-columns: 1fr; gap: 40px; }
@@ -294,10 +301,13 @@
 
     /* ── SCROLL REVEAL ── */
     .reveal {
-      opacity: 0; transform: translateY(22px);
+      opacity: 1; transform: translateY(0);
       transition: opacity .65s ease, transform .65s ease;
     }
-    .reveal.visible { opacity: 1; transform: translateY(0); }
+    .reveal.hidden {
+      opacity: 0; transform: translateY(22px);
+    }
+    .reveal.hidden.visible { opacity: 1; transform: translateY(0); }
 
     /* ── FOOTER ── */
     footer {
@@ -357,8 +367,7 @@
   <nav>
     <div class="nav-left">
       <a href="/" class="nav-logo">
-        TAC Co.
-        <span class="logo-sub">theaccountabilityco.com</span>
+        The Accountability Challenge Co<span class="gold-period">.</span>
       </a>
       <div class="nav-links">
         <a href="/#challenges" class="nav-link">Challenges</a>
@@ -403,6 +412,7 @@
   </section>
 
   <!-- CONTENT -->
+  <div class="content-area">
   <div class="content-wrap">
 
     <!-- TOC -->
@@ -432,7 +442,7 @@
         <p>The Accountability Challenge Co. ("TAC Co.", "we", "us", or "our") operates <strong>theaccountabilityco.com</strong> and its associated challenge sites: joinsmac.com, joinwac.com, and jointheaac.com (collectively, "the Sites").</p>
         <p>We collect only what we need to run the challenges, communicate with members, and process payments. We don't sell your data. We don't run ads. We use a small number of trusted third-party tools to operate the Sites.</p>
         <div class="prose-callout">
-          <p><strong>Plain language commitment:</strong> This policy is written to be read, not buried. If something here is unclear, email us at <a href="mailto:info@theaccountabilityco.com">info@theaccountabilityco.com</a> and we'll clarify it.</p>
+          <p><strong>Plain language commitment:</strong> This policy is written to be read, not buried. If something here is unclear, email us at <a href="/cdn-cgi/l/email-protection#9cf5f2faf3dce8f4f9fdfffff3e9f2e8fdfef5f0f5e8e5fff3b2fff3f1"><span class="__cf_email__" data-cfemail="aec7c0c8c1eedac6cbcfcdcdc1dbc0dacfccc7c2c7dad7cdc180cdc1c3">[email&#160;protected]</span></a> and we'll clarify it.</p>
         </div>
       </div>
 
@@ -519,7 +529,7 @@
           <li><strong>Opt out</strong> of marketing emails at any time</li>
           <li><strong>Data portability</strong> — receive a copy of your data in a common format</li>
         </ul>
-        <p>To exercise any of these rights, contact us at <a href="mailto:info@theaccountabilityco.com">info@theaccountabilityco.com</a>. We'll respond within 30 days.</p>
+        <p>To exercise any of these rights, contact us at <a href="/cdn-cgi/l/email-protection#92fbfcf4fdd2e6faf7f3f1f1fde7fce6f3f0fbfefbe6ebf1fdbcf1fdff"><span class="__cf_email__" data-cfemail="066f68606946726e636765656973687267646f6a6f727f65692865696b">[email&#160;protected]</span></a>. We'll respond within 30 days.</p>
         <p>Note: Deleting your account or data does not entitle you to a refund of any challenge entry fees already paid.</p>
       </div>
 
@@ -543,14 +553,15 @@
         <div class="contact-block">
           <div class="contact-block-text">
             <strong>The Accountability Challenge Co.</strong>
-            <span>info@theaccountabilityco.com</span>
+            <span><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="375e59515877435f525654545842594356555e5b5e434e54581954585a">[email&#160;protected]</a></span>
           </div>
-          <a href="mailto:info@theaccountabilityco.com" class="contact-block-link">Send Email →</a>
+          <a href="/cdn-cgi/l/email-protection#c6afa8a0a986b2aea3a7a5a5a9b3a8b2a7a4afaaafb2bfa5a9e8a5a9ab" class="contact-block-link">Send Email →</a>
         </div>
       </div>
 
     </main>
-  </div>
+  </div><!-- /content-wrap -->
+  </div><!-- /content-area -->
 
   <!-- FOOTER -->
   <footer>
@@ -585,7 +596,7 @@
     </div>
   </footer>
 
-  <script>
+  <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
     // Hamburger
     const hamburger = document.getElementById('hamburger');
     const mobileMenu = document.getElementById('mobileMenu');
@@ -594,8 +605,9 @@
       mobileMenu.classList.toggle('open');
     });
 
-    // Scroll reveal
+    // Scroll reveal — add hidden class via JS so content shows without JS
     const reveals = document.querySelectorAll('.reveal');
+    reveals.forEach(el => el.classList.add('hidden'));
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
@@ -607,18 +619,4 @@
     reveals.forEach(el => observer.observe(el));
 
     // TOC active state on scroll
-    const sections = document.querySelectorAll('.prose-section[id]');
-    const tocLinks = document.querySelectorAll('.toc-list a');
-    const tocObserver = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          tocLinks.forEach(a => a.classList.remove('active'));
-          const active = document.querySelector(`.toc-list a[href="#${entry.target.id}"]`);
-          if (active) active.classList.add('active');
-        }
-      });
-    }, { rootMargin: '-20% 0px -70% 0px' });
-    sections.forEach(s => tocObserver.observe(s));
-  </script>
-</body>
-</html>
+    const sections = do
