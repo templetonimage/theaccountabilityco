@@ -1,626 +1,198 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <!-- Meta Pixel: consent-gated, does NOT fire until the cookie banner is accepted (or a prior "accepted" choice is found in localStorage). See consent script near the closing </body> tag. -->
+  <script>
+  var BRAND = 'TAC';
+  function loadMetaPixel() {
+    if (window.fbq) return;
+    !function(f,b,e,v,n,t,s)
+    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+    n.queue=[];t=b.createElement(e);t.async=!0;
+    t.src=v;s=b.getElementsByTagName(e)[0];
+    s.parentNode.insertBefore(t,s)}(window, document,'script',
+    'https://connect.facebook.net/en_US/fbevents.js');
+    fbq('init', '1676740660054343');
+    fbq('track', 'PageView', { content_name: BRAND });
+  }
+  </script>
+  <!-- No noscript pixel: without JS there's no way to gate on consent, so no-JS visitors are not tracked. -->
+  <!-- End Meta Pixel Code -->
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Privacy Policy — The Accountability Challenge Co.</title>
-  <meta name="description" content="Privacy Policy for The Accountability Challenge Co. and its challenges: SMAC, WAC, and AAC." />
+  <meta name="description" content="Privacy Policy for The Accountability Challenge Co." />
   <link rel="icon" type="image/x-icon" href="favicon.ico" />
   <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png" />
   <link rel="icon" type="image/png" sizes="16x16" href="favicon-16.png" />
   <link rel="apple-touch-icon" sizes="180x180" href="favicon-180.png" />
-  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700&family=Inter:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
     :root {
-      --ink:        #0d0d0d;
-      --ink-mid:    #1a1a1a;
-      --gold:       #C9A84C;
-      --gold-lt:    #E8C97A;
-      --gold-dk:    #9e7c2e;
-      --gold-bg:    rgba(201,168,76,.07);
-      --gold-rule:  rgba(201,168,76,.30);
-      --paper:      #F5F1E8;
-      --paper-dark: #EDE8DC;
-      --muted:      #7a7570;
-      --rule:       #2a2826;
+      --black:        #0d0d0d;
+      --off-black:    #141414;
+      --border:       #2a2a2a;
+      --muted:        #a09a8e;
+      --text:         #d4d0c8;
+      --white:        #f0ece0;
+      --cream:        #f7f3ea;
+      --cream-white:  #fdfbf6;
+      --ink:          #17140f;
+      --ink-muted:    #6b6558;
+      --light-border: #e8e2d4;
     }
-
     html { scroll-behavior: smooth; }
+    body { background: var(--cream); color: var(--ink); font-family: 'Inter', sans-serif; font-size: 17px; line-height: 1.7; -webkit-font-smoothing: antialiased; }
+    .container { max-width: 900px; margin: 0 auto; padding: 0 24px; }
 
-    body {
-      background: var(--ink);
-      color: var(--paper);
-      font-family: 'DM Sans', sans-serif;
-      font-size: 16px;
-      line-height: 1.6;
-      -webkit-font-smoothing: antialiased;
-      overflow-x: hidden;
-    }
+    /* NAV (matches homepage) */
+    nav { position: sticky; top: 0; z-index: 100; background: rgba(13,13,13,.92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); padding: 14px 24px; display: flex; align-items: center; justify-content: space-between; }
+    .nav-logo { font-family: 'Sora', sans-serif; font-size: 1.4rem; letter-spacing: .04em; color: var(--white); text-decoration: none; }
+    .nav-logo span { color: var(--muted); font-size: .78rem; font-family: 'Space Mono', monospace; letter-spacing: .1em; text-transform: uppercase; font-weight: 400; display: block; margin-top: 2px; }
+    .nav-links { display: flex; align-items: center; gap: 28px; }
+    .nav-link { font-family: 'Space Mono', monospace; font-size: .72rem; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); text-decoration: none; transition: color .2s; }
+    .nav-link:hover { color: var(--white); }
 
-    body::before {
-      content: '';
-      position: fixed; inset: 0;
-      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
-      opacity: .022;
-      pointer-events: none;
-      z-index: 9999;
-    }
+    /* LEGAL CONTENT */
+    .legal-wrap { max-width: 720px; margin: 0 auto; padding: 64px 24px 96px; }
+    .tag { display: inline-block; font-family: 'Space Mono', monospace; font-size: .72rem; letter-spacing: .12em; text-transform: uppercase; color: var(--ink-muted); border: 1px solid var(--light-border); padding: 4px 12px; border-radius: 8px; margin-bottom: 20px; }
+    h1 { font-family: 'Sora', sans-serif; font-weight: 700; font-size: clamp(34px, 5vw, 52px); color: var(--ink); letter-spacing: -.01em; line-height: 1.08; margin-bottom: 12px; }
+    .meta { font-family: 'Space Mono', monospace; font-size: .75rem; color: var(--ink-muted); margin-bottom: 44px; padding-bottom: 28px; border-bottom: 1px solid var(--light-border); }
+    h2 { font-family: 'Sora', sans-serif; font-weight: 600; font-size: 1.35rem; color: var(--ink); letter-spacing: .01em; margin: 40px 0 12px; }
+    p { margin-bottom: 16px; font-size: .98rem; color: var(--ink-muted); font-weight: 300; }
+    a { color: var(--ink); text-decoration: underline; }
+    a:hover { color: var(--ink-muted); }
+    ul { padding-left: 20px; margin-bottom: 16px; }
+    li { margin-bottom: 8px; font-size: .98rem; color: var(--ink-muted); font-weight: 300; }
+    strong { color: var(--ink); font-weight: 600; }
 
-    /* ── ANIMATIONS ── */
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(28px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-    @keyframes pulse-dot {
-      0%, 100% { opacity: 1; transform: scale(1); }
-      50%       { opacity: .3; transform: scale(.5); }
-    }
+    /* FOOTER (matches homepage) */
+    footer { background: var(--black); border-top: 1px solid var(--border); padding: 40px 24px; text-align: center; }
+    .footer-logo { font-family: 'Sora', sans-serif; font-size: 1.5rem; color: var(--white); letter-spacing: .04em; margin-bottom: 8px; }
+    .footer-logo span { color: var(--muted); font-size: .78rem; font-family: 'Space Mono', monospace; letter-spacing: .1em; text-transform: uppercase; margin-left: 8px; }
+    footer p { font-size: .82rem; color: var(--muted); margin-top: 12px; }
+    footer a { color: var(--muted); text-decoration: underline; }
+    footer a:hover { color: var(--white); }
+    .sister-badge { display: inline-flex; align-items: center; gap: 8px; margin-top: 20px; font-family: 'Space Mono', monospace; font-size: .72rem; letter-spacing: .08em; color: var(--muted); border: 1px solid var(--border); padding: 8px 14px; border-radius: 8px; }
+    .sister-badge a { text-decoration: none; color: var(--muted); }
+    .sister-badge a:hover { color: var(--white); }
 
-    .fade-up { animation: fadeUp .7s ease both; }
-    .d1 { animation-delay: .08s; } .d2 { animation-delay: .2s; } .d3 { animation-delay: .34s; }
-
-    /* ── NAV ── */
-    nav {
-      position: sticky; top: 0; z-index: 100;
-      background: rgba(13,13,13,.95);
-      backdrop-filter: blur(14px);
-      border-bottom: 1px solid rgba(201,168,76,.22);
-      padding: 0 32px;
-      display: flex; align-items: stretch; justify-content: space-between;
-      height: 56px;
-    }
-    .nav-left { display: flex; align-items: center; gap: 0; }
-    .nav-logo {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 1.2rem; letter-spacing: .07em;
-      color: var(--paper); text-decoration: none;
-      display: flex; align-items: center; height: 100%;
-      padding-right: 28px;
-      border-right: 1px solid #222;
-    }
-    .nav-logo .gold-period { color: var(--gold); }
-    .nav-logo .logo-sub {
-      font-family: 'DM Mono', monospace;
-      font-size: .6rem; letter-spacing: .18em; text-transform: uppercase;
-      color: var(--muted); margin-left: 10px; margin-top: 2px;
-    }
-    .nav-links { display: flex; align-items: stretch; margin-left: 0; }
-    .nav-link {
-      font-family: 'DM Mono', monospace; font-size: .68rem; letter-spacing: .1em; text-transform: uppercase;
-      color: #5a5550; text-decoration: none; padding: 0 20px;
-      display: flex; align-items: center;
-      border-right: 1px solid #1a1816;
-      transition: color .2s, background .2s;
-    }
-    .nav-link:hover { color: var(--paper); background: #141210; }
-    .nav-right { display: flex; align-items: center; gap: 10px; }
-    .nav-badge {
-      font-family: 'DM Mono', monospace; font-size: .62rem; letter-spacing: .1em; text-transform: uppercase;
-      color: var(--muted); padding: 5px 14px;
-      border: 1px solid #2a2826; border-radius: 2px;
-      text-decoration: none; transition: color .2s, border-color .2s;
-    }
-    .nav-badge:hover { color: var(--gold); border-color: var(--gold-rule); }
-
-    .hamburger {
-      display: none; flex-direction: column; justify-content: center; gap: 5px;
-      width: 36px; height: 36px; background: transparent;
-      border: 1px solid #2a2826; border-radius: 2px; cursor: pointer; padding: 7px;
-    }
-    .hamburger span { display: block; width: 100%; height: 1.5px; background: #888; transition: all .22s ease; }
-    .hamburger.open span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
-    .hamburger.open span:nth-child(2) { opacity: 0; }
-    .hamburger.open span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
-
-    .mobile-menu {
-      display: none; position: fixed; top: 56px; left: 0; right: 0;
-      background: var(--ink); border-bottom: 1px solid #1e1c1a;
-      padding: 16px 24px 28px; z-index: 99; flex-direction: column;
-    }
-    .mobile-menu.open { display: flex; }
-    .mobile-menu a {
-      font-family: 'DM Mono', monospace; font-size: .8rem; letter-spacing: .08em; text-transform: uppercase;
-      color: #7a7470; text-decoration: none; padding: 14px 0; border-bottom: 1px solid #1e1c1a; transition: color .2s;
-    }
-    .mobile-menu a:hover { color: var(--paper); }
-
-    @media (max-width: 720px) {
-      .nav-links { display: none; }
-      .nav-right { display: none; }
-      .hamburger { display: flex; }
-    }
-
-    /* ── PAGE HERO ── */
-    .page-hero {
-      background: var(--ink);
-      position: relative; overflow: hidden;
-      padding: 80px 0 72px;
-      border-bottom: 1px solid #1a1816;
-    }
-    .page-hero-watermark {
-      position: absolute; inset: 0; pointer-events: none; z-index: 1;
-      display: flex; align-items: center; overflow: hidden;
-    }
-    .page-hero-watermark span {
-      font-family: 'Bebas Neue', sans-serif; font-size: 28vw;
-      letter-spacing: .04em; line-height: 1;
-      color: rgba(201,168,76,.04);
-      white-space: nowrap; display: block;
-    }
-    .page-hero-grid {
-      position: absolute; inset: 0; pointer-events: none;
-      background-image:
-        linear-gradient(rgba(201,168,76,.03) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(201,168,76,.03) 1px, transparent 1px);
-      background-size: 80px 80px;
-    }
-    .page-hero-inner {
-      max-width: 860px; margin: 0 auto; padding: 0 32px;
-      position: relative; z-index: 2;
-    }
-    .page-eyebrow {
-      font-family: 'DM Mono', monospace; font-size: .7rem; letter-spacing: .22em; text-transform: uppercase;
-      color: var(--gold); margin-bottom: 24px;
-      display: flex; align-items: center; gap: 10px;
-    }
-    .live-dot {
-      display: inline-block; width: 6px; height: 6px; background: var(--gold);
-      border-radius: 50%; animation: pulse-dot 2s ease-in-out infinite;
-    }
-    .page-title {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: clamp(52px, 7vw, 88px);
-      line-height: .92; letter-spacing: .01em;
-      color: var(--paper); margin-bottom: 28px;
-    }
-    .page-meta {
-      display: flex; align-items: center; gap: 24px; flex-wrap: wrap;
-    }
-    .page-meta-item {
-      font-family: 'DM Mono', monospace; font-size: .65rem; letter-spacing: .12em; text-transform: uppercase;
-      color: #4a4642; display: flex; align-items: center; gap: 8px;
-    }
-    .page-meta-item::before {
-      content: ''; display: inline-block; width: 16px; height: 1px; background: #2a2826;
-    }
-
-    /* ── CONTENT BODY ── */
-    .content-area {
-      background-color: #F6F1E8;
-      background-image: radial-gradient(circle, rgba(100,90,70,.15) 1px, transparent 1px);
-      background-size: 20px 20px;
-      border-top: 1px solid #D4CEBC;
-    }
-    .content-wrap {
-      max-width: 860px; margin: 0 auto; padding: 72px 32px 100px;
-      display: grid; grid-template-columns: 200px 1fr; gap: 64px; align-items: start;
-    }
-
-    /* Sticky TOC */
-    .toc {
-      position: sticky; top: 80px;
-    }
-    .toc-head {
-      font-family: 'DM Mono', monospace; font-size: .6rem; letter-spacing: .18em; text-transform: uppercase;
-      color: #9a9080; margin-bottom: 16px; padding-bottom: 12px;
-      border-bottom: 1px solid #D4CEBC;
-    }
-    .toc-list { list-style: none; display: flex; flex-direction: column; gap: 2px; }
-    .toc-list a {
-      font-family: 'DM Mono', monospace; font-size: .65rem; letter-spacing: .08em;
-      color: #7a7470; text-decoration: none; padding: 5px 0;
-      display: block; transition: color .2s;
-      border-left: 2px solid transparent; padding-left: 10px;
-    }
-    .toc-list a:hover { color: var(--gold-dk); border-left-color: var(--gold-dk); }
-    .toc-list a.active { color: var(--gold-dk); border-left-color: var(--gold-dk); }
-
-    /* Prose */
-    .prose { min-width: 0; }
-
-    .prose-section {
-      padding-bottom: 52px;
-      border-bottom: 1px solid #D4CEBC;
-      margin-bottom: 52px;
-    }
-    .prose-section:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
-
-    .prose-section-num {
-      font-family: 'DM Mono', monospace; font-size: .62rem; letter-spacing: .16em; text-transform: uppercase;
-      color: var(--gold-dk); margin-bottom: 12px; display: block;
-    }
-    .prose-section h2 {
-      font-family: 'Bebas Neue', sans-serif; font-size: 1.9rem; letter-spacing: .04em;
-      color: #0d0d0d; margin-bottom: 20px; line-height: 1;
-    }
-    .prose-section p {
-      font-size: .95rem; color: #5a5450; line-height: 1.75; font-weight: 300;
-      margin-bottom: 16px;
-    }
-    .prose-section p:last-child { margin-bottom: 0; }
-    .prose-section p strong { color: #0d0d0d; font-weight: 500; }
-    .prose-section p a {
-      color: var(--gold-dk); text-decoration: none; border-bottom: 1px solid rgba(158,124,46,.3);
-      transition: border-color .2s;
-    }
-    .prose-section p a:hover { border-color: var(--gold-dk); }
-
-    .prose-section ul {
-      list-style: none; margin: 16px 0; display: flex; flex-direction: column; gap: 10px;
-    }
-    .prose-section ul li {
-      font-size: .95rem; color: #5a5450; line-height: 1.65; font-weight: 300;
-      padding-left: 18px; position: relative;
-    }
-    .prose-section ul li::before {
-      content: '◆'; position: absolute; left: 0;
-      font-size: .45rem; color: var(--gold-dk); top: 6px;
-    }
-    .prose-section ul li strong { color: #0d0d0d; font-weight: 500; }
-
-    /* Highlight box */
-    .prose-callout {
-      background: rgba(201,168,76,.08);
-      border: 1px solid rgba(158,124,46,.25);
-      border-left: 3px solid var(--gold-dk);
-      border-radius: 2px;
-      padding: 20px 24px;
-      margin: 24px 0;
-    }
-    .prose-callout p {
-      font-size: .9rem; color: #6a6458; margin-bottom: 0;
-    }
-    .prose-callout p strong { color: #0d0d0d; }
-
-    /* Contact block */
-    .contact-block {
-      background: #EDE8DC;
-      border: 1px solid #D4CEBC;
-      border-radius: 3px;
-      padding: 28px 32px;
-      margin-top: 24px;
-      display: flex; align-items: center; justify-content: space-between; gap: 20px;
-      flex-wrap: wrap;
-    }
-    .contact-block-text strong {
-      display: block; font-size: .95rem; font-weight: 600; color: #0d0d0d; margin-bottom: 4px;
-    }
-    .contact-block-text span {
-      font-size: .85rem; color: #7a7470;
-    }
-    .contact-block-link {
-      font-family: 'DM Mono', monospace; font-size: .68rem; letter-spacing: .1em; text-transform: uppercase;
-      color: #0d0d0d; border: 1px solid rgba(0,0,0,.25); border-radius: 2px;
-      padding: 9px 18px; text-decoration: none; white-space: nowrap;
-      transition: background .2s, color .2s;
-    }
-    .contact-block-link:hover { background: #0d0d0d; color: #F6F1E8; }
-
-    @media (max-width: 720px) {
-      .content-wrap { grid-template-columns: 1fr; gap: 40px; }
-      .toc { position: static; }
-    }
-
-    /* ── SCROLL REVEAL ── */
-    .reveal {
-      opacity: 1; transform: translateY(0);
-      transition: opacity .65s ease, transform .65s ease;
-    }
-    .reveal.hidden {
-      opacity: 0; transform: translateY(22px);
-    }
-    .reveal.hidden.visible { opacity: 1; transform: translateY(0); }
-
-    /* ── FOOTER ── */
-    footer {
-      background: #060504;
-      border-top: 1px solid #111;
-      padding: 64px 0 40px;
-    }
-    .footer-inner {
-      max-width: 1080px; margin: 0 auto; padding: 0 32px;
-    }
-    .footer-top {
-      display: grid; grid-template-columns: 1.5fr 1fr 1fr; gap: 48px;
-      padding-bottom: 48px; border-bottom: 1px solid #111;
-      margin-bottom: 36px;
-    }
-    .footer-brand-name {
-      font-family: 'Bebas Neue', sans-serif; font-size: 1.6rem; letter-spacing: .1em;
-      color: var(--gold); margin-bottom: 12px;
-    }
-    .footer-brand-sub {
-      font-family: 'DM Mono', monospace; font-size: .6rem; letter-spacing: .15em; text-transform: uppercase;
-      color: #6a6460; margin-bottom: 18px;
-    }
-    .footer-desc {
-      font-size: .85rem; color: #7a7470; line-height: 1.65; font-weight: 300; max-width: 300px;
-    }
-    .footer-col-head {
-      font-family: 'DM Mono', monospace; font-size: .62rem; letter-spacing: .18em; text-transform: uppercase;
-      color: #6a6460; margin-bottom: 18px;
-    }
-    .footer-links { list-style: none; display: flex; flex-direction: column; gap: 10px; }
-    .footer-links a {
-      font-size: .85rem; color: #7a7470; text-decoration: none; transition: color .2s;
-    }
-    .footer-links a:hover { color: var(--gold); }
-    .footer-bottom {
-      display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;
-    }
-    .footer-copy {
-      font-family: 'DM Mono', monospace; font-size: .6rem; letter-spacing: .12em; text-transform: uppercase;
-      color: #5a5450;
-    }
-    .footer-handle {
-      font-family: 'DM Mono', monospace; font-size: .6rem; letter-spacing: .12em; text-transform: uppercase;
-      color: #5a5450; text-decoration: none; transition: color .2s;
-    }
-    .footer-handle:hover { color: var(--gold); }
-
-    @media (max-width: 720px) {
-      .footer-top { grid-template-columns: 1fr; gap: 36px; }
-    }
+    /* COOKIE BANNER (matches homepage banner) */
+    .cookie-banner { position: fixed; bottom: 0; left: 0; right: 0; z-index: 200; background: var(--black); border-top: 1px solid var(--border); padding: 18px 24px; display: none; }
+    .cookie-banner.show { display: flex; }
+    .cookie-inner { max-width: 900px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 24px; flex-wrap: wrap; }
+    .cookie-text { font-size: .85rem; color: var(--text); font-weight: 300; max-width: 620px; }
+    .cookie-text a { color: var(--white); text-decoration: underline; }
+    .cookie-actions { display: flex; gap: 10px; flex-shrink: 0; }
+    .cookie-btn { font-family: 'Space Mono', monospace; font-size: .75rem; letter-spacing: .06em; text-transform: uppercase; padding: 9px 18px; border-radius: 8px; cursor: pointer; border: 1px solid var(--border); background: transparent; color: var(--muted); }
+    .cookie-btn.accept { background: var(--white); color: var(--black); border-color: var(--white); font-weight: 600; }
+    .cookie-btn:hover { color: var(--white); border-color: var(--muted); }
+    .cookie-btn.accept:hover { opacity: .9; }
   </style>
 </head>
 <body>
 
-  <!-- NAV -->
-  <nav>
-    <div class="nav-left">
-      <a href="/" class="nav-logo">
-        The Accountability Challenge Co<span class="gold-period">.</span>
-      </a>
-      <div class="nav-links">
-        <a href="/#challenges" class="nav-link">Challenges</a>
-        <a href="/#about" class="nav-link">About</a>
-      </div>
-    </div>
-    <div class="nav-right">
-      <a href="https://joinsmac.com" target="_blank" class="nav-badge">SMAC</a>
-      <a href="https://joinwac.com" target="_blank" class="nav-badge">WAC</a>
-      <a href="https://jointheaac.com" target="_blank" class="nav-badge">AAC</a>
-    </div>
-    <button class="hamburger" id="hamburger" aria-label="Menu">
-      <span></span><span></span><span></span>
-    </button>
-  </nav>
-  <div class="mobile-menu" id="mobileMenu">
-    <a href="/#challenges">Challenges</a>
-    <a href="/#about">About</a>
-    <a href="https://joinsmac.com" target="_blank">SMAC →</a>
-    <a href="https://joinwac.com" target="_blank">WAC →</a>
-    <a href="https://jointheaac.com" target="_blank">AAC (Coming Soon)</a>
+<!-- NAV -->
+<nav>
+  <a href="index.html" class="nav-logo">TAC Co.<span>The Accountability Challenge Co.</span></a>
+  <div class="nav-links">
+    <a href="index.html#challenges" class="nav-link">Challenges</a>
+    <a href="index.html#about" class="nav-link">About</a>
   </div>
+</nav>
 
-  <!-- PAGE HERO -->
-  <section class="page-hero">
-    <div class="page-hero-watermark">
-      <span>Privacy</span>
+<div class="legal-wrap">
+  <span class="tag">Legal</span>
+  <h1>Privacy Policy</h1>
+  <p class="meta">Effective Date: July 2026 &nbsp;·&nbsp; Last Updated: July 2026</p>
+
+  <p>This Privacy Policy describes how Nate Templeton ("we," "us," or "our") collects, uses, and shares information in connection with The Accountability Challenge Co. (TAC Co.) website, theaccountabilityco.com.</p>
+
+  <h2>What This Site Is</h2>
+  <p>theaccountabilityco.com is a marketing hub for three separate 90-day accountability challenges: SMAC (joinsmac.com), WAC (joinwac.com), and AAC (jointheaac.com). This site does not process payments, host a member platform, or collect proof submissions directly — clicking a challenge card takes you to that challenge's own website, which has its own privacy and cookie policies.</p>
+
+  <h2>Information We Collect</h2>
+  <p>We collect information automatically through the Meta Pixel and standard browser technologies when you visit this site. See the <strong>Cookies &amp; Tracking Technologies</strong> section below for details. We do not collect names, emails, or payment information on this site itself.</p>
+
+  <h2>How We Use Your Information</h2>
+  <ul>
+    <li>To measure and improve the performance of our ads, and to build audiences for future advertising</li>
+    <li>To understand which challenges visitors are most interested in</li>
+    <li>To improve this site going forward</li>
+  </ul>
+
+  <h2>Cookies &amp; Tracking Technologies</h2>
+  <p>This site uses the <strong>Meta Pixel</strong>, a tracking tool from Meta Platforms, Inc. (Facebook/Instagram), to measure ad performance and understand how visitors use our site. The pixel only loads after you accept cookies in our banner, it does not run before that. Once active, it may collect information such as your IP address, browser and device details, pages visited, and actions taken on our site. This data is shared with Meta and may be used to show you more relevant ads on Facebook and Instagram.</p>
+  <p>For a full breakdown of the cookies and tracking tools we use, and how to opt out, see our <a href="cookies.html">Cookie Policy</a>.</p>
+
+  <h2>Sharing Your Information</h2>
+  <p>We do not sell or rent your personal information. We may share it with:</p>
+  <ul>
+    <li><strong>Meta Platforms, Inc.</strong>, via the Meta Pixel, for ad measurement and targeting. See <a href="https://www.facebook.com/privacy/policy/" target="_blank" rel="noopener">Meta's Privacy Policy</a>.</li>
+    <li><strong>GitHub Pages</strong>, which hosts this website. See <a href="https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement" target="_blank" rel="noopener">GitHub's Privacy Statement</a>.</li>
+  </ul>
+  <p>If you visit one of our three challenge sites (SMAC, WAC, or AAC), that site's own Privacy Policy governs any information you provide there, including names, emails, and payment details.</p>
+
+  <h2>Your Rights</h2>
+  <p>You can limit Meta Pixel tracking using your browser settings or Meta's ad preferences, as described in our <a href="cookies.html">Cookie Policy</a>. For questions about this policy, reach out via <a href="https://www.natetempleton.com" target="_blank" rel="noopener">natetempleton.com</a>.</p>
+
+  <h2>Children's Privacy</h2>
+  <p>TAC Co.'s challenges are intended for adults 18 and older. We do not knowingly collect information from minors.</p>
+
+  <h2>Changes to This Policy</h2>
+  <p>We may update this policy as the site evolves. Material changes will be reflected here with an updated effective date.</p>
+
+  <h2>Contact</h2>
+  <p>Questions about this policy? Reach out via <a href="https://www.natetempleton.com" target="_blank" rel="noopener">natetempleton.com</a>.</p>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">TAC Co. <span>The Accountability Challenge Co.</span></div>
+  <p>Created by <a href="https://www.natetempleton.com">Nate Templeton</a> &nbsp;·&nbsp; <a href="privacy.html">Privacy Policy</a> &nbsp;·&nbsp; <a href="cookies.html">Cookie Policy</a></p>
+  <p style="margin-top:16px; font-family:'Space Mono',monospace; font-size:.7rem; color:var(--muted);">© 2026 Nate Templeton. All rights reserved.</p>
+  <div style="display:flex; flex-wrap:wrap; gap:10px; justify-content:center; margin-top:20px;">
+    <div class="sister-badge">
+      Challenges: <a href="https://www.joinsmac.com">SMAC</a> &nbsp;|&nbsp; <a href="https://www.joinwac.com">WAC</a> &nbsp;|&nbsp; <a href="https://www.jointheaac.com">AAC</a>
     </div>
-    <div class="page-hero-grid"></div>
-    <div class="page-hero-inner">
-      <div class="page-eyebrow fade-up d1">
-        <span class="live-dot"></span>
-        Legal
-      </div>
-      <h1 class="page-title fade-up d2">Privacy Policy</h1>
-      <div class="page-meta fade-up d3">
-        <span class="page-meta-item">The Accountability Challenge Co.</span>
-        <span class="page-meta-item">Effective: January 1, 2026</span>
-        <span class="page-meta-item">Last updated: March 2026</span>
-      </div>
+  </div>
+</footer>
+
+<!-- COOKIE CONSENT BANNER -->
+<div class="cookie-banner" id="cookieBanner">
+  <div class="cookie-inner">
+    <p class="cookie-text">We use cookies and the Meta Pixel to run this site and measure ad performance. See our <a href="cookies.html">Cookie Policy</a> for details.</p>
+    <div class="cookie-actions">
+      <button class="cookie-btn" id="cookieDecline">Decline</button>
+      <button class="cookie-btn accept" id="cookieAccept">Accept</button>
     </div>
-  </section>
+  </div>
+</div>
 
-  <!-- CONTENT -->
-  <div class="content-area">
-  <div class="content-wrap">
-
-    <!-- TOC -->
-    <aside class="toc reveal">
-      <div class="toc-head">Contents</div>
-      <ul class="toc-list">
-        <li><a href="#overview">Overview</a></li>
-        <li><a href="#information-collected">Information We Collect</a></li>
-        <li><a href="#how-we-use">How We Use It</a></li>
-        <li><a href="#sharing">Sharing & Disclosure</a></li>
-        <li><a href="#emails">Email Communications</a></li>
-        <li><a href="#payments">Payments</a></li>
-        <li><a href="#cookies">Cookies</a></li>
-        <li><a href="#your-rights">Your Rights</a></li>
-        <li><a href="#children">Children</a></li>
-        <li><a href="#changes">Policy Changes</a></li>
-        <li><a href="#contact">Contact</a></li>
-      </ul>
-    </aside>
-
-    <!-- PROSE -->
-    <main class="prose">
-
-      <div class="prose-section reveal" id="overview">
-        <span class="prose-section-num">01 — Overview</span>
-        <h2>The Short Version</h2>
-        <p>The Accountability Challenge Co. ("TAC Co.", "we", "us", or "our") operates <strong>theaccountabilityco.com</strong> and its associated challenge sites: joinsmac.com, joinwac.com, and jointheaac.com (collectively, "the Sites").</p>
-        <p>We collect only what we need to run the challenges, communicate with members, and process payments. We don't sell your data. We don't run ads. We use a small number of trusted third-party tools to operate the Sites.</p>
-        <div class="prose-callout">
-          <p><strong>Plain language commitment:</strong> This policy is written to be read, not buried. If something here is unclear, email us at <a href="/cdn-cgi/l/email-protection#9cf5f2faf3dce8f4f9fdfffff3e9f2e8fdfef5f0f5e8e5fff3b2fff3f1"><span class="__cf_email__" data-cfemail="aec7c0c8c1eedac6cbcfcdcdc1dbc0dacfccc7c2c7dad7cdc180cdc1c3">[email&#160;protected]</span></a> and we'll clarify it.</p>
-        </div>
-      </div>
-
-      <div class="prose-section reveal" id="information-collected">
-        <span class="prose-section-num">02 — Information We Collect</span>
-        <h2>What We Collect</h2>
-        <p>We collect information in three ways: what you give us directly, what's collected automatically when you use the Sites, and what comes from third-party tools we use to operate.</p>
-        <p><strong>Information you provide directly:</strong></p>
-        <ul>
-          <li><strong>Name and email address</strong> when you join a waitlist, sign up for a challenge, or contact us</li>
-          <li><strong>Payment information</strong> processed by Stripe (we do not store card details — see Payments section)</li>
-          <li><strong>Submission content</strong> such as screenshots, links, or form responses you submit as part of a challenge</li>
-          <li><strong>Messages</strong> sent to us via contact forms or email</li>
-        </ul>
-        <p><strong>Information collected automatically:</strong></p>
-        <ul>
-          <li>Browser type, device type, and operating system</li>
-          <li>Pages visited, time on site, and referring URLs</li>
-          <li>IP address and general location data</li>
-        </ul>
-      </div>
-
-      <div class="prose-section reveal" id="how-we-use">
-        <span class="prose-section-num">03 — How We Use It</span>
-        <h2>How We Use Your Information</h2>
-        <p>We use the information we collect to:</p>
-        <ul>
-          <li>Operate and administer the challenges (SMAC, WAC, AAC)</li>
-          <li>Process your enrollment and payments</li>
-          <li>Send challenge-related communications — updates, submission reminders, results</li>
-          <li>Send marketing emails to opted-in subscribers (unsubscribe anytime)</li>
-          <li>Respond to support requests and contact form submissions</li>
-          <li>Improve the Sites and challenge experience over time</li>
-          <li>Comply with legal obligations</li>
-        </ul>
-        <p>We do not use your data for advertising, profiling, or any automated decision-making that affects your eligibility in a challenge.</p>
-      </div>
-
-      <div class="prose-section reveal" id="sharing">
-        <span class="prose-section-num">04 — Sharing & Disclosure</span>
-        <h2>Who We Share Data With</h2>
-        <p>We do not sell, rent, or trade your personal information. We share data only with the third-party services necessary to operate the Sites:</p>
-        <ul>
-          <li><strong>Stripe</strong> — payment processing. Stripe's privacy policy governs how they handle payment data.</li>
-          <li><strong>MailerLite</strong> — email list management and campaign delivery for opted-in subscribers.</li>
-          <li><strong>Formspree</strong> — contact form submission routing.</li>
-          <li><strong>Hosting providers</strong> — the infrastructure that serves the Sites (e.g., GitHub Pages, Netlify, or similar).</li>
-        </ul>
-        <p>We may disclose your information if required by law, or to protect the rights, safety, or property of TAC Co. or its members.</p>
-      </div>
-
-      <div class="prose-section reveal" id="emails">
-        <span class="prose-section-num">05 — Email Communications</span>
-        <h2>Emails & Marketing</h2>
-        <p>By joining a waitlist or subscribing via a form on the Sites, you agree to receive email communications from TAC Co. These may include challenge announcements, enrollment reminders, round updates, and promotional content.</p>
-        <p><strong>You can unsubscribe at any time</strong> using the link at the bottom of any email, or by emailing us directly. Transactional emails related to an active enrollment (receipts, submission confirmations) are not subject to unsubscribe and are sent as part of your membership.</p>
-        <p>We use MailerLite to manage email lists. Your email address is stored in their system. See <a href="https://www.mailerlite.com/legal/privacy-policy" target="_blank">MailerLite's Privacy Policy</a> for details.</p>
-      </div>
-
-      <div class="prose-section reveal" id="payments">
-        <span class="prose-section-num">06 — Payments</span>
-        <h2>Payment Processing</h2>
-        <p>All payments are processed by <strong>Stripe</strong>. TAC Co. does not store, handle, or have access to your credit card number, CVV, or full payment details. When you complete a purchase, you are submitting payment information directly to Stripe's secure infrastructure.</p>
-        <p>Stripe may collect additional data as part of their fraud prevention and payment processing services. See <a href="https://stripe.com/privacy" target="_blank">Stripe's Privacy Policy</a> for full details.</p>
-        <p>We retain a record of your transaction (amount, date, product purchased) for accounting and support purposes.</p>
-      </div>
-
-      <div class="prose-section reveal" id="cookies">
-        <span class="prose-section-num">07 — Cookies</span>
-        <h2>Cookies & Tracking</h2>
-        <p>The Sites may use cookies and similar technologies for basic functionality and analytics. We do not use advertising cookies or third-party tracking pixels for retargeting.</p>
-        <p>Third-party tools embedded on the Sites (Stripe, MailerLite) may set their own cookies as part of their standard operation. You can configure your browser to block or delete cookies, though this may affect some site functionality.</p>
-        <p>We do not currently use a cookie consent banner, but will update this policy if our cookie usage changes materially.</p>
-      </div>
-
-      <div class="prose-section reveal" id="your-rights">
-        <span class="prose-section-num">08 — Your Rights</span>
-        <h2>Your Rights & Choices</h2>
-        <p>Depending on where you're located, you may have the right to:</p>
-        <ul>
-          <li><strong>Access</strong> the personal information we hold about you</li>
-          <li><strong>Correct</strong> inaccurate or incomplete information</li>
-          <li><strong>Delete</strong> your personal data (subject to any legal retention requirements)</li>
-          <li><strong>Opt out</strong> of marketing emails at any time</li>
-          <li><strong>Data portability</strong> — receive a copy of your data in a common format</li>
-        </ul>
-        <p>To exercise any of these rights, contact us at <a href="/cdn-cgi/l/email-protection#92fbfcf4fdd2e6faf7f3f1f1fde7fce6f3f0fbfefbe6ebf1fdbcf1fdff"><span class="__cf_email__" data-cfemail="066f68606946726e636765656973687267646f6a6f727f65692865696b">[email&#160;protected]</span></a>. We'll respond within 30 days.</p>
-        <p>Note: Deleting your account or data does not entitle you to a refund of any challenge entry fees already paid.</p>
-      </div>
-
-      <div class="prose-section reveal" id="children">
-        <span class="prose-section-num">09 — Children</span>
-        <h2>Children's Privacy</h2>
-        <p>The Sites and challenges are intended for adults aged 18 and older. We do not knowingly collect personal information from anyone under 18. If you believe a minor has submitted information to us, contact us immediately and we will delete it.</p>
-      </div>
-
-      <div class="prose-section reveal" id="changes">
-        <span class="prose-section-num">10 — Changes</span>
-        <h2>Policy Changes</h2>
-        <p>We may update this Privacy Policy from time to time. When we do, we'll update the "Last updated" date at the top of this page. For material changes, we'll notify active members via email. Continued use of the Sites after a policy update constitutes acceptance of the revised policy.</p>
-        <p>We recommend checking this page periodically if you're an active member of any TAC Co. challenge.</p>
-      </div>
-
-      <div class="prose-section reveal" id="contact">
-        <span class="prose-section-num">11 — Contact</span>
-        <h2>Questions & Requests</h2>
-        <p>For any questions about this policy, data requests, or privacy-related concerns, reach us at:</p>
-        <div class="contact-block">
-          <div class="contact-block-text">
-            <strong>The Accountability Challenge Co.</strong>
-            <span><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="375e59515877435f525654545842594356555e5b5e434e54581954585a">[email&#160;protected]</a></span>
-          </div>
-          <a href="/cdn-cgi/l/email-protection#c6afa8a0a986b2aea3a7a5a5a9b3a8b2a7a4afaaafb2bfa5a9e8a5a9ab" class="contact-block-link">Send Email →</a>
-        </div>
-      </div>
-
-    </main>
-  </div><!-- /content-wrap -->
-  </div><!-- /content-area -->
-
-  <!-- FOOTER -->
-  <footer>
-    <div class="footer-inner">
-      <div class="footer-top">
-        <div>
-          <div class="footer-brand-name">TAC Co.</div>
-          <div class="footer-brand-sub">The Accountability Challenge Co.</div>
-          <p class="footer-desc">Three proof-based 90-day challenges. One standard. Built for people who show up.</p>
-        </div>
-        <div>
-          <div class="footer-col-head">Challenges</div>
-          <ul class="footer-links">
-            <li><a href="https://joinsmac.com" target="_blank">SMAC — Social Media</a></li>
-            <li><a href="https://joinwac.com" target="_blank">WAC — Websites</a></li>
-            <li><a href="https://jointheaac.com" target="_blank">AAC — Paid Ads <span style="color:#5a5450;">(Soon)</span></a></li>
-          </ul>
-        </div>
-        <div>
-          <div class="footer-col-head">Legal</div>
-          <ul class="footer-links">
-            <li><a href="/privacy.html">Privacy Policy</a></li>
-            <li><a href="https://instagram.com/jointheacc" target="_blank">@jointheacc</a></li>
-            <li><a href="https://natetempleton.com" target="_blank">natetempleton.com</a></li>
-          </ul>
-        </div>
-      </div>
-      <div class="footer-bottom">
-        <span class="footer-copy">© 2026 The Accountability Challenge Co. — theaccountabilityco.com</span>
-        <a href="https://instagram.com/jointheacc" target="_blank" class="footer-handle">@jointheacc</a>
-      </div>
-    </div>
-  </footer>
-
-  <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
-    // Hamburger
-    const hamburger = document.getElementById('hamburger');
-    const mobileMenu = document.getElementById('mobileMenu');
-    hamburger.addEventListener('click', () => {
-      hamburger.classList.toggle('open');
-      mobileMenu.classList.toggle('open');
+<script>
+  (function () {
+    const banner = document.getElementById('cookieBanner');
+    const KEY = 'tac_cookie_consent';
+    const consent = localStorage.getItem(KEY);
+    if (consent === 'accepted') {
+      loadMetaPixel();
+    } else if (!consent) {
+      banner.classList.add('show');
+    }
+    document.getElementById('cookieAccept').addEventListener('click', () => {
+      localStorage.setItem(KEY, 'accepted');
+      loadMetaPixel();
+      banner.classList.remove('show');
     });
+    document.getElementById('cookieDecline').addEventListener('click', () => {
+      localStorage.setItem(KEY, 'declined');
+      banner.classList.remove('show');
+    });
+  })();
+</script>
 
-    // Scroll reveal — add hidden class via JS so content shows without JS
-    const reveals = document.querySelectorAll('.reveal');
-    reveals.forEach(el => el.classList.add('hidden'));
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('visible');
-          observer.unobserve(entry.target);
-        }
-      });
-    }, { threshold: 0.1 });
-    reveals.forEach(el => observer.observe(el));
-
-    // TOC active state on scroll
-    const sections = do
+</body>
+</html>

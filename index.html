@@ -1,6 +1,25 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <!-- Meta Pixel: consent-gated, does NOT fire until the cookie banner is accepted (or a prior "accepted" choice is found in localStorage). See consent script near the closing </body> tag. -->
+  <script>
+  var BRAND = 'TAC';
+  function loadMetaPixel() {
+    if (window.fbq) return;
+    !function(f,b,e,v,n,t,s)
+    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+    n.queue=[];t=b.createElement(e);t.async=!0;
+    t.src=v;s=b.getElementsByTagName(e)[0];
+    s.parentNode.insertBefore(t,s)}(window, document,'script',
+    'https://connect.facebook.net/en_US/fbevents.js');
+    fbq('init', '1676740660054343');
+    fbq('track', 'PageView', { content_name: BRAND });
+  }
+  </script>
+  <!-- No noscript pixel: without JS there's no way to gate on consent, so no-JS visitors are not tracked. -->
+  <!-- End Meta Pixel Code -->
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>The Accountability Challenge Co.</title>
@@ -359,6 +378,18 @@
     /* SCROLL REVEAL */
     .reveal { opacity: 0; transform: translateY(20px); transition: opacity .5s ease, transform .5s ease; }
     .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    /* COOKIE BANNER */
+    .cookie-banner { position: fixed; bottom: 0; left: 0; right: 0; z-index: 200; background: var(--black); border-top: 1px solid var(--border); padding: 18px 24px; display: none; }
+    .cookie-banner.show { display: flex; }
+    .cookie-inner { max-width: 900px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 24px; flex-wrap: wrap; }
+    .cookie-text { font-size: .85rem; color: var(--text); font-weight: 300; max-width: 620px; }
+    .cookie-text a { color: var(--white); text-decoration: underline; }
+    .cookie-actions { display: flex; gap: 10px; flex-shrink: 0; }
+    .cookie-btn { font-family: 'Space Mono', monospace; font-size: .75rem; letter-spacing: .06em; text-transform: uppercase; padding: 9px 18px; border-radius: 8px; cursor: pointer; border: 1px solid var(--border); background: transparent; color: var(--muted); }
+    .cookie-btn.accept { background: var(--white); color: var(--black); border-color: var(--white); font-weight: 600; }
+    .cookie-btn:hover { color: var(--white); border-color: var(--muted); }
+    .cookie-btn.accept:hover { opacity: .9; }
   </style>
 </head>
 <body>
@@ -575,10 +606,25 @@
       </div>
       <div class="footer-bottom">
         <span class="footer-copy">© 2026 The Accountability Challenge Co. — theaccountabilityco.com</span>
-        <a href="https://instagram.com/jointheacc" target="_blank" class="footer-handle">@jointheacc</a>
+        <div style="display:flex; align-items:center; gap:20px;">
+          <a href="privacy.html" class="footer-handle">Privacy Policy</a>
+          <a href="cookies.html" class="footer-handle">Cookie Policy</a>
+          <a href="https://instagram.com/jointheacc" target="_blank" class="footer-handle">@jointheacc</a>
+        </div>
       </div>
     </div>
   </footer>
+
+  <!-- COOKIE CONSENT BANNER -->
+  <div class="cookie-banner" id="cookieBanner">
+    <div class="cookie-inner">
+      <p class="cookie-text">We use cookies and the Meta Pixel to run this site and measure ad performance. See our <a href="cookies.html">Cookie Policy</a> for details.</p>
+      <div class="cookie-actions">
+        <button class="cookie-btn" id="cookieDecline">Decline</button>
+        <button class="cookie-btn accept" id="cookieAccept">Accept</button>
+      </div>
+    </div>
+  </div>
 
   <script>
     // Hamburger
@@ -632,6 +678,27 @@
       });
     }, { threshold: 0.12 });
     document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+    // Cookie consent banner (gates the Meta Pixel)
+    (function () {
+      const banner = document.getElementById('cookieBanner');
+      const KEY = 'tac_cookie_consent';
+      const consent = localStorage.getItem(KEY);
+      if (consent === 'accepted') {
+        loadMetaPixel();
+      } else if (!consent) {
+        banner.classList.add('show');
+      }
+      document.getElementById('cookieAccept').addEventListener('click', () => {
+        localStorage.setItem(KEY, 'accepted');
+        loadMetaPixel();
+        banner.classList.remove('show');
+      });
+      document.getElementById('cookieDecline').addEventListener('click', () => {
+        localStorage.setItem(KEY, 'declined');
+        banner.classList.remove('show');
+      });
+    })();
   </script>
 </body>
 </html>

@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Meta Pixel: consent-gated, does NOT fire until the cookie banner is accepted (or a prior "accepted" choice is found in localStorage). See consent script near the closing </body> tag. -->
+  <script>
+  var BRAND = 'TAC';
+  function loadMetaPixel() {
+    if (window.fbq) return;
+    !function(f,b,e,v,n,t,s)
+    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+    n.queue=[];t=b.createElement(e);t.async=!0;
+    t.src=v;s=b.getElementsByTagName(e)[0];
+    s.parentNode.insertBefore(t,s)}(window, document,'script',
+    'https://connect.facebook.net/en_US/fbevents.js');
+    fbq('init', '1676740660054343');
+    fbq('track', 'PageView', { content_name: BRAND });
+  }
+  </script>
+  <!-- No noscript pixel: without JS there's no way to gate on consent, so no-JS visitors are not tracked. -->
+  <!-- End Meta Pixel Code -->
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cookie Policy — The Accountability Challenge Co.</title>
+  <meta name="description" content="Cookie Policy for The Accountability Challenge Co." />
+  <link rel="icon" type="image/x-icon" href="favicon.ico" />
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="favicon-16.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="favicon-180.png" />
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700&family=Inter:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --black:        #0d0d0d;
+      --off-black:    #141414;
+      --border:       #2a2a2a;
+      --muted:        #a09a8e;
+      --text:         #d4d0c8;
+      --white:        #f0ece0;
+      --cream:        #f7f3ea;
+      --cream-white:  #fdfbf6;
+      --ink:          #17140f;
+      --ink-muted:    #6b6558;
+      --light-border: #e8e2d4;
+    }
+    html { scroll-behavior: smooth; }
+    body { background: var(--cream); color: var(--ink); font-family: 'Inter', sans-serif; font-size: 17px; line-height: 1.7; -webkit-font-smoothing: antialiased; }
+    .container { max-width: 900px; margin: 0 auto; padding: 0 24px; }
+
+    /* NAV (matches homepage) */
+    nav { position: sticky; top: 0; z-index: 100; background: rgba(13,13,13,.92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); padding: 14px 24px; display: flex; align-items: center; justify-content: space-between; }
+    .nav-logo { font-family: 'Sora', sans-serif; font-size: 1.4rem; letter-spacing: .04em; color: var(--white); text-decoration: none; }
+    .nav-logo span { color: var(--muted); font-size: .78rem; font-family: 'Space Mono', monospace; letter-spacing: .1em; text-transform: uppercase; font-weight: 400; display: block; margin-top: 2px; }
+    .nav-links { display: flex; align-items: center; gap: 28px; }
+    .nav-link { font-family: 'Space Mono', monospace; font-size: .72rem; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); text-decoration: none; transition: color .2s; }
+    .nav-link:hover { color: var(--white); }
+
+    /* LEGAL CONTENT */
+    .legal-wrap { max-width: 720px; margin: 0 auto; padding: 64px 24px 96px; }
+    .tag { display: inline-block; font-family: 'Space Mono', monospace; font-size: .72rem; letter-spacing: .12em; text-transform: uppercase; color: var(--ink-muted); border: 1px solid var(--light-border); padding: 4px 12px; border-radius: 8px; margin-bottom: 20px; }
+    h1 { font-family: 'Sora', sans-serif; font-weight: 700; font-size: clamp(34px, 5vw, 52px); color: var(--ink); letter-spacing: -.01em; line-height: 1.08; margin-bottom: 12px; }
+    .meta { font-family: 'Space Mono', monospace; font-size: .75rem; color: var(--ink-muted); margin-bottom: 44px; padding-bottom: 28px; border-bottom: 1px solid var(--light-border); }
+    h2 { font-family: 'Sora', sans-serif; font-weight: 600; font-size: 1.35rem; color: var(--ink); letter-spacing: .01em; margin: 40px 0 12px; }
+    p { margin-bottom: 16px; font-size: .98rem; color: var(--ink-muted); font-weight: 300; }
+    a { color: var(--ink); text-decoration: underline; }
+    a:hover { color: var(--ink-muted); }
+    ul { padding-left: 20px; margin-bottom: 16px; }
+    li { margin-bottom: 8px; font-size: .98rem; color: var(--ink-muted); font-weight: 300; }
+    strong { color: var(--ink); font-weight: 600; }
+    table { width: 100%; border-collapse: collapse; margin: 8px 0 24px; font-size: .9rem; }
+    th, td { text-align: left; padding: 10px 12px; border: 1px solid var(--light-border); color: var(--ink-muted); font-weight: 300; }
+    th { font-family: 'Space Mono', monospace; font-size: .72rem; letter-spacing: .06em; text-transform: uppercase; color: var(--ink); background: var(--cream-white); }
+
+    /* FOOTER (matches homepage) */
+    footer { background: var(--black); border-top: 1px solid var(--border); padding: 40px 24px; text-align: center; }
+    .footer-logo { font-family: 'Sora', sans-serif; font-size: 1.5rem; color: var(--white); letter-spacing: .04em; margin-bottom: 8px; }
+    .footer-logo span { color: var(--muted); font-size: .78rem; font-family: 'Space Mono', monospace; letter-spacing: .1em; text-transform: uppercase; margin-left: 8px; }
+    footer p { font-size: .82rem; color: var(--muted); margin-top: 12px; }
+    footer a { color: var(--muted); text-decoration: underline; }
+    footer a:hover { color: var(--white); }
+    .sister-badge { display: inline-flex; align-items: center; gap: 8px; margin-top: 20px; font-family: 'Space Mono', monospace; font-size: .72rem; letter-spacing: .08em; color: var(--muted); border: 1px solid var(--border); padding: 8px 14px; border-radius: 8px; }
+    .sister-badge a { text-decoration: none; color: var(--muted); }
+    .sister-badge a:hover { color: var(--white); }
+
+    /* COOKIE BANNER (matches homepage banner) */
+    .cookie-banner { position: fixed; bottom: 0; left: 0; right: 0; z-index: 200; background: var(--black); border-top: 1px solid var(--border); padding: 18px 24px; display: none; }
+    .cookie-banner.show { display: flex; }
+    .cookie-inner { max-width: 900px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 24px; flex-wrap: wrap; }
+    .cookie-text { font-size: .85rem; color: var(--text); font-weight: 300; max-width: 620px; }
+    .cookie-text a { color: var(--white); text-decoration: underline; }
+    .cookie-actions { display: flex; gap: 10px; flex-shrink: 0; }
+    .cookie-btn { font-family: 'Space Mono', monospace; font-size: .75rem; letter-spacing: .06em; text-transform: uppercase; padding: 9px 18px; border-radius: 8px; cursor: pointer; border: 1px solid var(--border); background: transparent; color: var(--muted); }
+    .cookie-btn.accept { background: var(--white); color: var(--black); border-color: var(--white); font-weight: 600; }
+    .cookie-btn:hover { color: var(--white); border-color: var(--muted); }
+    .cookie-btn.accept:hover { opacity: .9; }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="index.html" class="nav-logo">TAC Co.<span>The Accountability Challenge Co.</span></a>
+  <div class="nav-links">
+    <a href="index.html#challenges" class="nav-link">Challenges</a>
+    <a href="index.html#about" class="nav-link">About</a>
+  </div>
+</nav>
+
+<div class="legal-wrap">
+  <span class="tag">Legal</span>
+  <h1>Cookie Policy</h1>
+  <p class="meta">Effective Date: July 2026 &nbsp;·&nbsp; Last Updated: July 2026</p>
+
+  <p>This Cookie Policy explains what cookies and tracking technologies TAC Co. (theaccountabilityco.com) uses, why we use them, and how you can control them. It should be read alongside our <a href="privacy.html">Privacy Policy</a>.</p>
+
+  <h2>What Are Cookies</h2>
+  <p>Cookies are small text files placed on your device when you visit a website. Related technologies, like tracking pixels, work similarly by recording activity in your browser without necessarily storing a file on your device.</p>
+
+  <h2>Cookies &amp; Tracking Tools We Use</h2>
+  <table>
+    <thead>
+      <tr><th>Tool</th><th>Purpose</th><th>Type</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Meta Pixel</td><td>Measures ad performance, tracks conversions from Facebook/Instagram ads, and builds retargeting audiences</td><td>Advertising</td></tr>
+      <tr><td>GitHub Pages hosting</td><td>Basic server logs required to serve the site (IP address, request timing)</td><td>Essential</td></tr>
+    </tbody>
+  </table>
+
+  <h2>About the Meta Pixel</h2>
+  <p>We use the Meta Pixel, a tool provided by Meta Platforms, Inc., on theaccountabilityco.com. It only loads after you accept cookies in our banner (or on return visits once you've accepted). Once active, it reports events like page views back to Meta. This helps us understand which ads are working and lets Meta show our ads to people more likely to be interested in TAC Co.'s challenges.</p>
+  <p>Data the Meta Pixel may collect includes your IP address, browser type, device information, and the pages and actions you take on our site. Meta may combine this with other data it holds about you if you have a Facebook or Instagram account. Meta's own use of this data is governed by <a href="https://www.facebook.com/privacy/policy/" target="_blank" rel="noopener">Meta's Privacy Policy</a>.</p>
+
+  <h2>How to Control Cookies</h2>
+  <ul>
+    <li><strong>Our cookie banner:</strong> when you first visit theaccountabilityco.com, you can Accept or Decline non-essential tracking. Your choice is remembered on that device and browser.</li>
+    <li><strong>Browser settings:</strong> most browsers let you block or delete cookies.</li>
+    <li><strong>Meta ad preferences:</strong> manage how Meta uses your data for ads at <a href="https://www.facebook.com/adpreferences" target="_blank" rel="noopener">facebook.com/adpreferences</a>.</li>
+    <li><strong>Browser opt-out tools:</strong> ad-blocking extensions and browser "Do Not Track" or tracking-protection settings can limit pixel tracking, though we do not currently respond to Do Not Track signals directly.</li>
+  </ul>
+
+  <h2>Our Sister Sites</h2>
+  <p>SMAC (joinsmac.com), WAC (joinwac.com), and AAC (jointheaac.com) are separate websites with their own cookie policies, since they run their own platforms and collect their own member data. This policy covers theaccountabilityco.com only.</p>
+
+  <h2>Changes to This Policy</h2>
+  <p>We may update this Cookie Policy as our tracking tools change. Material changes will be reflected here with an updated effective date.</p>
+
+  <h2>Contact</h2>
+  <p>Questions about this policy? Reach out via <a href="https://www.natetempleton.com" target="_blank" rel="noopener">natetempleton.com</a>.</p>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">TAC Co. <span>The Accountability Challenge Co.</span></div>
+  <p>Created by <a href="https://www.natetempleton.com">Nate Templeton</a> &nbsp;·&nbsp; <a href="privacy.html">Privacy Policy</a> &nbsp;·&nbsp; <a href="cookies.html">Cookie Policy</a></p>
+  <p style="margin-top:16px; font-family:'Space Mono',monospace; font-size:.7rem; color:var(--muted);">© 2026 Nate Templeton. All rights reserved.</p>
+  <div style="display:flex; flex-wrap:wrap; gap:10px; justify-content:center; margin-top:20px;">
+    <div class="sister-badge">
+      Challenges: <a href="https://www.joinsmac.com">SMAC</a> &nbsp;|&nbsp; <a href="https://www.joinwac.com">WAC</a> &nbsp;|&nbsp; <a href="https://www.jointheaac.com">AAC</a>
+    </div>
+  </div>
+</footer>
+
+<!-- COOKIE CONSENT BANNER -->
+<div class="cookie-banner" id="cookieBanner">
+  <div class="cookie-inner">
+    <p class="cookie-text">We use cookies and the Meta Pixel to run this site and measure ad performance. See our <a href="cookies.html">Cookie Policy</a> for details.</p>
+    <div class="cookie-actions">
+      <button class="cookie-btn" id="cookieDecline">Decline</button>
+      <button class="cookie-btn accept" id="cookieAccept">Accept</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  (function () {
+    const banner = document.getElementById('cookieBanner');
+    const KEY = 'tac_cookie_consent';
+    const consent = localStorage.getItem(KEY);
+    if (consent === 'accepted') {
+      loadMetaPixel();
+    } else if (!consent) {
+      banner.classList.add('show');
+    }
+    document.getElementById('cookieAccept').addEventListener('click', () => {
+      localStorage.setItem(KEY, 'accepted');
+      loadMetaPixel();
+      banner.classList.remove('show');
+    });
+    document.getElementById('cookieDecline').addEventListener('click', () => {
+      localStorage.setItem(KEY, 'declined');
+      banner.classList.remove('show');
+    });
+  })();
+</script>
+
+</body>
+</html>
