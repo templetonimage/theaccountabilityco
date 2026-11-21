@@ -1,0 +1,1237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, interactive-widget=resizes-content" />
+<title>Systems Sprint | Member Platform</title>
+<meta name="robots" content="noindex" />
+<link rel="manifest" href="manifest.json" />
+<link rel="icon" type="image/png" href="icon-192.png" />
+<link rel="apple-touch-icon" href="icon-192.png" />
+<meta name="theme-color" content="#0d0d0d" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+<meta name="apple-mobile-web-app-title" content="Sprint" />
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700;800&family=Inter:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+<style>
+:root {
+  --accent: #6E5A8A; --accent-dim: #5A4872; --accent-lt: #9C8AB8;
+  --accent-bg: rgba(110,90,138,.10); --accent-bg2: rgba(110,90,138,.18);
+  --black: #0d0d0d; --off-black: #141414;
+  --bg: #f7f3ea; --surface: #fdfbf6; --surface2: #f0ece0; --border: #e8e2d4;
+  --text: #17140f; --text-muted: #6b6558;
+  --danger: #b3392f; --success: #2f7a4a;
+  --radius: 12px; --shadow: 0 4px 16px rgba(23,20,15,.05); --shadow-lg: 0 8px 32px rgba(23,20,15,.10);
+  --nav-h: 60px; --bottom-h: 64px;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; }
+body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); line-height: 1.5; -webkit-font-smoothing: antialiased; }
+h1, h2, h3, h4 { font-family: 'Sora', sans-serif; font-weight: 700; letter-spacing: -0.01em; }
+a { color: var(--accent-dim); }
+button { font-family: inherit; cursor: pointer; }
+input, textarea, select { font-family: inherit; font-size: 16px; }
+.mono { font-family: 'Space Mono', monospace; letter-spacing: .02em; }
+.hidden { display: none !important; }
+
+/* Auth */
+#auth-screen { min-height: 100vh; min-height: 100dvh; display: flex; align-items: center; justify-content: center; padding: 24px; background: var(--black); }
+.auth-card { width: 100%; max-width: 400px; background: var(--off-black); border: 1px solid #2a2a2a; border-radius: 16px; padding: 36px 28px; color: #f0ece0; }
+.auth-logo { font-family: 'Sora', sans-serif; font-weight: 800; font-size: 28px; color: var(--accent-lt); letter-spacing: .02em; text-align: center; }
+.auth-sub { text-align: center; color: #a09a8e; font-size: 14px; margin: 4px 0 24px; }
+.auth-badge { display: block; width: fit-content; margin: 0 auto 24px; font-family: 'Space Mono', monospace; font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--accent-lt); border: 1px solid var(--accent); padding: 4px 12px; border-radius: 8px; }
+.auth-label { display: block; font-family: 'Space Mono', monospace; font-size: 11px; letter-spacing: .1em; color: #a09a8e; margin-bottom: 6px; }
+.auth-input { width: 100%; padding: 12px 14px; border-radius: 10px; border: 1px solid #2a2a2a; background: #0d0d0d; color: #f0ece0; margin-bottom: 16px; }
+.auth-input:focus { outline: none; border-color: var(--accent); }
+.auth-btn { width: 100%; padding: 13px; border: none; border-radius: 10px; background: var(--accent); color: #fff; font-weight: 700; letter-spacing: .06em; font-size: 14px; }
+.auth-btn:hover { background: var(--accent-dim); }
+.auth-btn:disabled { opacity: .6; cursor: wait; }
+.auth-msg { min-height: 20px; margin-top: 12px; font-size: 13px; text-align: center; color: #e8a49c; }
+.auth-msg.ok { color: #b8e0c4; }
+.auth-foot { text-align: center; margin-top: 14px; font-size: 13px; color: #a09a8e; }
+.auth-foot a { color: var(--accent-lt); cursor: pointer; }
+.auth-join { text-align: center; margin-top: 22px; padding-top: 18px; border-top: 1px solid #2a2a2a; font-size: 13px; color: #a09a8e; }
+.auth-join a { color: var(--accent-lt); }
+
+/* Shell */
+#app { display: none; }
+#app.visible { display: block; }
+.topnav { position: fixed; top: 0; left: 0; right: 0; z-index: 200; height: var(--nav-h); background: var(--black); display: flex; align-items: center; justify-content: space-between; padding: 0 18px; padding-top: env(safe-area-inset-top); }
+.brand { font-family: 'Sora', sans-serif; font-weight: 800; font-size: 19px; color: var(--accent-lt); letter-spacing: .02em; cursor: pointer; background: none; border: none; }
+.topnav-right { display: flex; align-items: center; gap: 10px; }
+.topnav-pts { font-family: 'Space Mono', monospace; font-size: 12px; color: #f0ece0; border: 1px solid var(--accent); padding: 4px 10px; border-radius: 999px; }
+.avatar { width: 34px; height: 34px; border-radius: 50%; background: var(--accent); color: #fff; display: flex; align-items: center; justify-content: center; font-family: 'Sora', sans-serif; font-weight: 700; font-size: 13px; overflow: hidden; flex-shrink: 0; border: none; }
+.avatar img { width: 100%; height: 100%; object-fit: cover; }
+.avatar.lg { width: 84px; height: 84px; font-size: 28px; }
+.avatar.sm { width: 30px; height: 30px; font-size: 12px; }
+
+main { padding: calc(var(--nav-h) + 20px) 16px calc(var(--bottom-h) + 28px); max-width: 860px; margin: 0 auto; }
+.page { display: none; animation: fade .25s ease; }
+.page.active { display: block; }
+@keyframes fade { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: none; } }
+.page-title { font-family: 'Sora', sans-serif; font-weight: 700; font-size: 26px; }
+.page-sub { color: var(--text-muted); font-size: 14px; margin: 2px 0 18px; }
+
+.bottomnav { position: fixed; bottom: 0; left: 0; right: 0; z-index: 200; height: calc(var(--bottom-h) + env(safe-area-inset-bottom)); padding-bottom: env(safe-area-inset-bottom); background: var(--surface); border-top: 1px solid var(--border); display: flex; justify-content: space-around; }
+.nav-item { flex: 1; background: none; border: none; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; font-size: 11px; font-weight: 600; color: var(--text-muted); }
+.nav-item svg { width: 22px; height: 22px; }
+.nav-item.active { color: var(--accent-dim); }
+.nav-item.active svg { stroke: var(--accent); }
+@media (min-width: 900px) {
+  .bottomnav { top: var(--nav-h); bottom: 0; right: auto; width: 96px; height: auto; flex-direction: column; justify-content: flex-start; padding-top: 16px; border-top: none; border-right: 1px solid var(--border); }
+  .nav-item { flex: 0 0 72px; }
+  main { padding-left: 120px; padding-right: 24px; padding-bottom: 40px; max-width: 980px; }
+}
+
+/* Components */
+.card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; margin-bottom: 14px; box-shadow: var(--shadow); }
+.card-title { font-family: 'Sora', sans-serif; font-weight: 700; font-size: 17px; margin-bottom: 10px; display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.kicker { font-family: 'Space Mono', monospace; font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--accent); }
+.muted { color: var(--text-muted); }
+.small { font-size: 13px; }
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 6px; padding: 10px 18px; border-radius: 10px; border: 1.5px solid var(--accent); background: var(--accent); color: #fff; font-weight: 600; font-size: 14px; text-decoration: none; }
+.btn:hover { background: var(--accent-dim); border-color: var(--accent-dim); }
+.btn:disabled { opacity: .55; cursor: not-allowed; }
+.btn.outline { background: transparent; color: var(--accent-dim); }
+.btn.outline:hover { background: var(--accent-bg); }
+.btn.ghost { background: transparent; border-color: var(--border); color: var(--text); }
+.btn.ghost:hover { border-color: var(--accent); }
+.btn.danger { background: #fdf1ef; border-color: #f2c9c3; color: var(--danger); }
+.btn.sm { padding: 6px 12px; font-size: 13px; }
+.btn.block { width: 100%; }
+.row { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+.grid3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 14px; }
+.stat { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 14px; text-align: center; box-shadow: var(--shadow); }
+.stat-val { font-family: 'Sora', sans-serif; font-weight: 800; font-size: 30px; line-height: 1.1; color: var(--accent-dim); }
+.stat-lbl { font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: .1em; text-transform: uppercase; color: var(--text-muted); margin-top: 4px; }
+.field { margin-bottom: 14px; }
+.field label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 5px; }
+.field .hint { font-size: 12px; color: var(--text-muted); margin-top: 4px; }
+.input, textarea.input, select.input { width: 100%; padding: 11px 13px; border: 1.5px solid var(--border); border-radius: 10px; background: #fff; color: var(--text); }
+.input:focus { outline: none; border-color: var(--accent); }
+textarea.input { resize: vertical; min-height: 84px; }
+.pill { display: inline-block; font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: .08em; text-transform: uppercase; padding: 3px 9px; border-radius: 999px; background: var(--accent-bg); color: var(--accent-dim); }
+.pill.ok { background: rgba(47,122,74,.12); color: var(--success); }
+.pill.bad { background: rgba(179,57,47,.10); color: var(--danger); }
+.pill.dark { background: var(--black); color: var(--accent-lt); }
+.empty { text-align: center; color: var(--text-muted); font-size: 14px; padding: 24px 10px; }
+
+/* Hero */
+.hero-card { background: linear-gradient(135deg, var(--black), #1c1626); color: #f0ece0; border: 1.5px solid var(--accent); border-radius: var(--radius); padding: 22px; margin-bottom: 14px; position: relative; overflow: hidden; }
+.hero-card::before { content: ""; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, var(--accent-dim), var(--accent), var(--accent-lt)); }
+.hero-card .kicker { color: var(--accent-lt); }
+.hero-card h2 { font-size: 24px; margin: 6px 0 6px; color: #fff; }
+.hero-card p { color: rgba(240,236,224,.78); font-size: 14px; }
+.hero-card .btn { margin-top: 14px; }
+.countdown { font-family: 'Space Mono', monospace; font-size: 12px; color: var(--accent-lt); margin-top: 10px; }
+
+.weeks { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+.wk { border: 1.5px solid var(--border); border-radius: 10px; padding: 10px 6px; text-align: center; background: var(--surface2); }
+.wk b { display: block; font-family: 'Sora', sans-serif; font-size: 15px; }
+.wk span { font-size: 11px; color: var(--text-muted); }
+.wk.done { background: var(--accent-bg2); border-color: var(--accent-lt); }
+.wk.done b { color: var(--accent-dim); }
+.wk.now { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-bg); }
+.badge-line { display: flex; align-items: center; gap: 12px; margin-top: 14px; padding: 12px; border-radius: 10px; background: var(--surface2); }
+.badge-icon { width: 44px; height: 44px; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: var(--border); color: var(--text-muted); font-family: 'Sora', sans-serif; font-weight: 800; font-size: 14px; flex-shrink: 0; }
+.badge-icon.earned { background: linear-gradient(135deg, var(--accent-dim), var(--accent-lt)); color: #fff; box-shadow: 0 4px 14px rgba(110,90,138,.4); }
+
+.zoom-card { background: linear-gradient(to right, var(--accent-bg), var(--surface)); border: 1.5px solid var(--accent); }
+
+/* Leaderboard */
+.lb-row { display: flex; align-items: center; gap: 12px; padding: 10px; border-radius: 10px; }
+.lb-row.you { background: var(--accent-bg); }
+.lb-rank { width: 28px; text-align: center; font-family: 'Sora', sans-serif; font-weight: 700; color: var(--text-muted); }
+.lb-rank.top { color: var(--accent-dim); }
+.lb-info { flex: 1; min-width: 0; }
+.lb-name { font-weight: 700; font-size: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.lb-sub { font-size: 12px; color: var(--text-muted); }
+.lb-pts { font-family: 'Sora', sans-serif; font-weight: 700; font-size: 17px; color: var(--accent-dim); }
+.dots { display: inline-flex; gap: 3px; vertical-align: middle; margin-left: 4px; }
+.dots i { width: 7px; height: 7px; border-radius: 2px; background: var(--border); display: inline-block; }
+.dots i.on { background: var(--accent); }
+
+/* Feed */
+.post { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px; margin-bottom: 12px; box-shadow: var(--shadow); }
+.post.pinned { border-color: var(--accent); }
+.post-head { display: flex; gap: 10px; align-items: center; margin-bottom: 8px; }
+.post-name { font-weight: 700; font-size: 14px; }
+.post-time { font-size: 12px; color: var(--text-muted); }
+.post-text { font-size: 15px; white-space: pre-wrap; word-wrap: break-word; }
+.post-img { margin-top: 10px; max-width: 100%; max-height: 420px; border-radius: 10px; display: block; cursor: zoom-in; }
+.post-link { display: inline-block; margin-top: 8px; font-size: 13px; word-break: break-all; }
+.post-actions { display: flex; gap: 8px; margin-top: 12px; border-top: 1px solid var(--border); padding-top: 10px; flex-wrap: wrap; }
+.act { background: none; border: 1px solid var(--border); border-radius: 999px; padding: 5px 12px; font-size: 13px; color: var(--text-muted); }
+.act:hover, .act.on { border-color: var(--accent); color: var(--accent-dim); background: var(--accent-bg); }
+.replies { margin-top: 10px; padding-left: 12px; border-left: 2px solid var(--border); }
+.reply { padding: 6px 0; font-size: 14px; }
+.reply b { font-size: 13px; }
+.composer-tools { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; margin-top: 8px; }
+.file-btn { position: relative; overflow: hidden; }
+.file-btn input { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
+.preview-img { max-width: 160px; max-height: 120px; border-radius: 8px; margin-top: 8px; display: block; }
+
+/* Submit + builds */
+.week-tabs { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 14px; }
+.week-tab { border: 1.5px solid var(--border); background: var(--surface); border-radius: 999px; padding: 6px 14px; font-size: 13px; font-weight: 600; color: var(--text-muted); }
+.week-tab.active { border-color: var(--accent); background: var(--accent); color: #fff; }
+.week-tab:disabled { opacity: .45; cursor: not-allowed; }
+.build { border: 1px solid var(--border); border-radius: 10px; padding: 14px; margin-bottom: 10px; background: #fff; }
+.build-title { font-weight: 700; }
+.build img { max-width: 100%; border-radius: 8px; margin-top: 8px; max-height: 320px; cursor: zoom-in; }
+
+/* Guides */
+.guide { border-left: 3px solid var(--accent); }
+.guide h3 { font-size: 19px; margin: 4px 0 8px; }
+.guide ul { padding-left: 18px; margin: 6px 0 10px; }
+.guide li { margin: 4px 0; font-size: 14px; }
+.guide details summary { cursor: pointer; font-weight: 600; color: var(--accent-dim); font-size: 14px; margin-top: 6px; }
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.two-col ul { padding-left: 18px; font-size: 14px; }
+.two-col li { margin: 4px 0; }
+
+/* Admin */
+.admin-tabs { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 14px; }
+table.t { width: 100%; border-collapse: collapse; font-size: 13px; }
+table.t th, table.t td { text-align: left; padding: 8px 6px; border-bottom: 1px solid var(--border); vertical-align: top; }
+table.t th { font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: .08em; text-transform: uppercase; color: var(--text-muted); }
+.scroll-x { overflow-x: auto; }
+
+/* Toast + modal */
+#toast { position: fixed; left: 50%; bottom: calc(var(--bottom-h) + 18px); transform: translateX(-50%) translateY(20px); background: var(--black); color: #f0ece0; padding: 11px 18px; border-radius: 10px; font-size: 14px; opacity: 0; pointer-events: none; transition: all .25s; z-index: 500; max-width: 90vw; text-align: center; }
+#toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+#lightbox { position: fixed; inset: 0; background: rgba(0,0,0,.88); z-index: 600; display: none; align-items: center; justify-content: center; padding: 20px; cursor: zoom-out; }
+#lightbox.show { display: flex; }
+#lightbox img { max-width: 100%; max-height: 100%; border-radius: 8px; }
+.loading { text-align: center; padding: 18px; color: var(--text-muted); font-size: 13px; }
+
+@media (max-width: 560px) {
+  .grid3 { gap: 8px; }
+  .stat-val { font-size: 24px; }
+  .two-col { grid-template-columns: 1fr; }
+  .topnav-pts { display: none; }
+  .page-title { font-size: 22px; }
+}
+</style>
+</head>
+<body>
+
+<!-- AUTH -->
+<div id="auth-screen">
+  <div class="auth-card">
+    <div class="auth-logo">Systems Sprint</div>
+    <div class="auth-sub">The December Systems Sprint</div>
+    <span class="auth-badge">December 2026</span>
+    <form id="login-form" novalidate>
+      <label class="auth-label" for="auth-email">EMAIL</label>
+      <input class="auth-input" id="auth-email" type="email" autocomplete="email" placeholder="you@yourstudio.com" required />
+      <label class="auth-label" for="auth-pass">PASSWORD</label>
+      <input class="auth-input" id="auth-pass" type="password" autocomplete="current-password" placeholder="Your password" required />
+      <button class="auth-btn" id="auth-btn" type="submit">ENTER THE SPRINT</button>
+    </form>
+    <div class="auth-msg" id="auth-msg"></div>
+    <div class="auth-foot">Forgot or never set a password? <a data-action="forgot">Send a reset link</a></div>
+    <div class="auth-join">Not registered? <a href="/sprint/">Join the Sprint free</a></div>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="app">
+  <nav class="topnav">
+    <button class="brand" data-nav="dashboard">Systems Sprint</button>
+    <div class="topnav-right">
+      <span class="topnav-pts" id="top-pts">0 pts</span>
+      <button class="avatar" id="top-avatar" data-nav="profile" title="Profile">?</button>
+    </div>
+  </nav>
+
+  <main>
+    <!-- DASHBOARD -->
+    <section class="page active" id="page-dashboard">
+      <div class="page-title" id="dash-hello">Welcome</div>
+      <div class="page-sub">Four weeks. Four new systems for your photo or video business.</div>
+      <div class="hero-card" id="dash-hero"></div>
+      <div class="grid3">
+        <div class="stat"><div class="stat-val" id="st-pts">0</div><div class="stat-lbl">Points</div></div>
+        <div class="stat"><div class="stat-val" id="st-rank">-</div><div class="stat-lbl">Rank</div></div>
+        <div class="stat"><div class="stat-val" id="st-builds">0/4</div><div class="stat-lbl">Builds</div></div>
+      </div>
+      <div class="card zoom-card hidden" id="zoom-card"></div>
+      <div class="card">
+        <div class="card-title">Your Sprint</div>
+        <div class="weeks" id="dash-weeks"></div>
+        <div class="badge-line" id="dash-badge"></div>
+      </div>
+      <div class="card hidden" id="bonus-card"></div>
+      <div class="card">
+        <div class="card-title">Leaderboard <button class="btn ghost sm" data-nav="ranks">View all</button></div>
+        <div id="dash-lb"><div class="loading">Loading…</div></div>
+      </div>
+    </section>
+
+    <!-- FEED -->
+    <section class="page" id="page-feed">
+      <div class="page-title">Feed</div>
+      <div class="page-sub">Ask questions, share what broke, show what you built. +1 point per post, up to 2 a week.</div>
+      <div class="card">
+        <textarea class="input" id="post-text" maxlength="2000" placeholder="What are you building? Where are you stuck?"></textarea>
+        <div class="composer-tools">
+          <select class="input" id="post-tag" style="width:auto;padding:7px 10px;font-size:14px;">
+            <option value="">No tag</option>
+            <option value="question">Question</option>
+            <option value="win">Win</option>
+            <option value="help">Help, it broke</option>
+            <option value="showcase">Showcase</option>
+          </select>
+          <label class="btn ghost sm file-btn">Add image<input type="file" id="post-file" accept="image/*" /></label>
+          <button class="btn ghost sm" data-action="toggle-post-link">Add link</button>
+          <span style="flex:1"></span>
+          <button class="btn sm" id="post-btn" data-action="post">Post</button>
+        </div>
+        <input class="input hidden" id="post-link" type="url" placeholder="https://" style="margin-top:8px;" maxlength="500" />
+        <img id="post-preview" class="preview-img hidden" alt="" />
+      </div>
+      <div id="feed-list"><div class="loading">Loading…</div></div>
+      <div style="text-align:center;"><button class="btn ghost sm hidden" id="feed-more" data-action="feed-more">Load older posts</button></div>
+    </section>
+
+    <!-- SUBMIT -->
+    <section class="page" id="page-submit">
+      <div class="page-title">Submit a Build</div>
+      <div class="page-sub">One new build per week. Proof = a screenshot or short screen recording, plus 1 to 2 lines on what it replaces.</div>
+      <div class="week-tabs" id="sub-tabs"></div>
+      <div class="card" id="sub-card"></div>
+      <div class="card">
+        <div class="card-title">Builds from the group <button class="btn ghost sm" data-action="load-builds">Show</button></div>
+        <div id="builds-list" class="muted small">See what everyone else built this week. Steal good ideas.</div>
+      </div>
+    </section>
+
+    <!-- GUIDES -->
+    <section class="page" id="page-guides">
+      <div class="page-title">Build Guides</div>
+      <div class="page-sub">A starter guide for each week, with photo and video examples.</div>
+      <div id="guides-list"></div>
+    </section>
+
+    <!-- RANKS -->
+    <section class="page" id="page-ranks">
+      <div class="page-title">Leaderboard</div>
+      <div class="page-sub">December 2026. Builds, posts, and Zooms all count.</div>
+      <div class="card">
+        <div class="small muted" style="display:grid;grid-template-columns:1fr 1fr;gap:4px 16px;margin-bottom:6px;">
+          <span>Weekly build proof <b>+10</b></span><span>All 4 builds <b>+25 & badge</b></span>
+          <span>Attend a Zoom <b>+5</b></span><span>RSVP to a Zoom <b>+2</b></span>
+          <span>Feed post <b>+1</b> (2/week)</span>
+        </div>
+      </div>
+      <div class="card" id="ranks-list"><div class="loading">Loading…</div></div>
+    </section>
+
+    <!-- PROFILE -->
+    <section class="page" id="page-profile">
+      <div class="page-title">Profile</div>
+      <div class="page-sub">How you show up on the feed and leaderboard.</div>
+      <div class="card">
+        <div class="row" style="margin-bottom:14px;">
+          <div class="avatar lg" id="pf-avatar">?</div>
+          <div>
+            <label class="btn ghost sm file-btn">Change photo<input type="file" id="pf-file" accept="image/*" /></label>
+            <div class="small muted" style="margin-top:6px;">Square images work best.</div>
+          </div>
+        </div>
+        <div class="field"><label for="pf-name">Name</label><input class="input" id="pf-name" maxlength="80" /></div>
+        <div class="field"><label for="pf-business">Business</label><input class="input" id="pf-business" maxlength="160" placeholder="e.g. Rivera Wedding Films" /></div>
+        <div class="field"><label for="pf-website">Website</label><input class="input" id="pf-website" type="url" maxlength="300" placeholder="https://" /></div>
+        <div class="field"><label for="pf-bio">What you shoot</label><textarea class="input" id="pf-bio" maxlength="500" placeholder="Weddings, brand video, portraits…"></textarea></div>
+        <button class="btn" data-action="save-profile">Save profile</button>
+      </div>
+      <div class="card">
+        <div class="card-title">Points history</div>
+        <div id="pf-history"><div class="loading">Loading…</div></div>
+      </div>
+      <div class="card">
+        <div class="card-title">Account</div>
+        <div class="small muted" id="pf-email" style="margin-bottom:12px;"></div>
+        <div class="row">
+          <button class="btn ghost sm" data-action="reset-self">Email me a password reset</button>
+          <button class="btn danger sm" data-action="logout">Log out</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ADMIN -->
+    <section class="page" id="page-admin">
+      <div class="page-title">Admin</div>
+      <div class="page-sub">Review builds, run Zooms, check bonuses.</div>
+      <div class="admin-tabs" id="admin-tabs">
+        <button class="week-tab active" data-admin="overview">Overview</button>
+        <button class="week-tab" data-admin="review">Review builds</button>
+        <button class="week-tab" data-admin="zooms">Zooms</button>
+        <button class="week-tab" data-admin="members">Members</button>
+        <button class="week-tab" data-admin="bonus">Bonus review</button>
+      </div>
+      <div id="admin-body"></div>
+    </section>
+  </main>
+
+  <nav class="bottomnav" id="bottomnav">
+    <button class="nav-item active" data-nav="dashboard"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>Home</button>
+    <button class="nav-item" data-nav="feed"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>Feed</button>
+    <button class="nav-item" data-nav="submit"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>Submit</button>
+    <button class="nav-item" data-nav="guides"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>Guides</button>
+    <button class="nav-item" data-nav="ranks"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>Ranks</button>
+    <button class="nav-item hidden" data-nav="admin" id="nav-admin"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>Admin</button>
+  </nav>
+</div>
+
+<div id="toast"></div>
+<div id="lightbox"><img alt="" /></div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
+import { initializeAppCheck, ReCaptchaV3Provider } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app-check.js";
+import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged, sendPasswordResetEmail, setPersistence, browserLocalPersistence } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+import {
+  getFirestore, collection, doc, getDoc, getDocs, setDoc, addDoc, updateDoc, deleteDoc,
+  query, where, orderBy, limit, startAfter, serverTimestamp, arrayUnion, arrayRemove
+} from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+
+// ── Config ───────────────────────────────────────────────
+const _k1 = "AIzaSyBPPFaWXJim9TY0z"; const _k2 = "qLuXykFuhFaJ4sW9VM";
+const firebaseConfig = {
+  apiKey: _k1 + _k2,
+  authDomain: "tac-sprint.firebaseapp.com",
+  projectId: "tac-sprint",
+  messagingSenderId: "530035417143",
+  appId: "1:530035417143:web:9ebfb992028123fde21fb2",
+};
+const RECAPTCHA_SITE_KEY = "6LfLqiouAAAAAF4HK7-1WCZsxKcs0y882M2MYDtZ";
+const ADMIN_EMAIL = "nate@templetonimage.com";
+const APP_URL = "https://theaccountabilityco.com/sprint/app/";
+
+// Times ET. Keep in sync with functions/points.js and firestore.rules.
+const GRACE_MS = 12 * 3600e3;
+const WEEKS = [
+  { n: 1, start: 1796101200000, end: 1796706000000, dates: "Dec 1 to 7", due: "Mon, Dec 7", theme: "Map It, Then Automate It", pairs: "" },
+  { n: 2, start: 1796706000000, end: 1797310800000, dates: "Dec 8 to 14", due: "Mon, Dec 14", theme: "Intake on Autopilot", pairs: "WAC" },
+  { n: 3, start: 1797310800000, end: 1797915600000, dates: "Dec 15 to 21", due: "Mon, Dec 21", theme: "Content That Moves Itself", pairs: "SMAC" },
+  { n: 4, start: 1797915600000, end: 1798520400000, dates: "Dec 22 to 28", due: "Mon, Dec 28", theme: "Admin, Money, and Follow-Ups", pairs: "AAC" },
+];
+const SHOWCASE_START = 1798520400000;
+const SPRINT_END = 1798779600000; // Jan 1, 12:00 AM ET
+const MAX_POSTS_PER_WEEK = 2;
+const PAGE_SIZE = 25;
+
+// ── Firebase ─────────────────────────────────────────────
+const app = initializeApp(firebaseConfig);
+try { initializeAppCheck(app, { provider: new ReCaptchaV3Provider(RECAPTCHA_SITE_KEY), isTokenAutoRefreshEnabled: true }); }
+catch (e) { console.warn("App Check init failed", e); }
+const auth = getAuth(app);
+setPersistence(auth, browserLocalPersistence).catch(() => {});
+const db = getFirestore(app);
+
+// ── State ────────────────────────────────────────────────
+let me = null;         // { uid, email, isAdmin, ...registry }
+let myPrivate = null;
+let feedCursor = null;
+let postImage = "";
+let subImage = "";
+let subWeek = null;
+let mySubs = {};       // week -> data
+let leaderboard = [];
+let currentPage = "dashboard";
+
+// Admin-only date preview: ?asOf=2026-12-03 (UI only; server rules always use real time)
+const _asOf = new URLSearchParams(location.search).get("asOf");
+function now() {
+  if (_asOf && me && me.isAdmin) { const t = Date.parse(_asOf + "T12:00:00-05:00"); if (!isNaN(t)) return t; }
+  return Date.now();
+}
+
+// ── Helpers ──────────────────────────────────────────────
+const $ = (id) => document.getElementById(id);
+const esc = (v) => String(v ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const safeUrl = (u) => { try { const x = new URL(u); return ["http:", "https:"].includes(x.protocol) ? x.href : ""; } catch { return ""; } };
+const initials = (n) => (n || "?").split(/\s+/).filter(Boolean).slice(0, 2).map((w) => w[0].toUpperCase()).join("") || "?";
+const millis = (v) => (v && typeof v.toMillis === "function" ? v.toMillis() : typeof v === "number" ? v : 0);
+const fmtET = (t, opts) => new Intl.DateTimeFormat("en-US", { timeZone: "America/New_York", ...opts }).format(new Date(t));
+const fmtDateTime = (t) => fmtET(t, { weekday: "short", month: "short", day: "numeric", hour: "numeric", minute: "2-digit" }) + " ET";
+function ago(t) {
+  const s = Math.max(0, (Date.now() - t) / 1000);
+  if (s < 60) return "just now";
+  if (s < 3600) return Math.floor(s / 60) + "m ago";
+  if (s < 86400) return Math.floor(s / 3600) + "h ago";
+  if (s < 7 * 86400) return Math.floor(s / 86400) + "d ago";
+  return fmtET(t, { month: "short", day: "numeric" });
+}
+function left(ms) {
+  if (ms <= 0) return "now";
+  const d = Math.floor(ms / 86400e3), h = Math.floor((ms % 86400e3) / 3600e3), m = Math.floor((ms % 3600e3) / 60e3);
+  return d > 0 ? `${d}d ${h}h` : h > 0 ? `${h}h ${m}m` : `${m}m`;
+}
+function avatarHtml(person, cls = "") {
+  const photo = person && person.photo && person.photo.startsWith("data:image/") ? person.photo : "";
+  return `<div class="avatar ${cls}">${photo ? `<img src="${esc(photo)}" alt="" />` : esc(initials(person && person.name))}</div>`;
+}
+function dotsHtml(weeks = []) {
+  return `<span class="dots">${WEEKS.map((w) => `<i class="${weeks.includes(w.n) ? "on" : ""}"></i>`).join("")}</span>`;
+}
+let toastTimer;
+function toast(msg) {
+  const t = $("toast"); t.textContent = msg; t.classList.add("show");
+  clearTimeout(toastTimer); toastTimer = setTimeout(() => t.classList.remove("show"), 3200);
+}
+function friendlyErr(e) {
+  const c = (e && e.code) || "";
+  if (c.includes("permission-denied")) return "That isn't allowed right now. If a week just closed, it may be past the deadline.";
+  if (c.includes("unavailable") || c.includes("network")) return "Connection problem. Check your internet and try again.";
+  if (c.includes("resource-exhausted")) return "Too many requests. Wait a minute and try again.";
+  return "Something went wrong. Please try again.";
+}
+
+// Image compression to JPEG data URL. Keeps Firestore docs small.
+function compressImage(file, maxDim, quality, maxChars) {
+  return new Promise((resolve, reject) => {
+    if (!file || !file.type.startsWith("image/")) return reject(new Error("Please choose an image file."));
+    const url = URL.createObjectURL(file);
+    const img = new Image();
+    img.onload = () => {
+      URL.revokeObjectURL(url);
+      let q = quality, dim = maxDim, out = "";
+      for (let i = 0; i < 6; i++) {
+        const scale = Math.min(1, dim / Math.max(img.width, img.height));
+        const c = document.createElement("canvas");
+        c.width = Math.round(img.width * scale); c.height = Math.round(img.height * scale);
+        const ctx = c.getContext("2d"); ctx.fillStyle = "#fff"; ctx.fillRect(0, 0, c.width, c.height);
+        ctx.drawImage(img, 0, 0, c.width, c.height);
+        out = c.toDataURL("image/jpeg", q);
+        if (out.length <= maxChars) return resolve(out);
+        q = Math.max(0.45, q - 0.1); dim = Math.round(dim * 0.82);
+      }
+      reject(new Error("That image is too large. Try a smaller screenshot."));
+    };
+    img.onerror = () => { URL.revokeObjectURL(url); reject(new Error("Couldn't read that image.")); };
+    img.src = url;
+  });
+}
+
+// ── Sprint calendar ──────────────────────────────────────
+function phase(t = now()) {
+  if (t < WEEKS[0].start) return { kind: "pre" };
+  for (const w of WEEKS) if (t >= w.start && t < w.end) return { kind: "week", week: w };
+  if (t < SPRINT_END) return { kind: "showcase" };
+  return { kind: "done" };
+}
+const weekOpen = (w, t = now()) => t >= w.start && t < w.end + GRACE_MS;
+const openWeeks = (t = now()) => WEEKS.filter((w) => weekOpen(w, t));
+
+// ── Auth ─────────────────────────────────────────────────
+$("login-form").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const email = $("auth-email").value.trim(), pass = $("auth-pass").value;
+  const msg = $("auth-msg"); msg.className = "auth-msg"; msg.textContent = "";
+  if (!email || !pass) { msg.textContent = "Enter your email and password."; return; }
+  $("auth-btn").disabled = true;
+  try { await signInWithEmailAndPassword(auth, email, pass); }
+  catch (err) {
+    const c = err.code || "";
+    msg.textContent = c.includes("invalid-credential") || c.includes("wrong-password") || c.includes("user-not-found")
+      ? "Email or password is incorrect. If you never set a password, use the reset link below."
+      : c.includes("too-many-requests") ? "Too many attempts. Try again in a few minutes, or reset your password."
+      : "Couldn't log in. Please try again.";
+  } finally { $("auth-btn").disabled = false; }
+});
+
+async function sendReset(email) {
+  await sendPasswordResetEmail(auth, email, { url: APP_URL });
+}
+
+onAuthStateChanged(auth, async (user) => {
+  if (!user) {
+    me = null;
+    $("app").classList.remove("visible"); $("auth-screen").style.display = "flex";
+    return;
+  }
+  const isAdmin = (user.email || "").toLowerCase() === ADMIN_EMAIL;
+  try {
+    const reg = await getDoc(doc(db, "sprint_registry", user.uid));
+    if (!reg.exists() && !isAdmin) {
+      $("auth-msg").textContent = "No Sprint account found for this login. Join at theaccountabilityco.com/sprint.";
+      await signOut(auth); return;
+    }
+    me = { uid: user.uid, email: user.email, isAdmin, name: isAdmin ? "Nate Templeton" : "", points: 0, weeksCompleted: [], ...(reg.exists() ? reg.data() : {}) };
+    const priv = await getDoc(doc(db, "sprint_private", user.uid)).catch(() => null);
+    myPrivate = priv && priv.exists() ? priv.data() : null;
+  } catch (e) {
+    console.error(e);
+    $("auth-msg").textContent = "Couldn't load your account. Refresh and try again.";
+    return;
+  }
+  $("auth-screen").style.display = "none"; $("app").classList.add("visible");
+  $("nav-admin").classList.toggle("hidden", !isAdmin);
+  renderTop();
+  const start = (location.hash || "").replace("#", "");
+  navTo(["dashboard", "feed", "submit", "guides", "ranks", "profile", ...(isAdmin ? ["admin"] : [])].includes(start) ? start : "dashboard");
+});
+
+function renderTop() {
+  $("top-pts").textContent = `${me.points || 0} pts`;
+  $("top-pts").classList.toggle("hidden", !me.round);
+  const a = $("top-avatar");
+  a.innerHTML = me.photo && me.photo.startsWith("data:image/") ? `<img src="${esc(me.photo)}" alt="" />` : esc(initials(me.name));
+}
+async function refreshMe() {
+  const reg = await getDoc(doc(db, "sprint_registry", me.uid));
+  if (reg.exists()) Object.assign(me, reg.data());
+  renderTop();
+}
+
+// ── Navigation ───────────────────────────────────────────
+function navTo(page) {
+  currentPage = page;
+  document.querySelectorAll(".page").forEach((p) => p.classList.toggle("active", p.id === "page-" + page));
+  document.querySelectorAll(".nav-item").forEach((b) => b.classList.toggle("active", b.dataset.nav === page));
+  history.replaceState(null, "", "#" + page);
+  window.scrollTo(0, 0);
+  const loaders = { dashboard: loadDashboard, feed: () => loadFeed(true), submit: loadSubmit, guides: renderGuides, ranks: loadRanks, profile: loadProfile, admin: () => loadAdmin("overview") };
+  (loaders[page] || (() => {}))();
+}
+
+// ── Dashboard ────────────────────────────────────────────
+async function loadDashboard() {
+  await refreshMe().catch(() => {});
+  $("dash-hello").textContent = `Welcome, ${(me.name || "").split(" ")[0] || "builder"}`;
+  await loadMySubs().catch(() => {});
+  renderHero();
+  const done = me.weeksCompleted || [];
+  $("st-pts").textContent = me.points || 0;
+  $("st-builds").textContent = `${done.length}/4`;
+  const ph = phase();
+  $("dash-weeks").innerHTML = WEEKS.map((w) => {
+    const isNow = ph.kind === "week" && ph.week.n === w.n;
+    const sub = mySubs[w.n];
+    const label = done.includes(w.n) ? "Built ✓" : sub && sub.status === "rejected" ? "Needs fix" : isNow ? "This week" : now() > w.end + GRACE_MS ? "Missed" : w.dates;
+    return `<div class="wk ${done.includes(w.n) ? "done" : ""} ${isNow ? "now" : ""}"><b>Week ${w.n}</b><span>${esc(label)}</span></div>`;
+  }).join("");
+  const earned = !!me.finisher;
+  $("dash-badge").innerHTML = `<div class="badge-icon ${earned ? "earned" : ""}">SS</div><div><div style="font-weight:700;font-size:14px;">Systems Sprint 2026 badge</div><div class="small muted">${earned ? "Earned. All 4 builds shipped, +25 points." : `Ship all 4 builds to earn it and +25 points. ${4 - done.length} to go.`}</div></div>`;
+  renderBonus();
+  loadZoomCard();
+  loadDashLeaderboard();
+}
+
+async function loadMySubs() {
+  if (me.isAdmin && !me.round) { mySubs = {}; return; }
+  const snaps = await Promise.all(WEEKS.map((w) => getDoc(doc(db, "sprint_submissions", `${me.uid}_w${w.n}`))));
+  mySubs = {};
+  snaps.forEach((s, i) => { if (s.exists()) mySubs[WEEKS[i].n] = s.data(); });
+}
+
+function renderHero() {
+  const ph = phase(), t = now(), el = $("dash-hero");
+  const graceWeeks = WEEKS.filter((w) => t >= w.end && t < w.end + GRACE_MS && !mySubs[w.n]);
+  let html = "";
+  if (ph.kind === "pre") {
+    html = `<div class="kicker">Starts December 1</div><h2>Week 1 opens in ${left(WEEKS[0].start - t)}</h2>
+      <p>Your one job before then: write down the 3 tasks you repeat after every shoot or every inquiry. Your first build comes from that list.</p>
+      <button class="btn" data-nav="guides">Read the Week 1 guide</button>`;
+  } else if (ph.kind === "week") {
+    const w = ph.week, sub = mySubs[w.n];
+    html = `<div class="kicker">Week ${w.n} · ${esc(w.dates)}${w.pairs ? " · Pairs with " + w.pairs : ""}</div><h2>${esc(w.theme)}</h2>
+      ${sub ? `<p>${sub.status === "rejected" ? "Your build needs another look. Check the note on the Submit page." : `Submitted: <b>${esc(sub.title)}</b>. Nice work.`}</p>`
+            : `<p>Build one new workflow, automation, or bot this week and upload your proof.</p>`}
+      <div class="countdown">Due ${esc(w.due)}, 11:59 PM ET · ${left(w.end - t)} left</div>
+      <div class="row"><button class="btn" data-nav="submit">${sub ? "View or edit" : "Submit Week " + w.n}</button><button class="btn outline" style="color:#f0ece0;border-color:#9C8AB8;" data-nav="guides">Week ${w.n} guide</button></div>`;
+  } else if (ph.kind === "showcase") {
+    html = `<div class="kicker">Showcase · Dec 29 to 31</div><h2>Share your best build</h2>
+      <p>Post your favorite build in the feed by December 31. Show what it does and what it replaced.</p>
+      <button class="btn" data-nav="feed">Post in the feed</button>`;
+  } else {
+    html = `<div class="kicker">Sprint complete</div><h2>Thanks for building with us</h2>
+      <p>The December Systems Sprint is over. Your builds and points stay here. The next Sprint is in March, right before wedding season.</p>`;
+  }
+  if (graceWeeks.length) {
+    const w = graceWeeks[0];
+    html += `<p style="margin-top:12px;color:#f3d38a;font-size:13px;">Last call: Week ${w.n} proof is still accepted until Tuesday at noon ET (${left(w.end + GRACE_MS - t)} left).</p>`;
+  }
+  el.innerHTML = html;
+}
+
+function renderBonus() {
+  const card = $("bonus-card");
+  const r = (myPrivate && myPrivate.bonusResults) || {};
+  const got = Object.entries(r).filter(([, v]) => v === "awarded" || v === "already").map(([k]) => k.toUpperCase());
+  if (!got.length) { card.classList.add("hidden"); return; }
+  card.classList.remove("hidden");
+  card.innerHTML = `<div class="card-title">Your member bonus</div><div class="small">+15 points was added to your points in <b>${esc(got.join(" and "))}</b> because you're a current member. Nothing to claim.</div>`;
+}
+
+async function loadZoomCard() {
+  const card = $("zoom-card");
+  try {
+    const snap = await getDocs(query(collection(db, "sprint_coworking"), where("active", "==", true)));
+    const sessions = snap.docs.map((d) => ({ id: d.id, ...d.data() })).filter((s) => !s.startsAt || s.startsAt > now() - 3 * 3600e3)
+      .sort((a, b) => (a.startsAt || 0) - (b.startsAt || 0));
+    if (!sessions.length) { card.classList.add("hidden"); return; }
+    const s = sessions[0];
+    let rsvped = false;
+    if (!me.isAdmin || me.round) rsvped = (await getDoc(doc(db, "sprint_coworking", s.id, "rsvps", me.uid))).exists();
+    const zoom = safeUrl(s.zoomUrl || "");
+    card.classList.remove("hidden");
+    card.innerHTML = `<div class="card-title">${esc(s.label || "Accountability Zoom")}<span class="pill">+2 RSVP · +5 attend</span></div>
+      ${s.startsAt ? `<div style="font-weight:600;font-size:14px;">${esc(fmtDateTime(s.startsAt))}</div>` : ""}
+      ${s.notes ? `<div class="small muted" style="margin-top:4px;">${esc(s.notes)}</div>` : ""}
+      <div class="small muted" style="margin-top:4px;">Same live Zoom as the SMAC, WAC, and AAC members. Build alongside people and get unstuck.</div>
+      <div class="row" style="margin-top:12px;">
+        ${me.round ? `<button class="btn sm" data-action="rsvp" data-id="${esc(s.id)}" ${rsvped ? "disabled" : ""}>${rsvped ? "RSVP'd ✓" : "RSVP +2"}</button>` : ""}
+        ${zoom ? `<a class="btn outline sm" href="${esc(zoom)}" target="_blank" rel="noopener">Join Zoom</a>` : ""}
+        ${s.calendarUrl && safeUrl(s.calendarUrl) ? `<a class="btn ghost sm" href="${esc(safeUrl(s.calendarUrl))}" target="_blank" rel="noopener">Add to calendar</a>` : ""}
+      </div>`;
+  } catch (e) { console.warn("zoom card", e); card.classList.add("hidden"); }
+}
+
+async function rsvp(id) {
+  try {
+    await setDoc(doc(db, "sprint_coworking", id, "rsvps", me.uid), { uid: me.uid, name: me.name, ts: serverTimestamp() });
+    toast("RSVP confirmed. +2 points");
+    setTimeout(() => refreshMe().then(() => { if (currentPage === "dashboard") loadDashboard(); }), 2500);
+    loadZoomCard();
+  } catch (e) { toast(friendlyErr(e)); }
+}
+
+async function fetchLeaderboard() {
+  const snap = await getDocs(query(collection(db, "sprint_registry"), orderBy("points", "desc"), limit(300)));
+  leaderboard = snap.docs.map((d) => ({ id: d.id, ...d.data() }));
+  return leaderboard;
+}
+function rankOf(uid) {
+  const i = leaderboard.findIndex((p) => p.id === uid);
+  if (i < 0) return "-";
+  const pts = leaderboard[i].points || 0;
+  return leaderboard.findIndex((p) => (p.points || 0) === pts) + 1; // ties share a rank
+}
+function lbRow(p, i) {
+  const rank = leaderboard.findIndex((x) => (x.points || 0) === (p.points || 0)) + 1;
+  const you = p.id === me.uid;
+  return `<div class="lb-row ${you ? "you" : ""}">
+    <div class="lb-rank ${rank <= 3 ? "top" : ""}">${rank}</div>${avatarHtml(p, "sm")}
+    <div class="lb-info"><div class="lb-name">${esc(p.name)}${you ? ' <span class="pill dark">You</span>' : ""}${p.finisher ? ' <span class="pill ok">Finisher</span>' : ""}</div>
+    <div class="lb-sub">${esc(p.business || "")}${dotsHtml(p.weeksCompleted)}</div></div>
+    <div class="lb-pts">${p.points || 0}</div></div>`;
+}
+async function loadDashLeaderboard() {
+  try {
+    await fetchLeaderboard();
+    $("st-rank").textContent = me.round ? rankOf(me.uid) : "-";
+    const top = leaderboard.slice(0, 5);
+    $("dash-lb").innerHTML = top.length ? top.map(lbRow).join("") : `<div class="empty">No points yet. Be first.</div>`;
+  } catch (e) { $("dash-lb").innerHTML = `<div class="empty">Couldn't load the leaderboard.</div>`; }
+}
+async function loadRanks() {
+  $("ranks-list").innerHTML = `<div class="loading">Loading…</div>`;
+  try {
+    await fetchLeaderboard();
+    $("ranks-list").innerHTML = leaderboard.length ? leaderboard.map(lbRow).join("") : `<div class="empty">No members yet.</div>`;
+  } catch (e) { $("ranks-list").innerHTML = `<div class="empty">Couldn't load the leaderboard.</div>`; }
+}
+
+// ── Feed ─────────────────────────────────────────────────
+const TAGS = { question: "Question", win: "Win", help: "Help, it broke", showcase: "Showcase", announcement: "Announcement" };
+function postHtml(p) {
+  const likes = p.likes || [], liked = likes.includes(me.uid);
+  const link = safeUrl(p.link || "");
+  const img = p.image && p.image.startsWith("data:image/") ? p.image : "";
+  const canDelete = p.uid === me.uid || me.isAdmin;
+  return `<div class="post ${p.pinned ? "pinned" : ""}" id="post-${esc(p.id)}">
+    <div class="post-head">${avatarHtml(p.author || { name: p.name }, "sm")}<div style="flex:1;min-width:0;">
+      <div class="post-name">${esc(p.name)} ${p.tag ? `<span class="pill ${p.tag === "announcement" ? "dark" : ""}">${esc(TAGS[p.tag] || p.tag)}</span>` : ""} ${p.pinned ? '<span class="pill dark">Pinned</span>' : ""}</div>
+      <div class="post-time">${esc(ago(millis(p.ts)))}</div></div></div>
+    <div class="post-text">${esc(p.text)}</div>
+    ${link ? `<a class="post-link" href="${esc(link)}" target="_blank" rel="noopener nofollow">${esc(link)}</a>` : ""}
+    ${img ? `<img class="post-img" src="${esc(img)}" alt="Post image" data-zoom />` : ""}
+    <div class="post-actions">
+      <button class="act ${liked ? "on" : ""}" data-action="like" data-id="${esc(p.id)}">${liked ? "♥" : "♡"} ${likes.length || ""}</button>
+      <button class="act" data-action="replies" data-id="${esc(p.id)}">Reply${p.replyCount ? " · " + p.replyCount : ""}</button>
+      ${me.isAdmin ? `<button class="act" data-action="pin" data-id="${esc(p.id)}" data-pinned="${p.pinned ? 1 : 0}">${p.pinned ? "Unpin" : "Pin"}</button>` : ""}
+      ${canDelete ? `<button class="act" data-action="del-post" data-id="${esc(p.id)}">Delete</button>` : ""}
+    </div>
+    <div class="replies hidden" id="replies-${esc(p.id)}"></div>
+  </div>`;
+}
+let feedPosts = [];
+async function loadFeed(reset) {
+  if (reset) { feedCursor = null; feedPosts = []; $("feed-list").innerHTML = `<div class="loading">Loading…</div>`; }
+  try {
+    if (!leaderboard.length) await fetchLeaderboard().catch(() => {});
+    const q = feedCursor
+      ? query(collection(db, "sprint_posts"), orderBy("ts", "desc"), startAfter(feedCursor), limit(PAGE_SIZE))
+      : query(collection(db, "sprint_posts"), orderBy("ts", "desc"), limit(PAGE_SIZE));
+    const snap = await getDocs(q);
+    feedCursor = snap.docs[snap.docs.length - 1] || feedCursor;
+    const byId = Object.fromEntries(leaderboard.map((p) => [p.id, p]));
+    feedPosts.push(...snap.docs.map((d) => ({ id: d.id, ...d.data(), author: byId[d.data().uid] })));
+    const sorted = [...feedPosts].sort((a, b) => (b.pinned ? 1 : 0) - (a.pinned ? 1 : 0));
+    $("feed-list").innerHTML = sorted.length ? sorted.map(postHtml).join("") : `<div class="empty">No posts yet. Start the conversation: what's the first thing you're automating?</div>`;
+    $("feed-more").classList.toggle("hidden", snap.docs.length < PAGE_SIZE);
+  } catch (e) { console.error(e); $("feed-list").innerHTML = `<div class="empty">Couldn't load the feed.</div>`; }
+}
+$("post-file").addEventListener("change", async (e) => {
+  const f = e.target.files[0]; if (!f) return;
+  try { postImage = await compressImage(f, 1400, 0.75, 650000); $("post-preview").src = postImage; $("post-preview").classList.remove("hidden"); }
+  catch (err) { toast(err.message); postImage = ""; }
+  e.target.value = "";
+});
+async function submitPost() {
+  const text = $("post-text").value.trim();
+  if (!text) { toast("Write something first."); return; }
+  const link = $("post-link").value.trim();
+  if (link && !safeUrl(link)) { toast("That link doesn't look right. Start it with https://"); return; }
+  const data = { uid: me.uid, name: me.name, text, ts: serverTimestamp(), likes: [], replyCount: 0 };
+  const tag = $("post-tag").value; if (tag) data.tag = tag;
+  if (link) data.link = safeUrl(link);
+  if (postImage) data.image = postImage;
+  $("post-btn").disabled = true;
+  try {
+    await addDoc(collection(db, "sprint_posts"), data);
+    $("post-text").value = ""; $("post-link").value = ""; $("post-link").classList.add("hidden"); $("post-tag").value = "";
+    postImage = ""; $("post-preview").classList.add("hidden");
+    toast(phase().kind === "pre" || phase().kind === "done" ? "Posted." : "Posted. +1 point (up to 2 posts a week)");
+    loadFeed(true);
+    setTimeout(() => refreshMe().catch(() => {}), 2500);
+  } catch (e) { toast(friendlyErr(e)); }
+  finally { $("post-btn").disabled = false; }
+}
+async function toggleLike(id) {
+  const p = feedPosts.find((x) => x.id === id); if (!p) return;
+  const liked = (p.likes || []).includes(me.uid);
+  try {
+    await updateDoc(doc(db, "sprint_posts", id), { likes: liked ? arrayRemove(me.uid) : arrayUnion(me.uid) });
+    p.likes = liked ? p.likes.filter((u) => u !== me.uid) : [...(p.likes || []), me.uid];
+    const el = $("post-" + id); if (el) el.outerHTML = postHtml(p);
+  } catch (e) { toast(friendlyErr(e)); }
+}
+async function showReplies(id) {
+  const box = $("replies-" + id); if (!box) return;
+  if (!box.classList.contains("hidden") && box.dataset.loaded) { box.classList.add("hidden"); return; }
+  box.classList.remove("hidden"); box.innerHTML = `<div class="loading">Loading…</div>`;
+  try {
+    const snap = await getDocs(query(collection(db, "sprint_posts", id, "replies"), orderBy("ts", "asc"), limit(100)));
+    box.dataset.loaded = "1";
+    box.innerHTML = snap.docs.map((d) => { const r = d.data();
+      return `<div class="reply"><b>${esc(r.name)}</b> <span class="post-time">${esc(ago(millis(r.ts)))}</span>
+        ${r.uid === me.uid || me.isAdmin ? `<button class="act" style="padding:1px 8px;font-size:11px;" data-action="del-reply" data-post="${esc(id)}" data-id="${esc(d.id)}">Delete</button>` : ""}
+        <div style="white-space:pre-wrap;">${esc(r.text)}</div></div>`; }).join("")
+      + `<div class="row" style="margin-top:8px;"><input class="input" id="reply-in-${esc(id)}" maxlength="1000" placeholder="Write a reply" style="flex:1;padding:8px 10px;" /><button class="btn sm" data-action="reply" data-id="${esc(id)}">Reply</button></div>`;
+  } catch (e) { box.innerHTML = `<div class="small muted">Couldn't load replies.</div>`; }
+}
+async function sendReply(id) {
+  const inp = $("reply-in-" + id); const text = (inp && inp.value.trim()) || "";
+  if (!text) return;
+  try {
+    await addDoc(collection(db, "sprint_posts", id, "replies"), { uid: me.uid, name: me.name, text, ts: serverTimestamp() });
+    const p = feedPosts.find((x) => x.id === id); if (p) p.replyCount = (p.replyCount || 0) + 1;
+    $("replies-" + id).dataset.loaded = ""; $("replies-" + id).classList.add("hidden");
+    showReplies(id);
+  } catch (e) { toast(friendlyErr(e)); }
+}
+
+// ── Submit ───────────────────────────────────────────────
+async function loadSubmit() {
+  $("sub-card").innerHTML = `<div class="loading">Loading…</div>`;
+  await loadMySubs().catch(() => {});
+  const open = openWeeks();
+  const ph = phase();
+  if (subWeek === null || !WEEKS.find((w) => w.n === subWeek)) {
+    subWeek = open.length ? open[open.length - 1].n : ph.kind === "pre" ? 1 : 4;
+    const missing = open.find((w) => !mySubs[w.n]); if (missing) subWeek = missing.n;
+  }
+  $("sub-tabs").innerHTML = WEEKS.map((w) => `<button class="week-tab ${w.n === subWeek ? "active" : ""}" data-week="${w.n}">Week ${w.n}${mySubs[w.n] ? (mySubs[w.n].status === "rejected" ? " ✕" : " ✓") : ""}</button>`).join("");
+  renderSubCard();
+}
+function statusPill(s) {
+  if (!s) return "";
+  return s.status === "approved" ? '<span class="pill ok">Approved</span>' : s.status === "rejected" ? '<span class="pill bad">Needs a fix</span>' : '<span class="pill">Submitted · +10</span>';
+}
+function renderSubCard() {
+  const w = WEEKS.find((x) => x.n === subWeek), t = now();
+  const sub = mySubs[w.n], open = weekOpen(w, t);
+  const head = `<div class="kicker">Week ${w.n} · ${esc(w.dates)}</div><div class="card-title" style="margin-top:4px;">${esc(w.theme)} ${statusPill(sub)}</div>`;
+  if (me.isAdmin && !me.round) { $("sub-card").innerHTML = head + `<div class="muted small">Admin accounts don't submit builds. Use Admin > Review builds.</div>`; return; }
+  if (sub && sub.status === "rejected") {
+    $("sub-card").innerHTML = head + `<div class="small" style="margin-bottom:8px;"><b>${esc(sub.title)}</b></div>
+      <div class="small" style="background:#fdf1ef;border-radius:8px;padding:10px;">Note from Nate: ${esc(sub.adminNote || "This build doesn't meet the proof standard. Reply in the feed or email sprint@theaccountabilityco.com with questions.")}</div>`;
+    return;
+  }
+  if (!open && !sub) {
+    $("sub-card").innerHTML = head + `<div class="empty">${t < w.start ? `Week ${w.n} opens ${esc(fmtET(w.start, { weekday: "long", month: "short", day: "numeric" }))}. Read the guide to plan your build.` : "This week is closed. Jump back in with the current week."}</div>
+      ${t < w.start ? `<div style="text-align:center;"><button class="btn outline sm" data-nav="guides">Read the guide</button></div>` : ""}`;
+    return;
+  }
+  if (!open && sub) {
+    const img = sub.image && sub.image.startsWith("data:image/") ? sub.image : "";
+    $("sub-card").innerHTML = head + `<div class="build"><div class="build-title">${esc(sub.title)}</div>
+      <div class="small muted">${esc(sub.tool || "")}</div><div class="small" style="margin-top:6px;">Replaces: ${esc(sub.replaces)}</div>
+      ${safeUrl(sub.link || "") ? `<a class="post-link" href="${esc(safeUrl(sub.link))}" target="_blank" rel="noopener">${esc(sub.link)}</a>` : ""}
+      ${img ? `<img src="${esc(img)}" alt="Proof" data-zoom />` : ""}</div><div class="small muted">This week is closed, so the build is locked.</div>`;
+    return;
+  }
+  subImage = (sub && sub.image) || "";
+  const late = t >= w.end;
+  $("sub-card").innerHTML = head + `
+    <div class="small muted" style="margin-bottom:14px;">Due ${esc(w.due)}, 11:59 PM ET.${late ? ` <b style="color:var(--danger);">Grace period: closes Tuesday at noon ET.</b>` : ""} ${sub ? "You can edit until the week closes." : ""}</div>
+    <div class="field"><label for="sub-title">What did you build?</label><input class="input" id="sub-title" maxlength="120" placeholder="e.g. Gallery published → client delivery email" value="${esc(sub ? sub.title : "")}" /></div>
+    <div class="field"><label for="sub-replaces">What does it replace?</label><textarea class="input" id="sub-replaces" maxlength="600" placeholder="1 to 2 lines. e.g. I used to email every client by hand when their gallery went live.">${esc(sub ? sub.replaces : "")}</textarea></div>
+    <div class="field"><label for="sub-tool">Tool</label><input class="input" id="sub-tool" maxlength="80" list="tool-list" placeholder="Make, Zapier, MailerLite, custom GPT…" value="${esc(sub ? sub.tool || "" : "")}" />
+      <datalist id="tool-list">${["Make", "Zapier", "n8n", "MailerLite", "HoneyBook", "Dubsado", "Studio Ninja", "Pixieset", "Pic-Time", "Apple Shortcuts", "Notion", "Airtable", "Custom GPT", "Claude project", "Script"].map((x) => `<option value="${x}">`).join("")}</datalist></div>
+    <div class="field"><label>Proof screenshot</label>
+      <label class="btn ghost sm file-btn">${subImage ? "Replace screenshot" : "Upload screenshot"}<input type="file" id="sub-file" accept="image/*" /></label>
+      <img id="sub-preview" class="preview-img ${subImage ? "" : "hidden"}" src="${esc(subImage)}" alt="" />
+      <div class="hint">Show the scenario, automation, or bot itself, not just the app's home screen.</div></div>
+    <div class="field"><label for="sub-link">Screen recording link (optional)</label><input class="input" id="sub-link" type="url" maxlength="500" placeholder="Loom, Google Drive, or YouTube (unlisted)" value="${esc(sub ? sub.link || "" : "")}" />
+      <div class="hint">You need a screenshot or a recording link. Both is best.</div></div>
+    <button class="btn block" id="sub-btn" data-action="submit-build">${sub ? "Save changes" : `Submit Week ${w.n} · +10`}</button>
+    <details style="margin-top:14px;" class="small"><summary style="cursor:pointer;color:var(--accent-dim);font-weight:600;">What counts?</summary>
+      <ul style="padding-left:18px;margin-top:6px;"><li>Something you created this week that runs or saves steps on its own</li><li>Not a tool you already had, a ChatGPT question, or last month's build</li></ul></details>`;
+  $("sub-file").addEventListener("change", async (e) => {
+    const f = e.target.files[0]; if (!f) return;
+    try { subImage = await compressImage(f, 1600, 0.78, 850000); $("sub-preview").src = subImage; $("sub-preview").classList.remove("hidden"); }
+    catch (err) { toast(err.message); }
+    e.target.value = "";
+  });
+}
+async function submitBuild() {
+  const w = WEEKS.find((x) => x.n === subWeek);
+  const title = $("sub-title").value.trim(), replaces = $("sub-replaces").value.trim(), tool = $("sub-tool").value.trim(), linkRaw = $("sub-link").value.trim();
+  if (!title) return toast("Add what you built.");
+  if (!replaces) return toast("Add 1 to 2 lines on what it replaces.");
+  const link = linkRaw ? safeUrl(linkRaw) : "";
+  if (linkRaw && !link) return toast("That link doesn't look right. Start it with https://");
+  if (!subImage && !link) return toast("Add a screenshot or a screen recording link.");
+  const id = `${me.uid}_w${w.n}`, existing = mySubs[w.n];
+  const body = { title, replaces, tool, link, image: subImage };
+  $("sub-btn").disabled = true;
+  try {
+    if (existing) {
+      await updateDoc(doc(db, "sprint_submissions", id), { ...body, updatedAt: serverTimestamp() });
+      toast("Build updated.");
+    } else {
+      await setDoc(doc(db, "sprint_submissions", id), { uid: me.uid, name: me.name, week: w.n, ...body, status: "submitted", createdAt: serverTimestamp() });
+      toast(`Week ${w.n} submitted. +10 points`);
+      setTimeout(() => refreshMe().catch(() => {}), 2500);
+    }
+    await loadSubmit();
+  } catch (e) { console.error(e); toast(friendlyErr(e)); }
+  finally { const b = $("sub-btn"); if (b) b.disabled = false; }
+}
+async function loadBuilds() {
+  const box = $("builds-list"); box.innerHTML = `<div class="loading">Loading…</div>`;
+  try {
+    const snap = await getDocs(query(collection(db, "sprint_submissions"), where("week", "==", subWeek), limit(30)));
+    const items = snap.docs.map((d) => d.data()).filter((s) => s.status !== "rejected").sort((a, b) => millis(b.createdAt) - millis(a.createdAt));
+    box.innerHTML = items.length ? `<div class="small muted" style="margin-bottom:8px;">Week ${subWeek}</div>` + items.map((s) => {
+      const img = s.image && s.image.startsWith("data:image/") ? s.image : "";
+      return `<div class="build"><div class="build-title">${esc(s.title)}</div><div class="small muted">${esc(s.name)}${s.tool ? " · " + esc(s.tool) : ""}</div>
+        <div class="small" style="margin-top:6px;">Replaces: ${esc(s.replaces)}</div>
+        ${safeUrl(s.link || "") ? `<a class="post-link" href="${esc(safeUrl(s.link))}" target="_blank" rel="noopener nofollow">Watch the recording</a>` : ""}
+        ${img ? `<img src="${esc(img)}" alt="Proof" loading="lazy" data-zoom />` : ""}</div>`;
+    }).join("") : `<div class="empty">No Week ${subWeek} builds yet.</div>`;
+  } catch (e) { box.innerHTML = `<div class="empty">Couldn't load builds.</div>`; }
+}
+
+// ── Guides ───────────────────────────────────────────────
+const GUIDES = [
+  { n: 1, goal: "List everything you do by hand around a shoot or an inquiry, pick the one that eats the most time, and build your first automation to handle it.",
+    steps: ["Map (15 minutes): list everything you did by hand this past week. Inquiries, culling, backups, delivery, emails, invoices.", "Circle the task that eats the most time or happens after every single shoot.", "Build an automation that handles it, even if it only covers part of the job.", "Run it once for real, then screenshot or record it."],
+    ideas: ["Card offload kicks off an automatic backup to a second drive or the cloud, with folders named by client and date", "A new booking creates the shoot-day calendar event with location, timeline, and a gear checklist", "Publishing a gallery in Pixieset or Pic-Time sends the client a delivery email and marks the job done in your tracker", "New inquiry emails get labeled and logged to a lead sheet with the date, venue, and package"],
+    tools: "Apple Shortcuts or Hazel for backups · Make or Zapier for calendar and sheets · Gmail filters plus Make for inquiries" },
+  { n: 2, goal: "Build the path from inquiry to booked: an instant reply with your pricing guide, a date check, and a clean lead record without retyping a thing.",
+    steps: ["Start at your website's contact form. That's where every lead begins.", "Send an instant reply with your pricing guide and next steps.", "Log the lead with date, venue, and budget in one place.", "Bonus: check the date against your calendar automatically."],
+    ideas: ["Your contact form sends an instant reply with your pricing guide, and logs the lead with date, venue, and budget", "Every inquiry gets checked against your calendar so you know right away if the date is open", "A booked client automatically gets the questionnaire, then a reminder if it isn't back in 5 days", "Contract and retainer reminders go out on their own until the date is locked in"],
+    tools: "HoneyBook, Dubsado, or Studio Ninja automations · MailerLite · Make or Zapier with Google Sheets or Airtable" },
+  { n: 3, goal: "Turn every shoot into content. Sneak peeks, reels, and blog drafts that start themselves instead of waiting on you.",
+    steps: ["Pick one trigger: gallery delivered, film exported, or shoot marked done.", "Decide the content it should start: a blog draft, a sneak peek, or captions.", "Build it so the first draft exists without you opening a blank page.", "Post one piece it made and share it in the feed."],
+    ideas: ["A delivered gallery or film automatically creates a blog post draft with the venue, vendors, and your top images", "A sneak-peek workflow that gets 3 to 5 images or a teaser clip posted within 48 hours of every shoot", "One wedding film or event recap turns into short reels with captions through a repeatable pipeline", "A custom GPT or Claude project that writes captions and blog intros in your voice from your shoot notes"],
+    tools: "Custom GPT or Claude project · Make plus WordPress or Squarespace · Notion content calendar · Buffer or Meta Business Suite" },
+  { n: 4, goal: "Payment reminders, review requests, vendor credits, and lead follow-ups. Build the system that chases things so you don't have to.",
+    steps: ["List what you chase by hand: balances, reviews, replies, vendor credits.", "Pick the one that costs you the most money or reputation when it slips.", "Build the reminder or follow-up so it sends on a schedule without you.", "Keep it small. It's a holiday week. Something working beats something half done."],
+    ideas: ["Payment plan reminders go out automatically before each balance is due", "A review request (Google, The Knot, WeddingWire) sends a week after the gallery or film is delivered", "A vendor credit list and your favorite images go to the planner and venue after every wedding", "Leads who haven't replied in 3 days get a friendly follow-up, and a one-year anniversary email goes to past clients"],
+    tools: "Your CRM's workflows · MailerLite automations · Make with Stripe, QuickBooks, or Google Sheets" },
+];
+function renderGuides() {
+  const ph = phase();
+  const cur = ph.kind === "week" ? ph.week.n : ph.kind === "pre" ? 1 : 0;
+  $("guides-list").innerHTML = `
+    <div class="card"><div class="card-title">What counts as a build</div>
+      <div class="two-col">
+        <div><div class="pill ok" style="margin-bottom:6px;">Counts</div><ul>
+          <li>A new Make, Zapier, or n8n scenario that runs on its own</li>
+          <li>A new email automation in your CRM or MailerLite</li>
+          <li>A custom GPT, Claude project, or bot set up for a real task</li>
+          <li>A script or shortcut that replaces manual work</li>
+          <li>A documented workflow with at least one automated step</li></ul></div>
+        <div><div class="pill bad" style="margin-bottom:6px;">Doesn't count</div><ul>
+          <li>Using a tool or bot you already had</li><li>Asking ChatGPT or Claude a question</li>
+          <li>Signing up for an app without setting anything up</li><li>Last month's build, resubmitted</li><li>A plan to build something next week</li></ul></div>
+      </div>
+      <div class="small muted" style="margin-top:8px;">Proof = a screenshot or short screen recording of the build + 1 to 2 lines on what it replaces.</div></div>`
+    + GUIDES.map((g) => { const w = WEEKS[g.n - 1];
+      return `<div class="card guide" ${g.n === cur ? 'style="border-color:var(--accent);"' : ""}>
+        <div class="kicker">Week ${g.n} · ${esc(w.dates)}${w.pairs ? " · Pairs with " + w.pairs : ""}${g.n === cur ? " · This week" : ""}</div>
+        <h3>${esc(w.theme)}</h3><div class="small">${esc(g.goal)}</div>
+        <details ${g.n === cur ? "open" : ""}><summary>The plan, build ideas, and tools</summary>
+          <div style="font-weight:600;font-size:13px;margin-top:10px;">The plan</div><ul>${g.steps.map((s) => `<li>${esc(s)}</li>`).join("")}</ul>
+          <div style="font-weight:600;font-size:13px;">Build ideas for photo and video businesses</div><ul>${g.ideas.map((s) => `<li>${esc(s)}</li>`).join("")}</ul>
+          <div style="font-weight:600;font-size:13px;">Tools that fit</div><div class="small muted" style="margin:4px 0 6px;">${esc(g.tools)}</div>
+          <div class="small muted">Due ${esc(w.due)}, 11:59 PM ET.</div>
+        </details></div>`; }).join("")
+    + `<div class="card guide"><div class="kicker">Showcase · Dec 29 to 31</div><h3>Systems Showcase</h3>
+        <div class="small">Post your best build in the feed with the Showcase tag. Show what it does and what it replaced, then steal good ideas from everyone else.</div></div>`;
+}
+
+// ── Profile ──────────────────────────────────────────────
+let pfPhoto = null;
+async function loadProfile() {
+  await refreshMe().catch(() => {});
+  pfPhoto = null;
+  $("pf-avatar").outerHTML = `<div class="avatar lg" id="pf-avatar">${me.photo && me.photo.startsWith("data:image/") ? `<img src="${esc(me.photo)}" alt="" />` : esc(initials(me.name))}</div>`;
+  $("pf-name").value = me.name || ""; $("pf-business").value = me.business || ""; $("pf-website").value = me.website || ""; $("pf-bio").value = me.bio || "";
+  $("pf-email").textContent = `Logged in as ${me.email}`;
+  const box = $("pf-history");
+  if (me.isAdmin && !me.round) { box.innerHTML = `<div class="small muted">Admin account. No points.</div>`; return; }
+  try {
+    const snap = await getDocs(query(collection(db, "sprint_points"), where("uid", "==", me.uid)));
+    const rows = snap.docs.map((d) => d.data()).filter((r) => r.active).sort((a, b) => b.ts - a.ts);
+    box.innerHTML = rows.length ? `<table class="t"><tbody>${rows.map((r) => `<tr><td>${esc(r.action)}${r.week && r.kind === "proof" ? " · Week " + r.week : ""}</td><td class="muted">${esc(fmtET(r.ts, { month: "short", day: "numeric" }))}</td><td style="text-align:right;font-weight:700;color:var(--accent-dim);">+${r.pts}</td></tr>`).join("")}</tbody></table>`
+      : `<div class="small muted">No points yet. Your first build is worth +10.</div>`;
+  } catch (e) { box.innerHTML = `<div class="small muted">Couldn't load your points history.</div>`; }
+}
+$("pf-file").addEventListener("change", async (e) => {
+  const f = e.target.files[0]; if (!f) return;
+  try { pfPhoto = await compressImage(f, 240, 0.8, 85000); $("pf-avatar").innerHTML = `<img src="${pfPhoto}" alt="" />`; toast("Photo ready. Tap Save profile."); }
+  catch (err) { toast(err.message); }
+  e.target.value = "";
+});
+async function saveProfile() {
+  if (me.isAdmin && !me.round) { toast("The admin account has no Sprint profile."); return; }
+  const name = $("pf-name").value.trim();
+  if (!name) return toast("Name can't be empty.");
+  const website = $("pf-website").value.trim();
+  if (website && !safeUrl(website)) return toast("Website should start with https://");
+  const upd = { name, business: $("pf-business").value.trim(), website: website ? safeUrl(website) : "", bio: $("pf-bio").value.trim(), updatedAt: Date.now() };
+  if (pfPhoto) upd.photo = pfPhoto;
+  try { await updateDoc(doc(db, "sprint_registry", me.uid), upd); Object.assign(me, upd); renderTop(); toast("Profile saved."); }
+  catch (e) { toast(friendlyErr(e)); }
+}
+
+// ── Admin ────────────────────────────────────────────────
+let adminTab = "overview", reviewWeek = 1, adminMembers = [];
+async function loadAdmin(tab) {
+  if (!me.isAdmin) return;
+  adminTab = tab;
+  document.querySelectorAll("[data-admin]").forEach((b) => b.classList.toggle("active", b.dataset.admin === tab));
+  const body = $("admin-body"); body.innerHTML = `<div class="loading">Loading…</div>`;
+  try { await ({ overview: adminOverview, review: adminReview, zooms: adminZooms, members: adminMembersTab, bonus: adminBonus }[tab])(body); }
+  catch (e) { console.error(e); body.innerHTML = `<div class="empty">Couldn't load. ${esc(e.code || e.message || "")}</div>`; }
+}
+async function getMembers() {
+  const [reg, priv] = await Promise.all([getDocs(collection(db, "sprint_registry")), getDocs(collection(db, "sprint_private"))]);
+  const emails = Object.fromEntries(priv.docs.map((d) => [d.id, d.data()]));
+  adminMembers = reg.docs.map((d) => ({ id: d.id, ...d.data(), email: (emails[d.id] || {}).email || "", bonusResults: (emails[d.id] || {}).bonusResults || {} }))
+    .sort((a, b) => (b.points || 0) - (a.points || 0));
+  return adminMembers;
+}
+async function adminOverview(body) {
+  const members = await getMembers();
+  const subs = await getDocs(collection(db, "sprint_submissions"));
+  const perWeek = WEEKS.map((w) => subs.docs.filter((d) => d.data().week === w.n && d.data().status !== "rejected").length);
+  const pending = subs.docs.filter((d) => d.data().status === "submitted").length;
+  const bonusCount = members.filter((m) => Object.values(m.bonusResults).some((v) => v === "awarded" || v === "already")).length;
+  body.innerHTML = `<div class="grid3">
+      <div class="stat"><div class="stat-val">${members.length}</div><div class="stat-lbl">Members</div></div>
+      <div class="stat"><div class="stat-val">${pending}</div><div class="stat-lbl">To review</div></div>
+      <div class="stat"><div class="stat-val">${members.filter((m) => m.finisher).length}</div><div class="stat-lbl">Finishers</div></div></div>
+    <div class="card"><div class="card-title">Builds per week</div><div class="weeks">${WEEKS.map((w, i) => `<div class="wk"><b>${perWeek[i]}</b><span>Week ${w.n}</span></div>`).join("")}</div>
+      <div class="small muted" style="margin-top:10px;">${bonusCount} member${bonusCount === 1 ? "" : "s"} got the +15 cross-program bonus.</div></div>
+    <div class="card"><div class="card-title">Post an announcement</div>
+      <textarea class="input" id="ann-text" maxlength="2000" placeholder="Pinned to the top of the feed"></textarea>
+      <button class="btn sm" style="margin-top:8px;" data-action="announce">Post and pin</button></div>
+    <div class="card"><div class="card-title">Preview a date</div><div class="small muted">Add <span class="mono">?asOf=2026-12-03</span> to the URL to see the dashboard as of that date. Only changes what you see; deadlines on the server stay real.</div></div>`;
+}
+async function adminReview(body) {
+  const snap = await getDocs(query(collection(db, "sprint_submissions"), where("week", "==", reviewWeek)));
+  const items = snap.docs.map((d) => ({ id: d.id, ...d.data() })).sort((a, b) => millis(a.createdAt) - millis(b.createdAt));
+  body.innerHTML = `<div class="week-tabs">${WEEKS.map((w) => `<button class="week-tab ${w.n === reviewWeek ? "active" : ""}" data-review-week="${w.n}">Week ${w.n}</button>`).join("")}</div>
+    <div class="small muted" style="margin-bottom:10px;">Builds earn +10 the moment they're submitted. Reject only the ones that don't meet the standard: that removes the points (and the finisher bonus if it applied). Approving is optional and just marks it reviewed.</div>`
+    + (items.length ? items.map((s) => { const img = s.image && s.image.startsWith("data:image/") ? s.image : "";
+      return `<div class="build"><div class="row" style="justify-content:space-between;"><div class="build-title">${esc(s.title)}</div>${statusPill(s)}</div>
+        <div class="small muted">${esc(s.name)} · ${esc(s.tool || "No tool listed")} · ${esc(fmtDateTime(millis(s.createdAt)))}</div>
+        <div class="small" style="margin-top:6px;">Replaces: ${esc(s.replaces)}</div>
+        ${safeUrl(s.link || "") ? `<a class="post-link" href="${esc(safeUrl(s.link))}" target="_blank" rel="noopener">${esc(s.link)}</a>` : ""}
+        ${img ? `<img src="${esc(img)}" alt="Proof" loading="lazy" data-zoom />` : ""}
+        <input class="input" id="note-${esc(s.id)}" placeholder="Note to member (shown if rejected)" value="${esc(s.adminNote || "")}" style="margin-top:10px;padding:8px 10px;font-size:14px;" />
+        <div class="row" style="margin-top:8px;">
+          <button class="btn sm" data-action="review" data-id="${esc(s.id)}" data-status="approved">Approve</button>
+          <button class="btn danger sm" data-action="review" data-id="${esc(s.id)}" data-status="rejected">Reject</button>
+          ${s.status !== "submitted" ? `<button class="btn ghost sm" data-action="review" data-id="${esc(s.id)}" data-status="submitted">Reset</button>` : ""}
+        </div></div>`; }).join("") : `<div class="empty">No Week ${reviewWeek} builds yet.</div>`);
+}
+async function reviewSub(id, status) {
+  const note = ($("note-" + id) || {}).value || "";
+  try { await updateDoc(doc(db, "sprint_submissions", id), { status, adminNote: note.trim().slice(0, 500), reviewedAt: Date.now() }); toast(`Marked ${status}.`); loadAdmin("review"); }
+  catch (e) { toast(friendlyErr(e)); }
+}
+async function adminZooms(body) {
+  const snap = await getDocs(collection(db, "sprint_coworking"));
+  const sessions = snap.docs.map((d) => ({ id: d.id, ...d.data() })).sort((a, b) => (b.startsAt || b.createdAt || 0) - (a.startsAt || a.createdAt || 0));
+  body.innerHTML = `<div class="card"><div class="card-title">New Accountability Zoom</div>
+      <div class="field"><label>Label</label><input class="input" id="z-label" placeholder="Accountability Zoom" value="Accountability Zoom" /></div>
+      <div class="field"><label>Date and time (ET)</label><input class="input" id="z-when" type="datetime-local" /></div>
+      <div class="field"><label>Zoom link</label><input class="input" id="z-url" type="url" placeholder="https://zoom.us/j/..." /><div class="hint">Use the same link as the SMAC, WAC, and AAC sessions. Only logged-in members can see it.</div></div>
+      <div class="field"><label>Calendar link (optional)</label><input class="input" id="z-cal" type="url" placeholder="https://calendar.google.com/..." /></div>
+      <div class="field"><label>Note (optional)</label><input class="input" id="z-notes" maxlength="300" placeholder="Bring a build you're stuck on." /></div>
+      <button class="btn sm" data-action="z-create">Create and show on dashboard</button></div>`
+    + (sessions.length ? sessions.map((s) => `<div class="card"><div class="card-title">${esc(s.label || "Accountability Zoom")} ${s.active ? '<span class="pill ok">Showing</span>' : '<span class="pill">Hidden</span>'}</div>
+        <div class="small muted">${s.startsAt ? esc(fmtDateTime(s.startsAt)) : "No time set"}</div>
+        <div class="row" style="margin-top:10px;">
+          <button class="btn ghost sm" data-action="z-toggle" data-id="${esc(s.id)}" data-active="${s.active ? 1 : 0}">${s.active ? "Hide (close RSVPs)" : "Show"}</button>
+          <button class="btn outline sm" data-action="z-attendance" data-id="${esc(s.id)}">RSVPs and attendance</button>
+          <button class="btn danger sm" data-action="z-delete" data-id="${esc(s.id)}">Delete</button></div>
+        <div id="att-${esc(s.id)}" class="hidden" style="margin-top:12px;"></div></div>`).join("") : `<div class="empty">No sessions yet.</div>`);
+}
+function etLocalToMillis(v) {
+  // datetime-local value interpreted as ET (EST in Dec, UTC-5; EDT Mar to Nov, UTC-4)
+  if (!v) return 0;
+  const guess = Date.parse(v + ":00-05:00");
+  const offsetHrs = fmtET(guess, { timeZoneName: "short" }).includes("EDT") ? 4 : 5;
+  return Date.parse(v + `:00-0${offsetHrs}:00`);
+}
+async function zCreate() {
+  const label = $("z-label").value.trim() || "Accountability Zoom";
+  const startsAt = etLocalToMillis($("z-when").value);
+  const zoomUrl = safeUrl($("z-url").value.trim()), calendarUrl = safeUrl($("z-cal").value.trim()), notes = $("z-notes").value.trim();
+  if (!startsAt) return toast("Add the date and time.");
+  if (!zoomUrl) return toast("Add the Zoom link.");
+  try { await addDoc(collection(db, "sprint_coworking"), { label, startsAt, zoomUrl, calendarUrl, notes, active: true, createdAt: Date.now() }); toast("Session created."); loadAdmin("zooms"); }
+  catch (e) { toast(friendlyErr(e)); }
+}
+async function zAttendance(id) {
+  const box = $("att-" + id);
+  if (!box.classList.contains("hidden")) { box.classList.add("hidden"); return; }
+  box.classList.remove("hidden"); box.innerHTML = `<div class="loading">Loading…</div>`;
+  const [rs, at] = await Promise.all([getDocs(collection(db, "sprint_coworking", id, "rsvps")), getDocs(collection(db, "sprint_coworking", id, "attended"))]);
+  if (!adminMembers.length) await getMembers();
+  const rsvpIds = new Set(rs.docs.map((d) => d.id)), attIds = new Set(at.docs.map((d) => d.id));
+  const list = [...adminMembers].sort((a, b) => (rsvpIds.has(b.id) - rsvpIds.has(a.id)) || (a.name || "").localeCompare(b.name || ""));
+  box.innerHTML = `<div class="small muted" style="margin-bottom:6px;">${rsvpIds.size} RSVP'd · ${attIds.size} attended. Check who showed up (+5 each). Unchecking removes the points.</div>
+    <input class="input" placeholder="Filter by name" data-filter="${esc(id)}" style="padding:8px 10px;font-size:14px;margin-bottom:6px;" />
+    <div style="max-height:340px;overflow:auto;">${list.map((m) => `<label class="row att-row" data-name="${esc((m.name || "").toLowerCase())}" style="padding:5px 0;gap:8px;font-size:14px;">
+      <input type="checkbox" data-action="z-mark" data-session="${esc(id)}" data-uid="${esc(m.id)}" ${attIds.has(m.id) ? "checked" : ""} />
+      ${esc(m.name)} ${rsvpIds.has(m.id) ? '<span class="pill">RSVP</span>' : ""}</label>`).join("")}</div>`;
+}
+async function zMark(sessionId, uid, on) {
+  try {
+    const ref = doc(db, "sprint_coworking", sessionId, "attended", uid);
+    if (on) await setDoc(ref, { uid, ts: Date.now() }); else await deleteDoc(ref);
+    toast(on ? "Marked attended. +5" : "Attendance removed.");
+  } catch (e) { toast(friendlyErr(e)); }
+}
+async function adminMembersTab(body) {
+  const m = await getMembers();
+  const progs = (b) => Object.entries(b).filter(([, v]) => v === "awarded" || v === "already").map(([k]) => k.toUpperCase()).join(", ");
+  body.innerHTML = `<div class="row" style="margin-bottom:10px;"><button class="btn sm" data-action="export">Export CSV</button><span class="small muted">${m.length} members</span></div>
+    <div class="card scroll-x"><table class="t"><thead><tr><th>Name</th><th>Email</th><th>Pts</th><th>Weeks</th><th>Bonus</th><th>Joined</th></tr></thead><tbody>
+    ${m.map((x) => `<tr><td><b>${esc(x.name)}</b><div class="muted">${esc(x.business || "")}</div></td><td>${esc(x.email)}</td><td>${x.points || 0}</td><td>${dotsHtml(x.weeksCompleted)}</td><td>${esc(progs(x.bonusResults))}</td><td class="muted">${x.addedAt ? esc(fmtET(x.addedAt, { month: "short", day: "numeric" })) : ""}</td></tr>`).join("")}
+    </tbody></table></div>`;
+}
+function exportCsv() {
+  const cell = (v) => `"${String(v ?? "").replace(/"/g, '""')}"`;
+  const rows = [["Name", "Email", "Business", "Website", "Points", "Weeks built", "Finisher", "Bonus programs", "Joined"]]
+    .concat(adminMembers.map((x) => [x.name, x.email, x.business, x.website, x.points || 0, (x.weeksCompleted || []).join(" "), x.finisher ? "yes" : "",
+      Object.entries(x.bonusResults).filter(([, v]) => v === "awarded" || v === "already").map(([k]) => k.toUpperCase()).join(" "), x.addedAt ? new Date(x.addedAt).toISOString().slice(0, 10) : ""]));
+  const blob = new Blob([rows.map((r) => r.map(cell).join(",")).join("\n")], { type: "text/csv" });
+  const a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = "systems-sprint-members.csv"; a.click();
+}
+async function adminBonus(body) {
+  const snap = await getDocs(collection(db, "sprint_bonus_review"));
+  const items = snap.docs.map((d) => ({ id: d.id, ...d.data() })).sort((a, b) => b.ts - a.ts);
+  const why = { no_record: "Has a login there but no registry record", not_current: "Has a record but isn't a current member", error: "The check failed (permissions or network)" };
+  body.innerHTML = `<div class="small muted" style="margin-bottom:10px;">Signups where the +15 check needs a human look. If someone should have gotten it, add +15 in that program's own admin, then clear the item here.</div>`
+    + (items.length ? `<div class="card scroll-x"><table class="t"><thead><tr><th>Email</th><th>Program</th><th>Why</th><th></th></tr></thead><tbody>
+      ${items.map((x) => `<tr><td>${esc(x.emailLower)}</td><td>${esc((x.program || "").toUpperCase())}</td><td>${esc(why[x.status] || x.status)}</td><td><button class="btn ghost sm" data-action="bonus-clear" data-id="${esc(x.id)}">Clear</button></td></tr>`).join("")}
+      </tbody></table></div>` : `<div class="empty">Nothing to review.</div>`);
+}
+
+// ── Events ───────────────────────────────────────────────
+document.addEventListener("click", async (e) => {
+  const zoom = e.target.closest("[data-zoom]");
+  if (zoom) { $("lightbox").querySelector("img").src = zoom.src; $("lightbox").classList.add("show"); return; }
+  if (e.target.closest("#lightbox")) { $("lightbox").classList.remove("show"); return; }
+  const nav = e.target.closest("[data-nav]"); if (nav) { navTo(nav.dataset.nav); return; }
+  const wk = e.target.closest("[data-week]"); if (wk) { subWeek = +wk.dataset.week; loadSubmit(); $("builds-list").innerHTML = '<span class="muted small">See what everyone else built this week. Steal good ideas.</span>'; return; }
+  const rw = e.target.closest("[data-review-week]"); if (rw) { reviewWeek = +rw.dataset.reviewWeek; loadAdmin("review"); return; }
+  const at = e.target.closest("[data-admin]"); if (at) { loadAdmin(at.dataset.admin); return; }
+  const el = e.target.closest("[data-action]"); if (!el) return;
+  const id = el.dataset.id;
+  switch (el.dataset.action) {
+    case "forgot": {
+      const email = $("auth-email").value.trim(), msg = $("auth-msg");
+      if (!email) { msg.className = "auth-msg"; msg.textContent = "Type your email above first."; return; }
+      try { await sendReset(email); } catch (err) { /* same message either way: don't reveal who has an account */ }
+      msg.className = "auth-msg ok"; msg.textContent = "If that email is registered, a reset link is on its way. Check spam too.";
+      return;
+    }
+    case "reset-self": try { await sendReset(me.email); toast("Reset link sent to " + me.email); } catch { toast("Couldn't send the reset email."); } return;
+    case "logout": await signOut(auth); location.hash = ""; return;
+    case "rsvp": el.disabled = true; return rsvp(id);
+    case "toggle-post-link": $("post-link").classList.toggle("hidden"); return;
+    case "post": return submitPost();
+    case "feed-more": return loadFeed(false);
+    case "like": return toggleLike(id);
+    case "replies": return showReplies(id);
+    case "reply": return sendReply(id);
+    case "del-reply": if (!confirm("Delete this reply?")) return;
+      try { await deleteDoc(doc(db, "sprint_posts", el.dataset.post, "replies", id)); const b = $("replies-" + el.dataset.post); b.dataset.loaded = ""; b.classList.add("hidden"); showReplies(el.dataset.post); } catch (err) { toast(friendlyErr(err)); }
+      return;
+    case "del-post": if (!confirm("Delete this post?")) return;
+      try { await deleteDoc(doc(db, "sprint_posts", id)); feedPosts = feedPosts.filter((p) => p.id !== id); const n = $("post-" + id); if (n) n.remove(); toast("Post deleted."); setTimeout(() => refreshMe().catch(() => {}), 2500); } catch (err) { toast(friendlyErr(err)); }
+      return;
+    case "pin": try { await updateDoc(doc(db, "sprint_posts", id), { pinned: el.dataset.pinned !== "1" }); loadFeed(true); } catch (err) { toast(friendlyErr(err)); } return;
+    case "submit-build": return submitBuild();
+    case "load-builds": return loadBuilds();
+    case "save-profile": return saveProfile();
+    case "review": return reviewSub(id, el.dataset.status);
+    case "z-create": return zCreate();
+    case "z-toggle": try { await updateDoc(doc(db, "sprint_coworking", id), { active: el.dataset.active !== "1" }); loadAdmin("zooms"); } catch (err) { toast(friendlyErr(err)); } return;
+    case "z-delete": if (!confirm("Delete this session? Points already awarded stay.")) return;
+      try { await deleteDoc(doc(db, "sprint_coworking", id)); loadAdmin("zooms"); } catch (err) { toast(friendlyErr(err)); } return;
+    case "z-attendance": return zAttendance(id);
+    case "export": return exportCsv();
+    case "bonus-clear": try { await deleteDoc(doc(db, "sprint_bonus_review", id)); loadAdmin("bonus"); } catch (err) { toast(friendlyErr(err)); } return;
+    case "announce": {
+      const text = $("ann-text").value.trim(); if (!text) return toast("Write the announcement first.");
+      try { const ref = await addDoc(collection(db, "sprint_posts"), { uid: me.uid, name: me.name || "Nate Templeton", text, tag: "announcement", ts: serverTimestamp(), likes: [], replyCount: 0 });
+        await updateDoc(ref, { pinned: true }); $("ann-text").value = ""; toast("Announcement posted and pinned."); } catch (err) { toast(friendlyErr(err)); }
+      return;
+    }
+  }
+});
+document.addEventListener("change", (e) => {
+  const el = e.target.closest('[data-action="z-mark"]');
+  if (el) zMark(el.dataset.session, el.dataset.uid, el.checked);
+});
+document.addEventListener("input", (e) => {
+  const f = e.target.closest("[data-filter]"); if (!f) return;
+  const v = f.value.toLowerCase();
+  f.parentElement.querySelectorAll(".att-row").forEach((r) => { r.style.display = r.dataset.name.includes(v) ? "" : "none"; });
+});
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Escape") $("lightbox").classList.remove("show");
+  if (e.key === "Enter" && e.target.id && e.target.id.startsWith("reply-in-")) sendReply(e.target.id.replace("reply-in-", ""));
+});
+
+// ── PWA ──────────────────────────────────────────────────
+if ("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js", { scope: "./" }).catch(() => {});
+</script>
+</body>
+</html>
