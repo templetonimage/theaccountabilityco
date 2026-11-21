@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Meta Pixel: consent-gated, does NOT fire until the cookie banner is accepted. Shared TAC pixel, split by content_name. -->
+  <script>
+  var BRAND = 'SPRINT';
+  function loadMetaPixel() {
+    if (window.fbq) return;
+    !function(f,b,e,v,n,t,s)
+    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+    n.queue=[];t=b.createElement(e);t.async=!0;
+    t.src=v;s=b.getElementsByTagName(e)[0];
+    s.parentNode.insertBefore(t,s)}(window, document,'script',
+    'https://connect.facebook.net/en_US/fbevents.js');
+    fbq('init', '1676740660054343');
+    fbq('track', 'PageView', { content_name: BRAND });
+  }
+  </script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The December Systems Sprint | TAC Co.</title>
+  <meta name="description" content="A free 4-week challenge to build real workflows, automations, and bots. One new build every week in December, with proof. Registration closes December 5." />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="The December Systems Sprint | TAC Co." />
+  <meta property="og:description" content="A free 4-week challenge to build real workflows, automations, and bots. One new build every week in December, with proof." />
+  <meta property="og:url" content="https://theaccountabilityco.com/sprint/" />
+  <meta name="twitter:card" content="summary" />
+  <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/favicon-180.png" />
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700&family=Inter:wght@300;400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --black: #0d0d0d; --off-black: #141414; --border: #2a2a2a; --muted: #a09a8e;
+      --text: #d4d0c8; --white: #f0ece0; --cream: #f7f3ea; --cream-white: #fdfbf6;
+      --ink: #17140f; --ink-muted: #6b6558; --light-border: #e8e2d4;
+      --accent: #6E5A8A; --accent-dim: #5A4872; --accent-lt: #9C8AB8; --accent-bg: rgba(110,90,138,.08);
+    }
+    html { scroll-behavior: smooth; }
+    body { background: var(--cream); color: var(--ink); font-family: 'Inter', sans-serif; font-size: 17px; line-height: 1.65; -webkit-font-smoothing: antialiased; }
+    body::before { content: ''; position: fixed; inset: 0; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E"); opacity: .025; pointer-events: none; z-index: 1; }
+    .container { max-width: 900px; margin: 0 auto; padding: 0 24px; }
+    .tag { display: inline-block; font-family: 'Space Mono', monospace; font-size: .72rem; letter-spacing: .12em; text-transform: uppercase; color: var(--accent); border: 1px solid var(--accent); padding: 4px 12px; border-radius: 8px; margin-bottom: 20px; }
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(28px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes pulse-dot { 0%,100% { opacity: 1; transform: scale(1); } 50% { opacity: .5; transform: scale(.7); } }
+    .fade-up { animation: fadeUp .7s ease both; } .delay-1 { animation-delay: .1s; } .delay-2 { animation-delay: .22s; } .delay-3 { animation-delay: .34s; } .delay-4 { animation-delay: .46s; }
+
+    /* NAV */
+    nav { position: sticky; top: 0; z-index: 100; background: rgba(13,13,13,.92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); padding: 14px 24px; display: flex; align-items: center; justify-content: space-between; }
+    .nav-logo { font-family: 'Sora', sans-serif; font-weight: 700; font-size: 1.35rem; letter-spacing: .06em; color: var(--accent-lt); text-decoration: none; }
+    .nav-logo span { color: var(--white); font-weight: 400; margin-left: 6px; }
+    .nav-links { display: flex; align-items: center; gap: 28px; }
+    .nav-link { font-family: 'Space Mono', monospace; font-size: .75rem; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); text-decoration: none; transition: color .2s; }
+    .nav-link:hover { color: var(--white); }
+    .nav-right { display: flex; align-items: center; gap: 12px; }
+    .nav-login { font-family: 'Space Mono', monospace; font-size: .75rem; letter-spacing: .08em; text-transform: uppercase; color: var(--accent-lt); border: 1px solid var(--accent); padding: 7px 14px; border-radius: 8px; text-decoration: none; transition: background .2s, color .2s; }
+    .nav-login:hover { background: var(--accent); color: var(--white); }
+    .nav-cta { background: var(--accent); color: var(--white); font-weight: 600; font-size: .85rem; letter-spacing: .04em; padding: 9px 20px; border: 1px solid var(--accent); border-radius: 8px; cursor: pointer; text-decoration: none; transition: background .2s; font-family: inherit; }
+    .nav-cta:hover { background: var(--accent-dim); }
+    .hamburger { display: none; flex-direction: column; justify-content: center; align-items: center; gap: 5px; width: 36px; height: 36px; background: transparent; border: 1px solid var(--border); border-radius: 8px; cursor: pointer; padding: 6px; }
+    .hamburger span { display: block; width: 18px; height: 2px; background: var(--text); border-radius: 8px; transition: all .25s ease; }
+    .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); } .hamburger.open span:nth-child(2) { opacity: 0; } .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+    .mobile-menu { display: none; position: fixed; top: 57px; left: 0; right: 0; background: rgba(13,13,13,.97); border-bottom: 1px solid var(--border); padding: 20px 24px 28px; z-index: 99; flex-direction: column; }
+    .mobile-menu.open { display: flex; }
+    .mobile-menu a { font-family: 'Space Mono', monospace; font-size: .85rem; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); text-decoration: none; padding: 14px 0; border-bottom: 1px solid var(--border); }
+    .mobile-menu a:last-child { border-bottom: none; }
+    @media (max-width: 720px) { .nav-links, .nav-cta, .nav-logo span { display: none; } .hamburger { display: flex; } }
+    .nav-login { white-space: nowrap; }
+
+    /* PARENT BAR */
+    .parent-bar { background: var(--black); border-bottom: 1px solid var(--border); padding: 9px 24px; text-align: center; font-size: .8rem; color: var(--muted); }
+    .parent-bar a { color: var(--text); text-decoration: none; }
+    .parent-bar a:hover { color: var(--white); text-decoration: underline; }
+
+    /* HERO */
+    .hero { padding: 96px 24px 72px; text-align: center; position: relative; overflow: hidden; }
+    .hero::after { content: 'SPRINT'; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-family: 'Sora', sans-serif; font-weight: 700; font-size: clamp(160px, 30vw, 400px); color: rgba(110,90,138,.07); pointer-events: none; white-space: nowrap; line-height: 1; z-index: 0; }
+    .hero > * { position: relative; z-index: 1; }
+    .hero-kicker { font-family: 'Space Mono', monospace; font-size: .78rem; letter-spacing: .16em; text-transform: uppercase; color: var(--ink-muted); margin-bottom: 28px; }
+    .live-dot { display: inline-block; width: 7px; height: 7px; background: var(--accent); border-radius: 50%; margin-right: 8px; animation: pulse-dot 1.8s ease-in-out infinite; vertical-align: middle; }
+    .hero h1 { font-family: 'Sora', sans-serif; font-weight: 700; font-size: clamp(38px, 6vw, 66px); line-height: 1.08; letter-spacing: -.02em; margin-bottom: 24px; }
+    .hero h1 em { font-style: normal; color: var(--accent); }
+    .hero-sub { font-size: 1.15rem; font-weight: 300; color: var(--ink-muted); max-width: 580px; margin: 0 auto 20px; }
+    .hero-sub strong { font-weight: 600; color: var(--ink); }
+    .hero-note-box { max-width: 580px; margin: 0 auto 40px; font-size: .92rem; background: var(--accent-bg); border-left: 3px solid var(--accent); padding: 12px 18px; border-radius: 0 8px 8px 0; text-align: left; }
+    .hero-actions { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; margin-bottom: 18px; }
+    .btn-primary { display: inline-block; background: var(--black); color: var(--white); font-weight: 600; font-size: 1rem; letter-spacing: .03em; padding: 16px 36px; border: 1px solid var(--black); border-radius: 10px; cursor: pointer; text-decoration: none; font-family: inherit; transition: background .2s, transform .15s, box-shadow .2s; }
+    .btn-primary:hover { background: var(--accent); border-color: var(--accent); transform: translateY(-2px); box-shadow: 0 8px 32px rgba(110,90,138,.28); }
+    .btn-ghost { background: transparent; color: var(--ink-muted); font-weight: 500; font-size: 1rem; padding: 16px 28px; border: 1px solid var(--light-border); border-radius: 10px; text-decoration: none; transition: border-color .2s, color .2s; }
+    .btn-ghost:hover { border-color: var(--ink-muted); color: var(--ink); }
+    .hero-note { font-family: 'Space Mono', monospace; font-size: .73rem; color: var(--ink-muted); letter-spacing: .06em; }
+    .hero-ui { max-width: 560px; margin: 48px auto 0; }
+    .ui-panel { background: var(--cream-white); border: 1px solid var(--light-border); border-radius: 16px; box-shadow: 0 20px 50px rgba(23,20,15,.12); padding: 20px; text-align: left; }
+    .ui-panel-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+    .ui-panel-title { font-family: 'Sora', sans-serif; font-weight: 600; font-size: .95rem; }
+    .ui-tag { font-family: 'Space Mono', monospace; font-size: .68rem; background: var(--accent-bg); color: var(--accent-dim); padding: 3px 8px; border-radius: 6px; }
+    .ui-row { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 10px 0; border-top: 1px solid var(--light-border); font-size: .85rem; }
+    .ui-row:first-of-type { border-top: none; }
+    .ui-pts { font-family: 'Space Mono', monospace; color: var(--accent-dim); font-weight: 700; white-space: nowrap; }
+
+    /* STAT BAR */
+    .stat-bar { border-top: 1px solid var(--light-border); border-bottom: 1px solid var(--light-border); background: var(--cream-white); padding: 36px 24px; }
+    .stat-bar-inner { max-width: 900px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 24px; text-align: center; }
+    .stat-num { font-family: 'Sora', sans-serif; font-weight: 700; font-size: 2.8rem; color: var(--accent); line-height: 1; display: block; }
+    .stat-label { font-size: .82rem; color: var(--ink-muted); letter-spacing: .05em; margin-top: 6px; }
+
+    /* SECTIONS */
+    .section { padding: 88px 24px; }
+    .section-header { text-align: center; margin-bottom: 52px; }
+    .section-header h2 { font-family: 'Sora', sans-serif; font-weight: 700; font-size: clamp(30px, 5vw, 50px); letter-spacing: .01em; line-height: 1.08; margin-bottom: 14px; }
+    .section-header p { font-size: 1.05rem; color: var(--ink-muted); max-width: 580px; margin: 0 auto; font-weight: 300; }
+    .section-dark { background: var(--black); }
+    .section-dark .section-header h2 { color: var(--white); }
+    .section-dark .section-header p { color: var(--text); }
+    .section-dark .tag { color: var(--accent-lt); border-color: var(--accent-lt); }
+    .section-light { background: var(--cream-white); }
+
+    /* PROBLEM */
+    .problem-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px; }
+    .problem-card { background: var(--off-black); border: 1px solid var(--border); padding: 30px 26px; border-radius: 12px; transition: transform .2s, border-color .2s; }
+    .problem-card:hover { transform: translateY(-4px); border-color: var(--accent); }
+    .problem-card h3 { font-weight: 600; font-size: 1rem; color: var(--white); margin-bottom: 8px; }
+    .problem-card p { font-size: .9rem; color: var(--muted); }
+
+    /* WEEKS */
+    .plan-steps { display: flex; flex-direction: column; gap: 10px; max-width: 720px; margin: 0 auto; }
+    .plan-step { background: var(--cream-white); border: 1px solid var(--light-border); box-shadow: 0 4px 16px rgba(23,20,15,.05); border-radius: 12px; padding: 26px 30px; display: grid; grid-template-columns: 64px 1fr; gap: 22px; align-items: start; transition: border-color .2s, transform .2s; }
+    .plan-step:hover { border-color: var(--accent); transform: translateY(-2px); }
+    .step-num { font-family: 'Sora', sans-serif; font-weight: 700; font-size: 2.4rem; color: var(--accent); line-height: 1; }
+    .step-dates { font-family: 'Space Mono', monospace; font-size: .7rem; letter-spacing: .1em; text-transform: uppercase; color: var(--accent-dim); margin-bottom: 4px; }
+    .step-body h3 { font-weight: 600; font-size: 1.05rem; margin-bottom: 6px; }
+    .step-body p { font-size: .92rem; color: var(--ink-muted); }
+    .step-tie { display: inline-block; margin-top: 10px; background: var(--accent-bg); border: 1px solid rgba(110,90,138,.22); color: var(--accent-dim); font-family: 'Space Mono', monospace; font-size: .7rem; padding: 4px 10px; border-radius: 8px; }
+    @media (max-width: 520px) { .plan-step { grid-template-columns: 1fr; gap: 6px; } .step-num { font-size: 1.6rem; } }
+
+    /* WHAT COUNTS */
+    .counts-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; max-width: 900px; margin: 0 auto; }
+    @media (max-width: 680px) { .counts-cols { grid-template-columns: 1fr; } }
+    .counts-col { background: var(--cream-white); border: 1px solid var(--light-border); border-radius: 12px; padding: 26px; }
+    .counts-col h3 { font-family: 'Sora', sans-serif; font-size: 1.05rem; margin-bottom: 14px; }
+    .counts-col ul { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+    .counts-col li { position: relative; padding-left: 28px; font-size: .92rem; }
+    .counts-col.yes li::before { content: '✓'; position: absolute; left: 0; color: var(--accent); font-weight: 700; }
+    .counts-col.no li::before { content: '✕'; position: absolute; left: 0; color: #a3473f; font-weight: 700; }
+    .counts-col.no { background: var(--cream); }
+    .proof-note { max-width: 900px; margin: 18px auto 0; text-align: center; font-family: 'Space Mono', monospace; font-size: .76rem; color: var(--ink-muted); letter-spacing: .04em; }
+
+    /* FEATURES */
+    .feature-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 16px; }
+    .feature-card { background: var(--off-black); border: 1px solid var(--border); border-radius: 12px; padding: 26px; transition: border-color .2s, transform .2s; }
+    .feature-card:hover { border-color: var(--accent); transform: translateY(-3px); }
+    .feature-num { font-family: 'Space Mono', monospace; font-size: .68rem; letter-spacing: .12em; color: var(--accent-lt); margin-bottom: 10px; }
+    .feature-card h3 { font-weight: 600; font-size: .98rem; color: var(--white); margin-bottom: 6px; }
+    .feature-card p { font-size: .87rem; color: var(--muted); }
+
+    /* POINTS + BONUS */
+    .points-wrap { display: grid; grid-template-columns: 1.1fr .9fr; gap: 16px; max-width: 900px; margin: 0 auto; }
+    @media (max-width: 760px) { .points-wrap { grid-template-columns: 1fr; } }
+    .points-table { background: var(--cream-white); border: 1px solid var(--light-border); border-radius: 12px; padding: 8px 24px; }
+    .pt-row { display: flex; justify-content: space-between; gap: 12px; padding: 14px 0; border-top: 1px solid var(--light-border); font-size: .93rem; }
+    .pt-row:first-child { border-top: none; }
+    .pt-row b { font-family: 'Space Mono', monospace; color: var(--accent-dim); white-space: nowrap; }
+    .bonus-box { background: var(--black); color: var(--text); border-radius: 12px; padding: 30px 28px; border: 1px solid rgba(110,90,138,.45); background-image: linear-gradient(135deg, rgba(110,90,138,.18) 0%, transparent 60%); }
+    .bonus-box .big { font-family: 'Sora', sans-serif; font-weight: 700; font-size: 3rem; color: var(--accent-lt); line-height: 1; margin-bottom: 10px; }
+    .bonus-box h3 { color: var(--white); font-size: 1.05rem; margin-bottom: 10px; }
+    .bonus-box p { font-size: .9rem; margin-bottom: 10px; }
+    .bonus-box a { color: var(--accent-lt); }
+
+    /* FAQ */
+    .faq-list { max-width: 680px; margin: 0 auto; display: flex; flex-direction: column; gap: 6px; }
+    .faq-item { background: var(--cream-white); border: 1px solid var(--light-border); border-radius: 10px; overflow: hidden; }
+    .faq-q { padding: 20px 24px; cursor: pointer; font-weight: 500; color: var(--ink); font-size: .97rem; display: flex; justify-content: space-between; align-items: center; gap: 16px; user-select: none; background: none; border: 0; width: 100%; text-align: left; font-family: inherit; }
+    .faq-q::after { content: '+'; color: var(--accent); font-size: 1.3rem; flex-shrink: 0; transition: transform .2s; }
+    .faq-item.open .faq-q::after { transform: rotate(45deg); }
+    .faq-a { max-height: 0; overflow: hidden; transition: max-height .35s ease, padding .25s; font-size: .92rem; color: var(--ink-muted); line-height: 1.7; padding: 0 24px; }
+    .faq-item.open .faq-a { max-height: 420px; padding: 0 24px 20px; }
+
+    /* FINAL CTA */
+    .final-cta { padding: 100px 24px; text-align: center; position: relative; overflow: hidden; }
+    .final-cta::after { content: 'SPRINT'; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-family: 'Sora', sans-serif; font-weight: 700; font-size: clamp(140px, 26vw, 340px); color: rgba(110,90,138,.08); pointer-events: none; white-space: nowrap; line-height: 1; }
+    .final-cta > * { position: relative; z-index: 1; }
+    .final-cta h2 { font-family: 'Sora', sans-serif; font-weight: 700; font-size: clamp(34px, 6vw, 62px); letter-spacing: -.02em; line-height: 1.05; margin-bottom: 20px; }
+    .final-cta p { font-size: 1.1rem; color: var(--ink-muted); max-width: 480px; margin: 0 auto 28px; }
+    .final-note { max-width: none !important; margin-top: 28px; font-family: 'Space Mono', monospace; font-size: .72rem; color: var(--ink-muted); letter-spacing: .06em; }
+
+    /* FOOTER */
+    footer { background: var(--black); border-top: 1px solid var(--border); padding: 44px 24px; text-align: center; }
+    .footer-logo { font-family: 'Sora', sans-serif; font-weight: 700; font-size: 1.4rem; color: var(--accent-lt); letter-spacing: .06em; }
+    .footer-logo span { color: var(--muted); font-size: .9rem; font-family: 'Inter', sans-serif; font-weight: 300; letter-spacing: 0; margin-left: 8px; }
+    footer p { font-size: .82rem; color: var(--muted); margin-top: 12px; }
+    footer a { color: var(--muted); }
+    .sister-row { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin-top: 20px; }
+    .sister-badge { font-family: 'Space Mono', monospace; font-size: .72rem; letter-spacing: .06em; color: var(--muted); border: 1px solid var(--border); padding: 8px 14px; border-radius: 8px; text-decoration: none; transition: color .2s, border-color .2s; }
+    .sister-badge:hover { color: var(--white); border-color: var(--muted); }
+
+    /* MODAL */
+    .modal-overlay { position: fixed; inset: 0; background: rgba(13,13,13,.72); z-index: 300; display: none; align-items: center; justify-content: center; padding: 20px; }
+    .modal-overlay.show { display: flex; }
+    .modal { background: var(--cream-white); border-radius: 16px; max-width: 460px; width: 100%; padding: 32px 30px 28px; position: relative; max-height: 92vh; overflow-y: auto; }
+    .modal h3 { font-family: 'Sora', sans-serif; font-size: 1.4rem; margin-bottom: 6px; }
+    .modal .sub { font-size: .9rem; color: var(--ink-muted); margin-bottom: 20px; }
+    .modal-close { position: absolute; top: 14px; right: 16px; background: none; border: 0; font-size: 1.5rem; color: var(--ink-muted); cursor: pointer; line-height: 1; }
+    .field { margin-bottom: 14px; }
+    .field label { display: block; font-size: .8rem; font-weight: 600; margin-bottom: 6px; }
+    .field label span { font-weight: 400; color: var(--ink-muted); }
+    .field input { width: 100%; padding: 12px 14px; border: 1px solid var(--light-border); border-radius: 8px; font-size: 1rem; font-family: inherit; background: #fff; }
+    .field input:focus { outline: 2px solid var(--accent); border-color: var(--accent); }
+    .hp-field { position: absolute; left: -10000px; width: 1px; height: 1px; overflow: hidden; }
+    .member-note { font-size: .82rem; background: var(--accent-bg); border-left: 3px solid var(--accent); padding: 10px 12px; border-radius: 0 8px 8px 0; margin: 4px 0 18px; }
+    .modal .btn-primary { width: 100%; }
+    .modal .btn-primary:disabled { opacity: .6; cursor: wait; transform: none; }
+    .form-status { margin-top: 12px; font-size: .88rem; min-height: 1.2em; }
+    .form-status.err { color: #a3473f; }
+    .form-fine { margin-top: 10px; font-size: .74rem; color: var(--ink-muted); text-align: center; }
+    .success-view h3 { color: var(--accent-dim); }
+    .success-view p { font-size: .95rem; margin-bottom: 12px; }
+
+    /* COOKIE */
+    .cookie-banner { position: fixed; bottom: 0; left: 0; right: 0; z-index: 200; background: var(--black); border-top: 1px solid var(--border); padding: 18px 24px; display: none; }
+    .cookie-banner.show { display: flex; }
+    .cookie-inner { max-width: 900px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 24px; flex-wrap: wrap; width: 100%; }
+    .cookie-text { font-size: .85rem; color: var(--text); font-weight: 300; max-width: 620px; }
+    .cookie-text a { color: var(--accent-lt); }
+    .cookie-actions { display: flex; gap: 10px; }
+    .cookie-btn { font-family: 'Space Mono', monospace; font-size: .75rem; letter-spacing: .06em; text-transform: uppercase; padding: 9px 18px; border-radius: 8px; cursor: pointer; border: 1px solid var(--border); background: transparent; color: var(--muted); }
+    .cookie-btn.accept { background: var(--accent); color: var(--white); border-color: var(--accent); font-weight: 600; }
+
+    /* Registration-closed state */
+    body.reg-closed .when-open { display: none !important; }
+    body:not(.reg-closed) .when-closed { display: none !important; }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="/sprint/" class="nav-logo">SPRINT <span>Dec 2026</span></a>
+  <div class="nav-links">
+    <a href="#weeks" class="nav-link">The 4 Weeks</a>
+    <a href="#counts" class="nav-link">What Counts</a>
+    <a href="#points" class="nav-link">Points</a>
+    <a href="#faq" class="nav-link">FAQ</a>
+  </div>
+  <div class="nav-right">
+    <a href="/sprint/app/" class="nav-login">Member Login</a>
+    <button class="nav-cta when-open" data-open-signup>Join Free →</button>
+    <button class="hamburger" id="hamburger" aria-label="Open menu" aria-expanded="false"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+<div class="mobile-menu" id="mobileMenu" role="navigation" aria-label="Mobile navigation">
+  <a href="#weeks">The 4 Weeks</a>
+  <a href="#counts">What Counts</a>
+  <a href="#points">Points</a>
+  <a href="#faq">FAQ</a>
+  <a href="/sprint/app/">Member Login</a>
+  <a href="#join" class="when-open" data-open-signup style="color:var(--accent-lt);">Join Free →</a>
+</div>
+
+<div class="parent-bar">A free challenge from <a href="/">The Accountability Challenge Co.</a>, home of SMAC, WAC, and AAC</div>
+
+<!-- HERO -->
+<section class="hero">
+  <p class="hero-kicker fade-up when-open"><span class="live-dot"></span> Free &middot; December 1 to 28 &middot; Registration closes Dec 5</p>
+  <p class="hero-kicker fade-up when-closed">Registration is closed &middot; The December Sprint is underway</p>
+  <h1 class="fade-up delay-1">Stop Doing It by Hand.<br><em>Build the System.</em></h1>
+  <p class="hero-sub fade-up delay-2">The December Systems Sprint is a <strong>free, proof-based 4-week challenge</strong> for creatives and solopreneurs. Every week you build one new workflow, automation, or bot that takes something off your plate for good.</p>
+  <div class="hero-note-box fade-up delay-2"><strong>The one rule:</strong> you have to build something. Using a tool you already have doesn't count. Show proof of a new automation, workflow, or bot each week to earn your points.</div>
+  <div class="hero-actions fade-up delay-3">
+    <button class="btn-primary when-open" data-open-signup>Join the Sprint Free →</button>
+    <a href="/sprint/app/" class="btn-primary when-closed">Visit the Sprint →</a>
+    <a href="#weeks" class="btn-ghost">See the 4 Weeks</a>
+  </div>
+  <p class="hero-note fade-up delay-4">No card &middot; No cost &middot; Just builds</p>
+  <div class="hero-ui fade-up delay-4" aria-hidden="true">
+    <div class="ui-panel">
+      <div class="ui-panel-header"><span class="ui-panel-title">This week's builds</span><span class="ui-tag">Week 2 &middot; Intake</span></div>
+      <div class="ui-row"><span>Inquiry form → auto-reply → client sheet</span><span class="ui-pts">+10</span></div>
+      <div class="ui-row"><span>Calendar booking triggers a prep checklist</span><span class="ui-pts">+10</span></div>
+      <div class="ui-row"><span>Screen recording proof uploaded</span><span class="ui-pts">✓ Verified</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- STAT BAR -->
+<div class="stat-bar">
+  <div class="stat-bar-inner">
+    <div><span class="stat-num count-num" data-count="4">4</span><div class="stat-label">Weeks in December</div></div>
+    <div><span class="stat-num count-num" data-count="4">4</span><div class="stat-label">New systems you'll own</div></div>
+    <div><span class="stat-num">Free</span><div class="stat-label">Open to anyone</div></div>
+    <div><span class="stat-num">+15</span><div class="stat-label">Bonus pts for SMAC, WAC &amp; AAC members</div></div>
+  </div>
+</div>
+
+<!-- PROBLEM -->
+<section class="section section-dark">
+  <div class="container">
+    <div class="section-header">
+      <span class="tag">The problem</span>
+      <h2>You're Not Busy. You're Manual.</h2>
+      <p>Most solopreneurs lose hours a week to the same small tasks, done the same slow way, every single time.</p>
+    </div>
+    <div class="problem-grid">
+      <div class="problem-card"><h3>Copy, paste, repeat</h3><p>Moving the same info from inbox to spreadsheet to calendar. Every lead, every client, every week.</p></div>
+      <div class="problem-card"><h3>"I'll automate it someday"</h3><p>You've saved the tutorials and bookmarked the tools. Someday never shows up on the calendar.</p></div>
+      <div class="problem-card"><h3>Tools without systems</h3><p>You pay for the apps. Nothing connects them, so you're still the glue holding it all together.</p></div>
+      <div class="problem-card"><h3>Follow-ups that slip</h3><p>Invoices, reminders, and replies live in your head. That's where they get forgotten.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- THE 4 WEEKS -->
+<section class="section" id="weeks">
+  <div class="container">
+    <div class="section-header">
+      <span class="tag">The plan</span>
+      <h2>Four Weeks. Four Builds.</h2>
+      <p>Each week has a theme to point you at the right problem. What you build is up to you, as long as it's new and it's real.</p>
+    </div>
+    <div class="plan-steps">
+      <div class="plan-step"><div class="step-num">01</div><div class="step-body"><div class="step-dates">Dec 1 to 7</div><h3>Map It, Then Automate It</h3><p>List the tasks you repeat every week, pick the one that eats the most time, and build your first automation to handle it.</p></div></div>
+      <div class="plan-step"><div class="step-num">02</div><div class="step-body"><div class="step-dates">Dec 8 to 14</div><h3>Intake on Autopilot</h3><p>Build the path from inquiry to organized: form, auto-reply, and a clean record of every lead without retyping a thing.</p><span class="step-tie">Pairs with WAC</span></div></div>
+      <div class="plan-step"><div class="step-num">03</div><div class="step-body"><div class="step-dates">Dec 15 to 21</div><h3>Content That Moves Itself</h3><p>Build a scheduling, repurposing, or publishing workflow so content goes out without you babysitting it.</p><span class="step-tie">Pairs with SMAC</span></div></div>
+      <div class="plan-step"><div class="step-num">04</div><div class="step-body"><div class="step-dates">Dec 22 to 28</div><h3>Admin, Money, and Follow-Ups</h3><p>Invoices, payment reminders, lead follow-ups, review requests. Build the system that chases things so you don't have to.</p><span class="step-tie">Pairs with AAC</span></div></div>
+      <div class="plan-step"><div class="step-num">★</div><div class="step-body"><div class="step-dates">Dec 29 to 31</div><h3>Systems Showcase</h3><p>Share your best build with the group, see what everyone else made, and walk into January with four systems already running.</p></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- WHAT COUNTS -->
+<section class="section section-light" id="counts">
+  <div class="container">
+    <div class="section-header">
+      <span class="tag">Proof standards</span>
+      <h2>What Counts as a Build</h2>
+      <p>One build per week. It has to be something you created that week, and you have to show it.</p>
+    </div>
+    <div class="counts-cols">
+      <div class="counts-col yes">
+        <h3>Counts</h3>
+        <ul>
+          <li>A new Make, Zapier, or n8n scenario that runs on its own</li>
+          <li>A new email automation or sequence with a trigger</li>
+          <li>A custom GPT, Claude project, or chatbot you configured for a real task</li>
+          <li>A script, shortcut, or spreadsheet formula that replaces manual work</li>
+          <li>A new documented workflow or SOP with at least one automated step</li>
+        </ul>
+      </div>
+      <div class="counts-col no">
+        <h3>Doesn't count</h3>
+        <ul>
+          <li>Using a tool or bot you already had</li>
+          <li>Asking ChatGPT or Claude a question</li>
+          <li>Signing up for an app without setting anything up</li>
+          <li>Last month's build, resubmitted</li>
+          <li>A plan to build something next week</li>
+        </ul>
+      </div>
+    </div>
+    <p class="proof-note">Proof = a screenshot or short screen recording of the build + 1 to 2 lines on what it replaces</p>
+  </div>
+</section>
+
+<!-- PLATFORM -->
+<section class="section section-dark">
+  <div class="container">
+    <div class="section-header">
+      <span class="tag">The platform</span>
+      <h2>Built Like the Paid Challenges</h2>
+      <p>The Sprint runs on the same kind of member platform as SMAC, WAC, and AAC. Free doesn't mean flimsy.</p>
+    </div>
+    <div class="feature-grid">
+      <div class="feature-card"><div class="feature-num">01</div><h3>Weekly Build Submissions</h3><p>Upload your proof each week. Every build needs proof. No honor system.</p></div>
+      <div class="feature-card"><div class="feature-num">02</div><h3>Community Feed</h3><p>Ask questions, share what broke, and steal good ideas from other builders.</p></div>
+      <div class="feature-card"><div class="feature-num">03</div><h3>Accountability Zooms</h3><p>Join the same live Zooms as the TAC challenges. Build alongside people, get unstuck, earn points.</p></div>
+      <div class="feature-card"><div class="feature-num">04</div><h3>Weekly Build Guides</h3><p>A starter guide for each week's theme with examples and tool suggestions, so you're never staring at a blank screen.</p></div>
+      <div class="feature-card"><div class="feature-num">05</div><h3>Leaderboard</h3><p>Every build, post, and Zoom earns points. The leaderboard keeps it honest.</p></div>
+      <div class="feature-card"><div class="feature-num">06</div><h3>Finisher Badge</h3><p>Ship all four builds and earn the Systems Sprint 2026 badge.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- POINTS -->
+<section class="section" id="points">
+  <div class="container">
+    <div class="section-header">
+      <span class="tag">Points</span>
+      <h2>Show Up, Build, Score</h2>
+    </div>
+    <div class="points-wrap">
+      <div class="points-table">
+        <div class="pt-row"><span>Weekly build proof</span><b>+10</b></div>
+        <div class="pt-row"><span>All 4 weeks built</span><b>+25 &amp; badge</b></div>
+        <div class="pt-row"><span>Attend an Accountability Zoom</span><b>+5</b></div>
+        <div class="pt-row"><span>RSVP to a Zoom</span><b>+2</b></div>
+        <div class="pt-row"><span>Post in the feed</span><b>+1</b></div>
+      </div>
+      <div class="bonus-box">
+        <div class="big">+15</div>
+        <h3>Already in SMAC, WAC, or AAC?</h3>
+        <p>Sign up with the same email you use there and we'll add <strong>+15 points in each challenge you're a current member of</strong>. In two? That's +15 in both.</p>
+        <p>It happens automatically when you join. Nothing to claim.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="section section-dark" id="faq">
+  <div class="container">
+    <div class="section-header">
+      <span class="tag">FAQ</span>
+      <h2>Common Questions</h2>
+    </div>
+    <div class="faq-list">
+      <div class="faq-item"><button class="faq-q">Is it really free?</button><div class="faq-a">Yes. No card, no trial, nothing to cancel. Sign up, build, and keep everything you make.</div></div>
+      <div class="faq-item"><button class="faq-q">Do I need to know how to code?</button><div class="faq-a">No. Most builds use no-code tools like Make, Zapier, MailerLite, or a custom GPT. If you can follow a tutorial, you can do this. If you can code, scripts count too.</div></div>
+      <div class="faq-item"><button class="faq-q">What if I already use automations?</button><div class="faq-a">Great, you're ahead. But the Sprint only counts new builds made during each week. Use what you know to build something you haven't built yet.</div></div>
+      <div class="faq-item"><button class="faq-q">How much time does it take?</button><div class="faq-a">Plan on 1 to 3 hours a week. A small automation that works beats a big one that's half done. The point is a working system every week.</div></div>
+      <div class="faq-item"><button class="faq-q">Which tools can I use?</button><div class="faq-a">Any. Make, Zapier, n8n, MailerLite, Google Apps Script, Apple Shortcuts, Notion, Airtable, ChatGPT, Claude, your CRM's built-in automations. If you built it and it runs, it counts.</div></div>
+      <div class="faq-item"><button class="faq-q">How does the +15 bonus work?</button><div class="faq-a">When you join with the same email you use in SMAC, WAC, or AAC, we check each challenge automatically. If you're a current member, +15 points goes straight to your points in that challenge. It's added once per challenge.</div></div>
+      <div class="faq-item"><button class="faq-q">What happens if I miss a week?</button><div class="faq-a">Nothing gets locked. You just miss that week's points and the finisher badge. Jump back in the next week.</div></div>
+      <div class="faq-item"><button class="faq-q">When can I join?</button><div class="faq-a">Registration is open until December 5 at 11:59 PM ET. The Sprint runs December 1 to 28, with a showcase week to close out the year.</div></div>
+      <div class="faq-item"><button class="faq-q">Is this connected to SMAC, WAC, and AAC?</button><div class="faq-a">Yes. The Sprint is part of The Accountability Challenge Co., the same family as SMAC (social media), WAC (websites), and AAC (ads). Same proof-based model, shorter format.</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- FINAL CTA -->
+<section class="final-cta">
+  <h2>Four Systems by<br>New Year's.</h2>
+  <p class="when-open">Free to join. Registration closes December 5.</p>
+  <p class="when-closed">Registration for the December Sprint is closed. Members can log in below.</p>
+  <button class="btn-primary when-open" data-open-signup>Join the Sprint Free →</button>
+  <a href="/sprint/app/" class="btn-primary when-closed">Visit the Sprint →</a>
+  <p class="final-note">December 1 to 28, 2026 &middot; Showcase Dec 29 to 31</p>
+</section>
+
+<footer>
+  <div class="footer-logo">SPRINT <span>The December Systems Sprint</span></div>
+  <p>Part of <a href="/">The Accountability Challenge Co.</a> &nbsp;·&nbsp; Created by <a href="https://www.natetempleton.com">Nate Templeton</a> &nbsp;·&nbsp; <a href="/privacy.html">Privacy Policy</a> &nbsp;·&nbsp; <a href="mailto:sprint@theaccountabilityco.com">Contact</a></p>
+  <div class="sister-row">
+    <a class="sister-badge" href="https://www.joinsmac.com">SMAC &middot; Social Media</a>
+    <a class="sister-badge" href="https://www.joinwac.com">WAC &middot; Websites</a>
+    <a class="sister-badge" href="https://jointheaac.com">AAC &middot; Ads</a>
+  </div>
+  <p style="margin-top:16px; font-family:'Space Mono',monospace; font-size:.7rem;">© 2026 Nate Templeton. All rights reserved.</p>
+</footer>
+
+<!-- SIGNUP MODAL -->
+<div class="modal-overlay" id="signupModal" role="dialog" aria-modal="true" aria-labelledby="signupTitle">
+  <div class="modal">
+    <button class="modal-close" id="signupClose" aria-label="Close">×</button>
+    <div id="signupFormView">
+      <h3 id="signupTitle">Join the Sprint</h3>
+      <p class="sub">Free. Takes 30 seconds. Week 1 opens December 1.</p>
+      <form id="signupForm" novalidate>
+        <div class="field"><label for="su-name">Name</label><input id="su-name" name="name" autocomplete="name" maxlength="120" required /></div>
+        <div class="field"><label for="su-email">Email</label><input id="su-email" name="email" type="email" autocomplete="email" maxlength="254" required /></div>
+        <div class="field"><label for="su-business">Business <span>(optional)</span></label><input id="su-business" name="business" autocomplete="organization" maxlength="160" /></div>
+        <div class="hp-field" aria-hidden="true"><label for="su-website">Website</label><input id="su-website" name="website" tabindex="-1" autocomplete="off" /></div>
+        <div class="member-note">In SMAC, WAC, or AAC? Use the same email you use there and we'll add +15 points to each one automatically.</div>
+        <button type="submit" class="btn-primary" id="signupSubmit">Join Free →</button>
+        <div class="form-status" id="signupStatus" role="status"></div>
+        <p class="form-fine">We'll email you a link to set your password. No spam, unsubscribe anytime.</p>
+      </form>
+    </div>
+    <div id="signupSuccessView" class="success-view" hidden>
+      <h3>You're in.</h3>
+      <p>Check your inbox for an email from <strong>sprint@theaccountabilityco.com</strong> with a link to set your password. If it's not there in a few minutes, check spam.</p>
+      <p>Before December 1, write down the 3 tasks you repeat most every week. Your first build comes from that list.</p>
+      <button class="btn-primary" id="signupDone">Done</button>
+    </div>
+  </div>
+</div>
+
+<div class="cookie-banner" id="cookieBanner">
+  <div class="cookie-inner">
+    <p class="cookie-text">We use cookies and the Meta Pixel to run this site and measure ad performance. See our <a href="/privacy.html">Privacy Policy</a> for details.</p>
+    <div class="cookie-actions"><button class="cookie-btn" id="cookieDecline">Decline</button><button class="cookie-btn accept" id="cookieAccept">Accept</button></div>
+  </div>
+</div>
+
+<script>
+  // Registration window. The server enforces the same close time; this only swaps the page copy.
+  var REG_CLOSE_UTC = Date.parse('2026-12-06T04:59:59.999Z'); // Dec 5, 11:59:59 PM ET
+  if (Date.now() > REG_CLOSE_UTC) document.body.classList.add('reg-closed');
+
+  // Hamburger
+  var hamburger = document.getElementById('hamburger'), mobileMenu = document.getElementById('mobileMenu');
+  hamburger.addEventListener('click', function () {
+    var isOpen = mobileMenu.classList.toggle('open');
+    hamburger.classList.toggle('open', isOpen);
+    hamburger.setAttribute('aria-expanded', isOpen);
+  });
+  mobileMenu.querySelectorAll('a').forEach(function (a) { a.addEventListener('click', function () { mobileMenu.classList.remove('open'); hamburger.classList.remove('open'); }); });
+
+  // FAQ
+  document.querySelectorAll('.faq-q').forEach(function (q) {
+    q.addEventListener('click', function () {
+      var item = q.closest('.faq-item'), wasOpen = item.classList.contains('open');
+      document.querySelectorAll('.faq-item').forEach(function (i) { i.classList.remove('open'); });
+      if (!wasOpen) item.classList.add('open');
+    });
+  });
+
+  // Count-up
+  var countObserver = new IntersectionObserver(function (entries) {
+    entries.forEach(function (e) {
+      if (!e.isIntersecting) return;
+      var el = e.target, target = parseInt(el.getAttribute('data-count'), 10), start = performance.now();
+      (function tick(now) { var p = Math.min((now - start) / 1000, 1); el.textContent = Math.round((1 - Math.pow(1 - p, 3)) * target); if (p < 1) requestAnimationFrame(tick); })(start);
+      countObserver.unobserve(el);
+    });
+  }, { threshold: 0.4 });
+  document.querySelectorAll('.count-num').forEach(function (el) { countObserver.observe(el); });
+
+  // Modal open/close
+  var modal = document.getElementById('signupModal');
+  function openSignup() { if (document.body.classList.contains('reg-closed')) return; modal.classList.add('show'); setTimeout(function () { document.getElementById('su-name').focus(); }, 50); }
+  function closeSignup() { modal.classList.remove('show'); }
+  document.querySelectorAll('[data-open-signup]').forEach(function (b) { b.addEventListener('click', openSignup); });
+  document.getElementById('signupClose').addEventListener('click', closeSignup);
+  document.getElementById('signupDone').addEventListener('click', closeSignup);
+  modal.addEventListener('click', function (e) { if (e.target === modal) closeSignup(); });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeSignup(); });
+  if (location.hash === '#join') openSignup();
+
+  // Cookie consent (gates the Meta Pixel). Key is Sprint-specific so it doesn't clash with the TAC hub.
+  (function () {
+    var KEY = 'tac_sprint_cookie_consent', banner = document.getElementById('cookieBanner'), consent = null;
+    try { consent = localStorage.getItem(KEY); } catch (e) {}
+    if (consent === 'accepted') loadMetaPixel(); else if (!consent) banner.classList.add('show');
+    function save(v) { try { localStorage.setItem(KEY, v); } catch (e) {} banner.classList.remove('show'); }
+    document.getElementById('cookieAccept').addEventListener('click', function () { save('accepted'); loadMetaPixel(); });
+    document.getElementById('cookieDecline').addEventListener('click', function () { save('declined'); });
+  })();
+</script>
+
+<!-- Signup: Firebase App Check + callable Cloud Function -->
+<script type="module">
+  import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js';
+  import { initializeAppCheck, ReCaptchaV3Provider } from 'https://www.gstatic.com/firebasejs/10.12.5/firebase-app-check.js';
+  import { getFunctions, httpsCallable } from 'https://www.gstatic.com/firebasejs/10.12.5/firebase-functions.js';
+
+  // TODO (Nate): paste from Firebase Console > tac-sprint > Project settings > Your apps > Web app config.
+  const firebaseConfig = {
+    apiKey: 'AIzaSyBPPFaWXJim9TY0zqLuXykFuhFaJ4sW9VM',
+    authDomain: 'tac-sprint.firebaseapp.com',
+    projectId: 'tac-sprint',
+    appId: '1:530035417143:web:9ebfb992028123fde21fb2',
+  };
+  // TODO (Nate): reCAPTCHA v3 site key registered for theaccountabilityco.com (see DEPLOY.md).
+  const RECAPTCHA_SITE_KEY = '6LfLqiouAAAAAF4HK7-1WCZsxKcs0y882M2MYDtZ';
+
+  let createSprintAccount = null;
+  try {
+    const app = initializeApp(firebaseConfig);
+    initializeAppCheck(app, { provider: new ReCaptchaV3Provider(RECAPTCHA_SITE_KEY), isTokenAutoRefreshEnabled: true });
+    createSprintAccount = httpsCallable(getFunctions(app, 'us-central1'), 'createSprintAccount');
+  } catch (e) { console.error('Sprint signup init failed', e); }
+
+  const form = document.getElementById('signupForm');
+  const statusEl = document.getElementById('signupStatus');
+  const btn = document.getElementById('signupSubmit');
+  const setStatus = (msg, isErr) => { statusEl.textContent = msg || ''; statusEl.className = 'form-status' + (isErr ? ' err' : ''); };
+
+  const MESSAGES = {
+    'functions/already-exists': "You're already registered. Log in at the Member Login link, or use Forgot password.",
+    'functions/resource-exhausted': 'Too many attempts. Please try again in a bit.',
+    'functions/failed-precondition': 'Registration for the December Sprint is closed.',
+    'functions/invalid-argument': null, // use the server's own message
+    'functions/unauthenticated': "We couldn't verify this browser. Refresh the page and try again.",
+  };
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const name = form.name.value.trim();
+    const email = form.email.value.trim();
+    if (!name) return setStatus('Please add your name.', true);
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return setStatus("That email address doesn't look right.", true);
+    if (!createSprintAccount) return setStatus('Signup is unavailable right now. Please try again later.', true);
+
+    btn.disabled = true; setStatus('Creating your account…');
+    try {
+      await createSprintAccount({ name, email, business: form.business.value.trim(), hp: form.website.value });
+      document.getElementById('signupFormView').hidden = true;
+      document.getElementById('signupSuccessView').hidden = false;
+      if (window.fbq) fbq('track', 'CompleteRegistration', { content_name: 'SPRINT' });
+    } catch (err) {
+      const code = err && err.code;
+      setStatus((code in MESSAGES && MESSAGES[code]) || (err && err.message) || 'Something went wrong. Please try again.', true);
+    } finally {
+      btn.disabled = false;
+    }
+  });
+</script>
+</body>
+</html>
