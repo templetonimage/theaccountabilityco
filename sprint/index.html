@@ -67,7 +67,7 @@
     .mobile-menu.open { display: flex; }
     .mobile-menu a { font-family: 'Space Mono', monospace; font-size: .85rem; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); text-decoration: none; padding: 14px 0; border-bottom: 1px solid var(--border); }
     .mobile-menu a:last-child { border-bottom: none; }
-    @media (max-width: 720px) { .nav-links, .nav-cta, .nav-logo span { display: none; } .hamburger { display: flex; } }
+    @media (max-width: 720px) { .nav-links, .nav-cta { display: none; } .hamburger { display: flex; } .nav-logo { font-size: 1.05rem; letter-spacing: .02em; } .nav-login { padding: 6px 10px; } }
     .nav-login { white-space: nowrap; }
 
     /* PARENT BAR */
@@ -236,7 +236,7 @@
 <body>
 
 <nav>
-  <a href="/sprint/" class="nav-logo">SPRINT <span>Dec 2026</span></a>
+  <a href="/sprint/" class="nav-logo">Systems Sprint</a>
   <div class="nav-links">
     <a href="#weeks" class="nav-link">The 4 Weeks</a>
     <a href="#counts" class="nav-link">What Counts</a>
