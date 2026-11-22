@@ -549,7 +549,7 @@
 <!-- Signup: Firebase App Check + callable Cloud Function -->
 <script type="module">
   import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js';
-  import { initializeAppCheck, ReCaptchaV3Provider } from 'https://www.gstatic.com/firebasejs/10.12.5/firebase-app-check.js';
+  import { initializeAppCheck, ReCaptchaEnterpriseProvider } from 'https://www.gstatic.com/firebasejs/10.12.5/firebase-app-check.js';
   import { getFunctions, httpsCallable } from 'https://www.gstatic.com/firebasejs/10.12.5/firebase-functions.js';
 
   // TODO (Nate): paste from Firebase Console > tac-sprint > Project settings > Your apps > Web app config.
@@ -565,7 +565,7 @@
   let createSprintAccount = null;
   try {
     const app = initializeApp(firebaseConfig);
-    initializeAppCheck(app, { provider: new ReCaptchaV3Provider(RECAPTCHA_SITE_KEY), isTokenAutoRefreshEnabled: true });
+    initializeAppCheck(app, { provider: new ReCaptchaEnterpriseProvider(RECAPTCHA_SITE_KEY), isTokenAutoRefreshEnabled: true });
     createSprintAccount = httpsCallable(getFunctions(app, 'us-central1'), 'createSprintAccount');
   } catch (e) { console.error('Sprint signup init failed', e); }
 
