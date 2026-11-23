@@ -287,7 +287,7 @@ function renderNudges(r) {
   $("nudge-pause").textContent = paused ? "Resume" : "Pause";
   $("nudge-pause").classList.toggle("hidden", !on);
   const n = r && r.nudges;
-  const plan = n ? `${n.live ? "Last run sent" : "Last check would send"}: ${n.byKind.warned} day-7, ${n.byKind.bench} day-14, ${n.byKind.inactive} 30-day${n.held ? ` (${n.held} held by weekly limits)` : ""}${n.failed ? `, ${n.failed} failed` : ""}.` : "No nudge data yet.";
+  const plan = n ? `${n.live ? "Last run sent" : "Last check would send"}: ${n.byKind.warned} day-7, ${n.byKind.bench} day-14, ${n.byKind.d45 || 0} day-45, ${n.byKind.d60 || 0} day-60, ${n.byKind.inactive} 30-day${n.held ? ` (${n.held} held by weekly limits)` : ""}${n.failed ? `, ${n.failed} failed` : ""}.` : "No nudge data yet.";
   $("nudge-info").textContent = `${plan} Emails only go out with the Tuesday 9 AM check.`;
 }
 async function saveNudges(patch) {
@@ -301,7 +301,7 @@ async function saveNudges(patch) {
 }
 $("nudge-toggle").addEventListener("click", () => {
   const turningOn = settings.nudgesEnabled !== true;
-  if (turningOn && !confirmBox("Turn on nudge emails? The next Tuesday 9 AM check will email members who qualify. Make sure the 9 Hub automations are switched on in MailerLite.")) return;
+  if (turningOn && !confirmBox("Turn on nudge emails? The next Tuesday 9 AM check will email members who qualify. Make sure the 13 Hub automations are switched on in MailerLite.")) return;
   saveNudges({ nudgesEnabled: turningOn, nudgesPaused: false });
 });
 $("nudge-pause").addEventListener("click", () => saveNudges({ nudgesPaused: settings.nudgesPaused !== true }));
