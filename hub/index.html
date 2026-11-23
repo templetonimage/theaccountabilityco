@@ -71,6 +71,10 @@ td .email { color: var(--muted); font-size: 13px; }
 .st-active, .st-new { --s: var(--ok); } .st-warned { --s: var(--warn); } .st-bench { --s: var(--bad); }
 .tag { font-size: 11px; font-weight: 600; padding: 1px 6px; border-radius: 4px; background: var(--surface2); color: var(--muted); }
 .tag.bad { background: #fbe9e7; color: var(--bad); }
+.nudge-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px 18px; margin-bottom: 24px; display: flex; flex-wrap: wrap; align-items: center; gap: 12px; }
+.nudge-card .info { flex: 1; min-width: 240px; font-size: 14px; }
+.nudge-card .pill { display: inline-block; font-size: 12px; font-weight: 700; padding: 2px 8px; border-radius: 999px; margin-left: 6px; }
+.pill.on { background: #e3f1e8; color: var(--ok); } .pill.off { background: var(--surface2); color: var(--muted); } .pill.paused { background: #fff4e0; color: var(--warn); }
 .empty { padding: 28px; text-align: center; color: var(--muted); }
 .toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: var(--black); color: #fff; padding: 10px 16px; border-radius: 8px; font-size: 14px; z-index: 10; }
 @media (max-width: 640px) { main { padding: 16px; } header { padding: 12px 16px; } header .who { display: none; } }
@@ -106,6 +110,12 @@ td .email { color: var(--muted); font-size: 13px; }
     </div>
     <div id="notices"></div>
     <div class="cards" id="cards"></div>
+    <div class="nudge-card" id="nudge-card">
+      <div class="info"><b>Nudge emails</b><span class="pill off" id="nudge-pill">Off</span>
+        <div id="nudge-info" style="color:var(--muted);margin-top:4px;">Loading…</div></div>
+      <button class="btn ghost" id="nudge-pause">Pause</button>
+      <button class="btn" id="nudge-toggle">Turn on</button>
+    </div>
 
     <h2 style="font-size:18px;margin-bottom:10px;">Members</h2>
     <div class="filters">
@@ -136,7 +146,7 @@ td .email { color: var(--muted); font-size: 13px; }
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
 import { initializeAppCheck, ReCaptchaEnterpriseProvider } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app-check.js";
 import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged, sendPasswordResetEmail, setPersistence, browserLocalPersistence } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
-import { getFirestore, collection, getDocs, query, orderBy, limit } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+import { getFirestore, collection, getDocs, query, orderBy, limit, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
 import { getFunctions, httpsCallable } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-functions.js";
 
 // Public identifiers (safe in page code). Security comes from Auth, rules and App Check.
@@ -166,6 +176,7 @@ const fmtDate = (ms) => ms ? new Date(ms).toLocaleString("en-US", { month: "shor
 const toast = (t) => { const el = document.createElement("div"); el.className = "toast"; el.textContent = t; document.body.appendChild(el); setTimeout(() => el.remove(), 3500); };
 
 let people = [];
+let settings = {};
 
 // ── Auth ──
 setPersistence(auth, browserLocalPersistence).catch(() => {});
@@ -194,13 +205,16 @@ onAuthStateChanged(auth, async (user) => {
 // ── Data ──
 async function loadAll() {
   try {
-    const [reportSnap, peopleSnap] = await Promise.all([
+    const [reportSnap, peopleSnap, settingsSnap] = await Promise.all([
       getDocs(query(collection(db, "hub_reports"), orderBy("ts", "desc"), limit(1))),
       getDocs(collection(db, "hub_people")),
+      getDoc(doc(db, "hub_settings", "config")),
     ]);
+    settings = settingsSnap.exists() ? settingsSnap.data() : {};
     const report = reportSnap.empty ? null : reportSnap.docs[0].data();
     people = peopleSnap.docs.map((d) => d.data());
     renderReport(report);
+    renderNudges(report);
     renderPeople();
   } catch (err) {
     console.error(err);
@@ -262,6 +276,37 @@ function renderPeople() {
   }).join("");
 }
 ["q", "f-program", "f-state"].forEach((id) => $(id).addEventListener("input", renderPeople));
+
+// ── Nudges ──
+function renderNudges(r) {
+  const on = settings.nudgesEnabled === true, paused = settings.nudgesPaused === true;
+  const pill = $("nudge-pill");
+  pill.className = `pill ${!on ? "off" : paused ? "paused" : "on"}`;
+  pill.textContent = !on ? "Off" : paused ? "Paused" : "On";
+  $("nudge-toggle").textContent = on ? "Turn off" : "Turn on";
+  $("nudge-pause").textContent = paused ? "Resume" : "Pause";
+  $("nudge-pause").classList.toggle("hidden", !on);
+  const n = r && r.nudges;
+  const plan = n ? `${n.live ? "Last run sent" : "Last check would send"}: ${n.byKind.warned} day-7, ${n.byKind.bench} day-14, ${n.byKind.inactive} 30-day${n.held ? ` (${n.held} held by weekly limits)` : ""}${n.failed ? `, ${n.failed} failed` : ""}.` : "No nudge data yet.";
+  $("nudge-info").textContent = `${plan} Emails only go out with the Tuesday 9 AM check.`;
+}
+async function saveNudges(patch) {
+  try {
+    await setDoc(doc(db, "hub_settings", "config"), { ...patch, nudgesUpdatedAt: Date.now() }, { merge: true });
+    settings = { ...settings, ...patch };
+    const rep = await getDocs(query(collection(db, "hub_reports"), orderBy("ts", "desc"), limit(1)));
+    renderNudges(rep.empty ? null : rep.docs[0].data());
+    toast("Saved.");
+  } catch (err) { console.error(err); toast(`Couldn't save: ${err.code || err.message}`); }
+}
+$("nudge-toggle").addEventListener("click", () => {
+  const turningOn = settings.nudgesEnabled !== true;
+  if (turningOn && !confirmBox("Turn on nudge emails? The next Tuesday 9 AM check will email members who qualify. Make sure the 9 Hub automations are switched on in MailerLite.")) return;
+  saveNudges({ nudgesEnabled: turningOn, nudgesPaused: false });
+});
+$("nudge-pause").addEventListener("click", () => saveNudges({ nudgesPaused: settings.nudgesPaused !== true }));
+// A simple in-page confirm (native dialogs are blocked by some browsers' settings).
+function confirmBox(msg) { return window.confirm(msg); }
 
 // ── Run now ──
 $("run-btn").addEventListener("click", async () => {
