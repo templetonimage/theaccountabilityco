@@ -1,1 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>TAC Hub | Admin</title>
+<meta name="robots" content="noindex, nofollow" />
+<meta name="referrer" content="no-referrer" />
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://www.gstatic.com https://www.google.com https://www.recaptcha.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; connect-src https://*.googleapis.com https://us-central1-tac-hub-24a38.cloudfunctions.net https://www.google.com https://www.recaptcha.net; frame-src https://www.google.com https://www.recaptcha.net https://tac-hub-24a38.firebaseapp.com; base-uri 'none'; form-action 'none'; object-src 'none'" />
+<link rel="icon" type="image/png" href="/favicon-32.png" />
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800&family=Inter:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+<style>
+:root {
+  --bg: #f7f3ea; --surface: #fdfbf6; --surface2: #f0ece0; --border: #e8e2d4;
+  --text: #17140f; --muted: #6b6558; --black: #0d0d0d;
+  --smac: #446A85; --wac: #b8860b; --aac: #587548; --sprint: #6E5A8A;
+  --ok: #2f7a4a; --warn: #a86b12; --bad: #b3392f; --radius: 12px;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); line-height: 1.5; -webkit-font-smoothing: antialiased; }
+h1, h2, h3 { font-family: 'Sora', sans-serif; letter-spacing: -0.01em; }
+.mono { font-family: 'Space Mono', monospace; font-size: 12px; letter-spacing: .04em; text-transform: uppercase; color: var(--muted); }
+.hidden { display: none !important; }
+button { font-family: inherit; cursor: pointer; }
+input, select { font-family: inherit; font-size: 15px; }
 
+#auth { min-height: 100vh; display: flex; align-items: center; justify-content: center; background: var(--black); padding: 24px; }
+.auth-card { width: 100%; max-width: 380px; background: #141414; border: 1px solid #2a2a2a; border-radius: 16px; padding: 32px 26px; color: #f0ece0; }
+.auth-card h1 { font-size: 26px; text-align: center; margin-bottom: 4px; }
+.auth-card p { text-align: center; color: #a49d8e; font-size: 14px; margin-bottom: 22px; }
+.auth-card label { display: block; font-size: 13px; color: #c9c2b2; margin: 12px 0 4px; }
+.auth-card input { width: 100%; padding: 11px 12px; border-radius: 8px; border: 1px solid #333; background: #1d1d1d; color: #f0ece0; }
+.btn { border: 0; border-radius: 8px; padding: 11px 16px; font-weight: 600; font-size: 14px; background: var(--black); color: #fff; }
+.btn.full { width: 100%; margin-top: 18px; background: #f0ece0; color: var(--black); }
+.btn.ghost { background: transparent; color: var(--text); border: 1px solid var(--border); }
+.btn:disabled { opacity: .55; cursor: default; }
+.link { background: none; border: 0; color: #c9c2b2; text-decoration: underline; font-size: 13px; margin-top: 14px; width: 100%; }
+.msg { min-height: 20px; font-size: 13px; margin-top: 12px; text-align: center; color: #e8a49c; }
+
+header { background: var(--black); color: #f0ece0; padding: 14px 24px; display: flex; align-items: center; gap: 16px; }
+header h1 { font-size: 19px; }
+header .sp { flex: 1; }
+header .who { font-size: 13px; color: #a49d8e; }
+header .btn.ghost { color: #f0ece0; border-color: #333; padding: 7px 12px; }
+main { max-width: 1180px; margin: 0 auto; padding: 24px; }
+.bar { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; margin-bottom: 18px; }
+.bar .meta { font-size: 14px; color: var(--muted); flex: 1; min-width: 220px; }
+.check { display: flex; align-items: center; gap: 6px; font-size: 14px; }
+.notice { background: #fff4e0; border: 1px solid #f0d9a8; border-radius: 10px; padding: 10px 14px; font-size: 14px; margin-bottom: 16px; }
+.notice.bad { background: #fbe9e7; border-color: #efc2bc; }
+
+.cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 14px; margin-bottom: 24px; }
+.card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px 18px; border-top: 4px solid var(--c); }
+.card h3 { font-size: 16px; margin-bottom: 8px; }
+.card .row { display: flex; justify-content: space-between; font-size: 14px; padding: 2px 0; }
+.card .row b { font-variant-numeric: tabular-nums; }
+
+.filters { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 12px; }
+.filters input, .filters select { padding: 9px 11px; border: 1px solid var(--border); border-radius: 8px; background: var(--surface); }
+.filters input { flex: 1; min-width: 200px; }
+.count { font-size: 13px; color: var(--muted); margin-bottom: 8px; }
+.table-wrap { overflow-x: auto; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); }
+table { width: 100%; border-collapse: collapse; font-size: 14px; }
+th { text-align: left; font-family: 'Space Mono', monospace; font-size: 11px; letter-spacing: .05em; text-transform: uppercase; color: var(--muted); padding: 10px 12px; border-bottom: 1px solid var(--border); background: var(--surface2); white-space: nowrap; }
+td { padding: 10px 12px; border-bottom: 1px solid var(--border); vertical-align: top; }
+tr:last-child td { border-bottom: 0; }
+td .email { color: var(--muted); font-size: 13px; }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.chip { display: inline-flex; align-items: center; gap: 6px; border: 1px solid var(--border); border-left: 4px solid var(--c); border-radius: 6px; padding: 3px 8px; font-size: 12.5px; background: #fff; white-space: nowrap; }
+.dot { width: 8px; height: 8px; border-radius: 50%; background: var(--s); }
+.st-active, .st-new { --s: var(--ok); } .st-warned { --s: var(--warn); } .st-bench { --s: var(--bad); }
+.tag { font-size: 11px; font-weight: 600; padding: 1px 6px; border-radius: 4px; background: var(--surface2); color: var(--muted); }
+.tag.bad { background: #fbe9e7; color: var(--bad); }
+.empty { padding: 28px; text-align: center; color: var(--muted); }
+.toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: var(--black); color: #fff; padding: 10px 16px; border-radius: 8px; font-size: 14px; z-index: 10; }
+@media (max-width: 640px) { main { padding: 16px; } header { padding: 12px 16px; } header .who { display: none; } }
+</style>
+</head>
+<body>
+
+<section id="auth">
+  <form class="auth-card" id="login-form" autocomplete="on">
+    <h1>TAC Hub</h1>
+    <p>Admin only</p>
+    <label for="email">Email</label>
+    <input id="email" type="email" autocomplete="username" required />
+    <label for="password">Password</label>
+    <input id="password" type="password" autocomplete="current-password" required />
+    <button class="btn full" id="login-btn" type="submit">Sign in</button>
+    <button class="link" id="reset-btn" type="button">Forgot password?</button>
+    <div class="msg" id="auth-msg"></div>
+  </form>
+</section>
+
+<div id="app" class="hidden">
+  <header>
+    <h1>TAC Hub</h1><span class="sp"></span>
+    <span class="who" id="who"></span>
+    <button class="btn ghost" id="signout-btn">Sign out</button>
+  </header>
+  <main>
+    <div class="bar">
+      <div class="meta" id="run-meta">Loading…</div>
+      <label class="check"><input type="checkbox" id="send-email" /> Email me the report</label>
+      <button class="btn" id="run-btn">Run check now</button>
+    </div>
+    <div id="notices"></div>
+    <div class="cards" id="cards"></div>
+
+    <h2 style="font-size:18px;margin-bottom:10px;">Members</h2>
+    <div class="filters">
+      <input id="q" type="search" placeholder="Search name or email" />
+      <select id="f-program">
+        <option value="">All programs</option>
+        <option value="smac">SMAC</option><option value="wac">WAC</option><option value="aac">AAC</option><option value="sprint">Sprint</option>
+      </select>
+      <select id="f-state">
+        <option value="">Any status</option>
+        <option value="warned">Warned (7+ days)</option>
+        <option value="bench">14+ days, no proof</option>
+        <option value="inactive">Inactive (30+ days, no login)</option>
+        <option value="multi">In 2+ programs</option>
+      </select>
+    </div>
+    <div class="count" id="count"></div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Member</th><th>Programs</th><th>Longest without proof</th><th>Last login</th></tr></thead>
+        <tbody id="rows"><tr><td colspan="4" class="empty">Loading…</td></tr></tbody>
+      </table>
+    </div>
+  </main>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
+import { initializeAppCheck, ReCaptchaEnterpriseProvider } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app-check.js";
+import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged, sendPasswordResetEmail, setPersistence, browserLocalPersistence } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+import { getFirestore, collection, getDocs, query, orderBy, limit } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+import { getFunctions, httpsCallable } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-functions.js";
+
+// Public identifiers (safe in page code). Security comes from Auth, rules and App Check.
+const firebaseConfig = {
+  apiKey: "AIzaSyBS48sEPXUfqDZmImwUGgB2T1LKpFYmxeM",
+  authDomain: "tac-hub-24a38.firebaseapp.com",
+  projectId: "tac-hub-24a38",
+  storageBucket: "tac-hub-24a38.firebasestorage.app",
+  messagingSenderId: "980958756014",
+  appId: "1:980958756014:web:f3e56d090b26f5b89ac13f"
+};
+const RECAPTCHA_SITE_KEY = "6Lex0y0uAAAAAN7FZZFvb4fFw0wCdpXi5q-wTIMk";
+const ADMIN_EMAIL = "nate@templetonimage.com";
+
+const app = initializeApp(firebaseConfig);
+try { initializeAppCheck(app, { provider: new ReCaptchaEnterpriseProvider(RECAPTCHA_SITE_KEY), isTokenAutoRefreshEnabled: true }); }
+catch (e) { console.warn("App Check init failed", e); }
+const auth = getAuth(app);
+const db = getFirestore(app);
+const runStatusCheck = httpsCallable(getFunctions(app, "us-central1"), "runStatusCheck", { timeout: 300000 });
+
+const PROGRAMS = { smac: { label: "SMAC", c: "var(--smac)" }, wac: { label: "WAC", c: "var(--wac)" }, aac: { label: "AAC", c: "var(--aac)" }, sprint: { label: "Sprint", c: "var(--sprint)" } };
+const STATE_LABEL = { active: "On track", new: "New", warned: "Warned", bench: "14+ days" };
+const $ = (id) => document.getElementById(id);
+const esc = (v) => String(v ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const fmtDate = (ms) => ms ? new Date(ms).toLocaleString("en-US", { month: "short", day: "numeric", hour: "numeric", minute: "2-digit" }) : "";
+const toast = (t) => { const el = document.createElement("div"); el.className = "toast"; el.textContent = t; document.body.appendChild(el); setTimeout(() => el.remove(), 3500); };
+
+let people = [];
+
+// ── Auth ──
+setPersistence(auth, browserLocalPersistence).catch(() => {});
+$("login-form").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  $("login-btn").disabled = true; $("auth-msg").textContent = "";
+  try { await signInWithEmailAndPassword(auth, $("email").value.trim(), $("password").value); }
+  catch (err) { $("auth-msg").textContent = "Sign-in failed. Check your email and password."; }
+  finally { $("login-btn").disabled = false; }
+});
+$("reset-btn").addEventListener("click", async () => {
+  const email = $("email").value.trim();
+  if (!email) { $("auth-msg").textContent = "Enter your email first."; return; }
+  try { await sendPasswordResetEmail(auth, email); } catch (e) { /* same message either way */ }
+  $("auth-msg").textContent = "If that account exists, a reset link is on its way.";
+});
+$("signout-btn").addEventListener("click", () => signOut(auth));
+
+onAuthStateChanged(auth, async (user) => {
+  if (user && user.email !== ADMIN_EMAIL) { await signOut(auth); $("auth-msg").textContent = "This account doesn't have hub access."; return; }
+  $("auth").classList.toggle("hidden", !!user);
+  $("app").classList.toggle("hidden", !user);
+  if (user) { $("who").textContent = user.email; loadAll(); }
+});
+
+// ── Data ──
+async function loadAll() {
+  try {
+    const [reportSnap, peopleSnap] = await Promise.all([
+      getDocs(query(collection(db, "hub_reports"), orderBy("ts", "desc"), limit(1))),
+      getDocs(collection(db, "hub_people")),
+    ]);
+    const report = reportSnap.empty ? null : reportSnap.docs[0].data();
+    people = peopleSnap.docs.map((d) => d.data());
+    renderReport(report);
+    renderPeople();
+  } catch (err) {
+    console.error(err);
+    $("run-meta").textContent = "Couldn't load hub data.";
+    $("rows").innerHTML = `<tr><td colspan="4" class="empty">Couldn't load members (${esc(err.code || err.message)}).</td></tr>`;
+  }
+}
+
+function renderReport(r) {
+  if (!r) { $("run-meta").textContent = "No check has run yet. Click Run check now."; $("cards").innerHTML = ""; $("notices").innerHTML = ""; return; }
+  $("run-meta").innerHTML = `Last check: <b>${esc(fmtDate(r.ts))}</b> (${r.trigger === "schedule" ? "weekly" : "manual"}) · ${r.people} people · ${r.multiProgram} in 2+ programs`;
+  let notes = "";
+  const errs = Object.keys(r.errors || {});
+  if (errs.length) notes += `<div class="notice bad">Couldn't read: ${esc(errs.join(", "))}. Those programs are missing from this check.</div>`;
+  if (!r.smacLoginReliable) notes += `<div class="notice">SMAC logins aren't tracked reliably yet, so SMAC shows no Inactive members.</div>`;
+  $("notices").innerHTML = notes;
+  $("cards").innerHTML = Object.entries(PROGRAMS).map(([k, P]) => {
+    const s = r.summary && r.summary[k]; if (!s) return "";
+    const rows = k === "sprint"
+      ? `<div class="row"><span>Signups</span><b>${s.total}</b></div>`
+      : `<div class="row"><span>Members</span><b>${s.total}</b></div>
+         <div class="row"><span>On track</span><b>${s.active + s.new}</b></div>
+         <div class="row"><span>Warned</span><b>${s.warned}</b></div>
+         <div class="row"><span>14+ days, no proof</span><b>${s.bench}${k === "aac" ? ` (${s.locked} locked)` : ""}</b></div>
+         <div class="row"><span>Inactive</span><b>${k === "smac" && !r.smacLoginReliable ? "n/a" : s.inactive}</b></div>`;
+    return `<div class="card" style="--c:${P.c}"><h3>${P.label}</h3>${rows}</div>`;
+  }).join("");
+}
+
+function worstProof(p) { return Math.max(-1, ...Object.values(p.programs).map((x) => x.daysNoProof ?? -1)); }
+function latestLogin(p) { return Math.max(0, ...Object.values(p.programs).map((x) => x.lastLoginTs || 0)); }
+
+function renderPeople() {
+  const q = $("q").value.trim().toLowerCase(), fp = $("f-program").value, fs = $("f-state").value;
+  const list = people.filter((p) => {
+    if (q && !(`${p.name} ${p.email}`.toLowerCase().includes(q))) return false;
+    const progs = Object.entries(p.programs).filter(([k]) => !fp || k === fp);
+    if (!progs.length) return false;
+    if (fs === "multi") return Object.keys(p.programs).length > 1;
+    if (fs === "inactive") return progs.some(([, x]) => x.loginState === "inactive");
+    if (fs) return progs.some(([, x]) => x.proofState === fs);
+    return true;
+  }).sort((a, b) => worstProof(b) - worstProof(a) || a.email.localeCompare(b.email));
+
+  $("count").textContent = `${list.length} of ${people.length} people`;
+  if (!list.length) { $("rows").innerHTML = `<tr><td colspan="4" class="empty">${people.length ? "No one matches these filters." : "No data yet. Run a check."}</td></tr>`; return; }
+  $("rows").innerHTML = list.map((p) => {
+    const chips = Object.entries(p.programs).map(([k, x]) => {
+      const P = PROGRAMS[k] || { label: k, c: "#999" };
+      const label = k === "sprint" ? "Signed up" : (STATE_LABEL[x.proofState] || x.proofState);
+      const extra = (x.locked ? ` <span class="tag bad">Locked</span>` : "") + (x.loginState === "inactive" ? ` <span class="tag">Inactive</span>` : "");
+      return `<span class="chip st-${esc(x.proofState)}" style="--c:${P.c}" title="${esc(P.label)}: ${x.daysNoProof ?? "?"} days without proof"><span class="dot"></span>${esc(P.label)} · ${esc(label)}${extra}</span>`;
+    }).join("");
+    const w = worstProof(p), ll = latestLogin(p);
+    return `<tr><td><b>${esc(p.name || "(no name)")}</b><div class="email">${esc(p.email)}</div></td>
+      <td><div class="chips">${chips}</div></td>
+      <td>${w >= 0 ? `${w} days` : "n/a"}</td>
+      <td>${ll ? esc(fmtDate(ll)) : "Not recorded"}</td></tr>`;
+  }).join("");
+}
+["q", "f-program", "f-state"].forEach((id) => $(id).addEventListener("input", renderPeople));
+
+// ── Run now ──
+$("run-btn").addEventListener("click", async () => {
+  const btn = $("run-btn"); btn.disabled = true; btn.textContent = "Running…";
+  try {
+    const res = await runStatusCheck({ sendEmail: $("send-email").checked });
+    const errs = Object.keys(res.data.errors || {});
+    toast(errs.length ? `Done, with errors: ${errs.join(", ")}` : `Done: ${res.data.people} people checked${res.data.emailed ? ", report emailed" : ""}.`);
+    await loadAll();
+  } catch (err) {
+    console.error(err);
+    toast(`Check failed: ${err.message || err.code}`);
+  } finally { btn.disabled = false; btn.textContent = "Run check now"; }
+});
+</script>
+</body>
+</html>
